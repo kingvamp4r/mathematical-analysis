@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第十一章 §2：多元连续函数</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"]],
+        displayMath: [["\\[", "\\]"]],
+        processEscapes: true
+      },
+      options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202124;
+      --muted: #68707a;
+      --line: #d9dee7;
+      --paper: #fffef9;
+      --accent: #0c6a67;
+      --accent-dark: #084f4c;
+      --soft: #eef8f7;
+      --amber: #fff4e3;
+      --amber-line: #c47a18;
+      --ok: #146c43;
+      --bad: #9f1239;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f4f0e8;
+      color: var(--ink);
+      font: 17px/1.75 ui-serif, "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+    }
+    main {
+      width: min(980px, calc(100vw - 32px));
+      margin: 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 50px rgba(20, 30, 40, 0.08);
+    }
+    header {
+      padding: 40px 44px 28px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffef9, #fbf7ef);
+    }
+    section { padding: 26px 44px; border-bottom: 1px solid var(--line); }
+    h1, h2, h3, h4, button, .kicker, .tag {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      letter-spacing: 0;
+    }
+    h1 { margin: 0 0 10px; font-size: 34px; line-height: 1.2; }
+    h2 { margin: 0 0 12px; font-size: 23px; line-height: 1.3; }
+    h3 { margin: 20px 0 8px; font-size: 18px; line-height: 1.3; color: var(--accent-dark); }
+    h4 { margin: 14px 0 6px; font-size: 16px; color: var(--accent-dark); }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    .kicker {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .lead { color: var(--muted); max-width: 74ch; }
+    .note {
+      background: var(--amber);
+      border-left: 4px solid var(--amber-line);
+      padding: 12px 14px;
+      margin: 14px 0;
+      color: #704000;
+    }
+    .formula {
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      padding: 12px 14px;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .box {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 14px 16px;
+      min-height: 142px;
+    }
+    .box strong {
+      display: block;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      margin-bottom: 6px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 15px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      background: #fafafa;
+    }
+    .exercise {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 14px 16px;
+      margin: 12px 0;
+    }
+    .exercise-title {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+    .tag {
+      display: inline-block;
+      border: 1px solid #b6d7d4;
+      background: var(--soft);
+      color: var(--accent-dark);
+      font-size: 13px;
+      padding: 2px 7px;
+    }
+    details {
+      border-top: 1px dashed var(--line);
+      margin-top: 10px;
+      padding-top: 8px;
+    }
+    summary {
+      cursor: pointer;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 650;
+    }
+    .quiz-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 16px;
+      margin: 14px 0;
+    }
+    .question {
+      background: #f7f7f7;
+      padding: 10px 12px;
+      overflow-x: auto;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    button {
+      border: 1px solid #b9c1cc;
+      background: #fff;
+      color: var(--ink);
+      padding: 9px 10px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button:hover { border-color: var(--accent); background: var(--soft); }
+    button.correct { border-color: var(--ok); background: #eaf7ef; color: var(--ok); }
+    button.wrong { border-color: var(--bad); background: #fff0f3; color: var(--bad); }
+    .feedback {
+      min-height: 28px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .feedback.good { color: var(--ok); }
+    .feedback.bad { color: var(--bad); }
+    .refs, .footer { color: var(--muted); font-size: 15px; }
+    @media (max-width: 780px) {
+      main { margin: 16px auto; }
+      header, section { padding: 24px; }
+      h1 { font-size: 28px; }
+      .grid, .two, .choices { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      main { box-shadow: none; border: none; width: 100%; margin: 0; }
+      button { display: none; }
+      details { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="kicker">数学分析 · 第十一章 §2</div>
+    <h1>多元连续函数</h1>
+    <p class="lead">这一节把一元函数的极限、连续、四则运算和复合函数推广到 \(R^n\)。期末最常考的是：多元极限存在性、路径反例、累次极限、连续性的判定与向量值函数的分量判别。</p>
+  </header>
+
+  <section>
+    <h2>本节地图</h2>
+    <div class="grid">
+      <div class="box">
+        <strong>多元函数</strong>
+        <p>输入从一个数变成一个点 \(x=(x_1,\ldots,x_n)\)，输出仍是一个实数。</p>
+        <div class="formula">\[
+          f:D\subset R^n\to R,\qquad x\mapsto z=f(x)
+        \]</div>
+      </div>
+      <div class="box">
+        <strong>多元极限</strong>
+        <p>要求 \(x\) 以任意方式趋于 \(x_0\) 时，函数值都趋于同一个数。</p>
+      </div>
+      <div class="box">
+        <strong>连续与映射</strong>
+        <p>连续就是 \(\lim_{x\to x_0}f(x)=f(x_0)\)。向量值函数可按坐标分量判定。</p>
+      </div>
+    </div>
+    <p class="refs">教材对应：《数学分析》第三版下册第十一章 §2“多元连续函数”。辅助参考：<a href="https://www.math.ucdavis.edu/~hunter/intro_analysis_pdf/ch13.pdf">UC Davis Chapter 13</a>。</p>
+  </section>
+
+  <section>
+    <h2>一、多元函数是什么</h2>
+    <p>一元函数是一个自变量控制一个函数值；多元函数是多个自变量共同控制函数值。例如理想气体中，压强 \(p\) 可由体积 \(V\) 和温度 \(T\) 决定；圆台体积可由两个底半径和高度决定。</p>
+    <div class="formula">\[
+      f:D\subset R^n\to R,\qquad
+      x=(x_1,\ldots,x_n)\mapsto z=f(x)
+    \]</div>
+    <table>
+      <thead>
+        <tr><th>术语</th><th>意思</th><th>考试关注点</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>定义域 \(D\)</td>
+          <td>允许输入的点 \(x\) 的全体。</td>
+          <td>根号、分母、对数、反三角函数会限制定义域。</td>
+        </tr>
+        <tr>
+          <td>值域 \(f(D)\)</td>
+          <td>所有可能的函数值。</td>
+          <td>本节通常不重点求值域。</td>
+        </tr>
+        <tr>
+          <td>图像</td>
+          <td>\(\Gamma=\{(x,z)\in R^{n+1}:z=f(x),x\in D\}\)。</td>
+          <td>二元函数图像通常是 \(R^3\) 中曲面。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>二、多元极限：定义与判题</h2>
+    <p>设 \(D\subset R^n\)，\(x_0\) 是 \(D\) 的聚点，函数 \(f\) 在 \(D\setminus\{x_0\}\) 上有定义。若存在实数 \(A\)，使得：</p>
+    <div class="formula">\[
+      \forall \varepsilon\gt0,\ \exists \delta\gt0,\quad
+      0\lt |x-x_0|\lt \delta,\ x\in D
+      \Longrightarrow |f(x)-A|\lt\varepsilon,
+    \]</div>
+    <p>则称 \(f(x)\) 当 \(x\to x_0\) 时极限为 \(A\)，记作：</p>
+    <div class="formula">\[
+      \lim_{x\to x_0} f(x)=A.
+    \]</div>
+    <div class="note">多元极限比一元极限更严：不是只从左、右靠近，而是从平面或空间中的所有路径靠近。只要有两条路径给出不同极限，二重极限就不存在。</div>
+
+    <h3>判断二重极限的考试流程</h3>
+    <ol>
+      <li>先看目标点处能否直接用连续性代入，例如多项式、分母非零的有理式、连续函数的复合。</li>
+      <li>若不能直接代入，先用轴线、直线或累次极限猜可能的极限值 \(A\)。</li>
+      <li>怀疑不存在时，找两条路径给出不同极限；直线不够时试曲线。</li>
+      <li>怀疑存在时，必须回到估计或夹逼，把 \(|f(x,y)-A|\) 压到 \(0\)。</li>
+    </ol>
+
+    <h3>证明极限存在的常用方法</h3>
+    <table>
+      <thead>
+        <tr><th>方法</th><th>典型写法</th><th>适用信号</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>连续性法</td>
+          <td>若 \(f\) 在 \((x_0,y_0)\) 连续，则 \(\lim f=f(x_0,y_0)\)。</td>
+          <td>多项式、三角函数、指数对数、分母不为 \(0\) 的商、连续函数复合。</td>
+        </tr>
+        <tr>
+          <td>半径估计法</td>
+          <td>令 \(r=\sqrt{(x-x_0)^2+(y-y_0)^2}\)，把 \(|f(x,y)-A|\) 控制成 \(Cr^\alpha\)。</td>
+          <td>分子分母含 \(x^2+y^2\)、高阶小量、需要证明极限为 \(0\)。</td>
+        </tr>
+        <tr>
+          <td>夹逼法</td>
+          <td>找到 \(0\le |f(x,y)-A|\le h(x,y)\)，且 \(h(x,y)\to0\)。</td>
+          <td>含 \(\sin,\cos\) 或振荡项，常用 \(|\sin t|\le1\)、\(|\cos t|\le1\)。</td>
+        </tr>
+        <tr>
+          <td>极坐标法</td>
+          <td>在原点令 \(x=r\cos\theta,\ y=r\sin\theta\)。若 \(f=A+r^\alpha B(\theta)\)，且 \(B(\theta)\) 有界，则极限为 \(A\)。</td>
+          <td>原点处的齐次式、含 \(x^2+y^2\) 的分母、想看角度 \(\theta\) 是否影响结果。</td>
+        </tr>
+        <tr>
+          <td>运算法则</td>
+          <td>若 \(f\to A,\ g\to B\)，则 \(f+g\to A+B,\ fg\to AB,\ f/g\to A/B\)，其中 \(B\ne0\)。</td>
+          <td>函数能拆成几个已知极限的和、积、商。</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="formula">\[
+      |f(x,y)-A|\le C\left(\sqrt{(x-x_0)^2+(y-y_0)^2}\right)^\alpha,\quad \alpha\gt0
+      \Longrightarrow
+      \lim_{(x,y)\to(x_0,y_0)}f(x,y)=A.
+    \]</div>
+    <div class="note">证明存在不能只看几条路径。路径只覆盖趋近方式的一小部分；真正的存在证明要能管住所有趋近方式。</div>
+
+    <h3>证明极限不存在的常用方法</h3>
+    <p>最标准的动作是找两条趋近路径，让函数值趋于不同结果。例如：</p>
+    <div class="formula">\[
+      f(x,y)=\frac{xy}{x^2+y^2}.
+    \]</div>
+    <p>沿 \(y=0\) 趋于 \((0,0)\)，有 \(f(x,0)=0\)；沿 \(y=x\) 趋于 \((0,0)\)，有 \(f(x,x)=1/2\)。两条路径不同，所以极限不存在。</p>
+    <table>
+      <thead>
+        <tr><th>反例路径</th><th>什么时候试</th><th>判定方式</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>轴线 \(x=x_0\)、\(y=y_0\)</td>
+          <td>先手检查，计算最简单。</td>
+          <td>两条轴线极限不同，二重极限不存在。</td>
+        </tr>
+        <tr>
+          <td>直线 \(y-y_0=k(x-x_0)\)</td>
+          <td>分子分母同阶，或出现 \(xy,x^2,y^2\)。</td>
+          <td>结果依赖 \(k\)，二重极限不存在。</td>
+        </tr>
+        <tr>
+          <td>曲线 \(y-y_0=(x-x_0)^2\) 等</td>
+          <td>所有直线路径看起来相同，但式子里有 \(y-x^2\)、\(y^2-x\) 等结构。</td>
+          <td>曲线极限与直线极限不同，二重极限不存在。</td>
+        </tr>
+        <tr>
+          <td>累次极限</td>
+          <td>需要快速排除存在性。</td>
+          <td>两个累次极限存在但不相等，则二重极限不存在。</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note">两个累次极限相等不能推出二重极限存在；但两个累次极限不相等，可以立刻推出二重极限不存在。</div>
+  </section>
+
+  <section>
+    <h2>三、累次极限</h2>
+    <p>二重极限是 \((x,y)\) 一起趋近；累次极限是先让一个变量趋近，再让另一个变量趋近。</p>
+    <div class="formula">\[
+      \lim_{x\to x_0}\lim_{y\to y_0}f(x,y),
+      \qquad
+      \lim_{y\to y_0}\lim_{x\to x_0}f(x,y).
+    \]</div>
+    <table>
+      <thead>
+        <tr><th>现象</th><th>结论</th><th>考试提醒</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>二重极限存在，且某一方向的内层极限在外层变量的去心邻域内存在</td>
+          <td>相应累次极限存在且等于二重极限。</td>
+          <td>这是教材定理 11.2.1 的核心。</td>
+        </tr>
+        <tr>
+          <td>两个累次极限都存在且相等</td>
+          <td>不能推出二重极限存在。</td>
+          <td>累次极限只看两种特殊趋近顺序。</td>
+        </tr>
+        <tr>
+          <td>两个累次极限存在但不相等</td>
+          <td>二重极限一定不存在。</td>
+          <td>这是很快的反证工具。</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>定理 11.2.1 的内容和证明思路</h3>
+    <p>若</p>
+    <div class="formula">\[
+      \lim_{(x,y)\to(x_0,y_0)}f(x,y)=A,
+    \]</div>
+    <p>且当 \(x\) 在 \(x_0\) 附近、\(x\ne x_0\) 时，内层极限</p>
+    <div class="formula">\[
+      \varphi(x)=\lim_{y\to y_0}f(x,y)
+    \]</div>
+    <p>存在，那么</p>
+    <div class="formula">\[
+      \lim_{x\to x_0}\varphi(x)=A.
+    \]</div>
+    <p>证明思路：二重极限给出 \(|f(x,y)-A|\lt\varepsilon/2\) 的小邻域。固定一个 \(x\) 后令 \(y\to y_0\)，不等式传给 \(\varphi(x)\)，于是 \(|\varphi(x)-A|\le\varepsilon/2\)。</p>
+  </section>
+
+  <section>
+    <h2>四、连续性与运算</h2>
+    <p>若 \(f\) 在 \(x_0\) 有定义，且</p>
+    <div class="formula">\[
+      \lim_{x\to x_0}f(x)=f(x_0),
+    \]</div>
+    <p>则称 \(f\) 在 \(x_0\) 连续。用 \(\varepsilon-\delta\) 语言就是：</p>
+    <div class="formula">\[
+      \forall\varepsilon\gt0,\ \exists\delta\gt0,\quad
+      |x-x_0|\lt\delta
+      \Longrightarrow |f(x)-f(x_0)|\lt\varepsilon.
+    \]</div>
+    <p>一元连续函数的基本运算性质可以推广到多元函数：</p>
+    <table>
+      <thead>
+        <tr><th>性质</th><th>内容</th><th>证明思路</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>和差积商</td>
+          <td>连续函数的和、差、积仍连续；分母非零时商连续。</td>
+          <td>由极限四则运算法则推出。</td>
+        </tr>
+        <tr>
+          <td>复合</td>
+          <td>若 \(g:D\to\Omega\) 连续，\(f:\Omega\to R^m\) 连续，则 \(f\circ g\) 连续。</td>
+          <td>先用 \(f\) 的连续性找 \(\eta\)，再用 \(g\) 的连续性找 \(\delta\)。</td>
+        </tr>
+        <tr>
+          <td>常见初等函数</td>
+          <td>多项式、根式、对数、三角函数在自然定义域内连续。</td>
+          <td>看作一元连续函数与多元连续函数的复合。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>五、向量值函数</h2>
+    <p>向量值函数的输出不是一个实数，而是一个向量：</p>
+    <div class="formula">\[
+      f:D\subset R^n\to R^m,\qquad
+      f(x)=(f_1(x),f_2(x),\ldots,f_m(x)).
+    \]</div>
+    <p>极限和连续都可按分量判断：</p>
+    <div class="formula">\[
+      f(x)\to A=(A_1,\ldots,A_m)
+      \Longleftrightarrow
+      f_j(x)\to A_j,\quad j=1,\ldots,m.
+    \]</div>
+    <div class="formula">\[
+      f \text{ 在 } x_0 \text{ 连续}
+      \Longleftrightarrow
+      f_1,\ldots,f_m \text{ 都在 } x_0 \text{ 连续}.
+    \]</div>
+    <p>证明思路：一边用 \(|f_j(x)-f_j(x_0)|\le |f(x)-f(x_0)|\)；另一边用</p>
+    <div class="formula">\[
+      |f(x)-f(x_0)|
+      \le\sum_{j=1}^{m}|f_j(x)-f_j(x_0)|.
+    \]</div>
+  </section>
+
+  <section>
+    <h2>六、即时判断</h2>
+    <div class="quiz-card" data-answer="不能">
+      <div class="question">所有直线路径的极限都相同，是否一定能推出二重极限存在？</div>
+      <div class="choices"></div>
+      <div class="feedback"></div>
+    </div>
+    <div class="quiz-card" data-answer="相等">
+      <div class="question">若二重极限存在，且两个累次极限也存在，那么这三个极限的关系是什么？</div>
+      <div class="choices"></div>
+      <div class="feedback"></div>
+    </div>
+    <div class="quiz-card" data-answer="分量">
+      <div class="question">判断 \(f:D\subset R^n\to R^m\) 连续，最常用的拆法是什么？</div>
+      <div class="choices"></div>
+      <div class="feedback"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>七、课后题训练</h2>
+    <p>以下是第十一章 §2 课后题的完整训练版，表述做了复习化整理，公式和条件尽量保留。每题后面给出答案方向，便于不翻原教材也能复习。</p>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 1</span><span class="tag">自然定义域</span></div>
+      <p>确定下列函数的自然定义域：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\quad u=\ln(y-x)+\frac{x}{\sqrt{1-x^2-y^2}},\\
+      &(2)\quad u=\frac1{\sqrt x}+\frac1{\sqrt y}+\frac1{\sqrt z},\\
+      &(3)\quad u=\sqrt{R^2-x^2-y^2-z^2}+\sqrt{x^2+y^2+z^2-r^2}\quad(R\gt r),\\
+      &(4)\quad u=\arcsin\frac{z}{x^2+y^2}.
+      \end{aligned}
+      \]</div>
+      <details>
+        <summary>答案方向</summary>
+        <p>分别检查对数真数、分母、根号非负、反正弦自变量范围。</p>
+        <div class="formula">\[
+        \begin{aligned}
+        &(1)\ y\gt x,\quad x^2+y^2\lt1;\\
+        &(2)\ x\gt0,\ y\gt0,\ z\gt0;\\
+        &(3)\ r^2\le x^2+y^2+z^2\le R^2;\\
+        &(4)\ x^2+y^2\ne0,\quad |z|\le x^2+y^2.
+        \end{aligned}
+        \]</div>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 2</span><span class="tag">齐次结构</span></div>
+      <p>设 \(x\gt0\)，且</p>
+      <div class="formula">\[
+        f\!\left(\frac yx\right)=\frac{x^3}{(x^2+y^2)^{3/2}}.
+      \]</div>
+      <p>求一元函数 \(f(t)\)。</p>
+      <details>
+        <summary>答案方向</summary>
+        <p>令 \(t=y/x\)，则 \(x^2+y^2=x^2(1+t^2)\)。</p>
+        <div class="formula">\[
+          f(t)=\frac{1}{(1+t^2)^{3/2}}.
+        \]</div>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 3</span><span class="tag">代换求函数</span></div>
+      <p>若</p>
+      <div class="formula">\[
+        z(x,y)=\sqrt y+f(\sqrt x-1),
+      \]</div>
+      <p>且当 \(y=4\) 时 \(z=x+1\)。求 \(f(t)\) 和 \(z(x,y)\)。</p>
+      <details>
+        <summary>答案方向</summary>
+        <p>令 \(t=\sqrt x-1\)，则 \(x=(t+1)^2\)。由 \(2+f(t)=x+1\)，得到：</p>
+        <div class="formula">\[
+          f(t)=t^2+2t,\qquad z(x,y)=x+\sqrt y-1.
+        \]</div>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 4</span><span class="tag">原点极限存在性</span></div>
+      <p>讨论下列函数当 \((x,y)\to(0,0)\) 时的极限是否存在：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ f(x,y)=\frac{x-y}{x+y},\\
+      &(2)\ f(x,y)=\frac{xy}{x^2+y^2},\\
+      &(3)\ f(x,y)=
+      \begin{cases}
+      1,&0\lt y\lt x^2,\\
+      0,&\text{其他点},
+      \end{cases}\\
+      &(4)\ f(x,y)=\frac{x^3y^3}{x^4+y^4}.
+      \end{aligned}
+      \]</div>
+      <details>
+        <summary>答案方向</summary>
+        <p>(1) 沿 \(y=0\) 与 \(x=0\) 得到不同结果，不存在。</p>
+        <p>(2) 沿 \(y=0\) 得 \(0\)，沿 \(y=x\) 得 \(1/2\)，不存在。</p>
+        <p>(3) 沿 \(y=x^2/2\) 得 \(1\)，沿 \(y=0\) 得 \(0\)，不存在。</p>
+        <p>(4) 存在且等于 \(0\)。可用 \(2x^2y^2\le x^4+y^4\) 得 \(|f(x,y)|\le |xy|/2\to0\)。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 5</span><span class="tag">极限性质证明</span></div>
+      <p>证明多元函数极限具有唯一性、局部有界性、局部保号性和局部夹逼性。</p>
+      <details>
+        <summary>证明思路</summary>
+        <p>这些性质与一元函数完全同型。唯一性用 \(|A-B|\le |A-f(x)|+|f(x)-B|\)。局部有界性取 \(\varepsilon=1\)。局部保号性取 \(\varepsilon=|A|/2\)。夹逼性用不等式在去心邻域内传递并令极限趋近。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 6</span><span class="tag">四则运算法则</span></div>
+      <p>设 \(x\to x_0\) 时 \(f(x)\) 与 \(g(x)\) 的极限存在。证明：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \lim_{x\to x_0}(f(x)\pm g(x))=\lim_{x\to x_0}f(x)\pm\lim_{x\to x_0}g(x),\\
+      &(2)\ \lim_{x\to x_0}(f(x)g(x))=\left(\lim_{x\to x_0}f(x)\right)\left(\lim_{x\to x_0}g(x)\right),\\
+      &(3)\ \lim_{x\to x_0}\frac{f(x)}{g(x)}
+      =\frac{\lim_{x\to x_0}f(x)}{\lim_{x\to x_0}g(x)},\quad \lim_{x\to x_0}g(x)\ne0.
+      \end{aligned}
+      \]</div>
+      <details>
+        <summary>证明思路</summary>
+        <p>和差用三角不等式；乘法用拆项 \(fg-AB=f(g-B)+B(f-A)\)，并用局部有界性；商法先由保号性保证分母在邻域内不为 \(0\)，再转化为乘法。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 7</span><span class="tag">计算极限</span></div>
+      <p>求下列极限：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \lim_{(x,y)\to(0,1)}\frac{1-xy}{1+x^2+y^2},&
+      &(2)\ \lim_{(x,y)\to(0,0)}\frac{1+x^2+y^2}{x^2+y^2},\\
+      &(3)\ \lim_{(x,y)\to(0,0)}\frac{\sqrt{1+xy}-1}{xy},&
+      &(4)\ \lim_{(x,y)\to(0,0)}\frac{x^2+y^2}{\sqrt{1+x^2+y^2}-1},\\
+      &(5)\ \lim_{(x,y)\to(0,0)}\frac{\ln(x^2+e^{y^2})}{x^2+y^2},&
+      &(6)\ \lim_{(x,y)\to(0,0)}\frac{\sin(x^3+y^3)}{x^2+y^2},\\
+      &(7)\ \lim_{(x,y)\to(0,0)}\frac{1-\cos(x^2+y^2)}{(x^2+y^2)x^2y^2},&
+      &(8)\ \lim_{\substack{x\to+\infty\\ y\to+\infty}}(x^2+y^2)e^{-(x+y)}.
+      \end{aligned}
+      \]</div>
+      <details>
+        <summary>答案方向</summary>
+        <div class="formula">\[
+        (1)\ \frac12,\quad
+        (2)\ \text{发散到 }+\infty,\quad
+        (3)\ \frac12,\quad
+        (4)\ 2,\quad
+        (5)\ 1,\quad
+        (6)\ 0,\quad
+        (7)\ \text{无有限极限},\quad
+        (8)\ 0.
+        \]</div>
+        <p>(3)(4) 用有理化；(5) 用 \(\ln(1+t)\sim t\) 与 \(e^{y^2}-1\sim y^2\)；(7) 沿 \(x=y=t\) 会发散。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 8</span><span class="tag">二重极限与累次极限</span></div>
+      <p>讨论下列函数在原点的二重极限和两个累次极限：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ f(x,y)=\frac{x^2y^2}{x^2y^2+(x-y)^2},\\
+      &(2)\ f(x,y)=\frac{x^2(1+x^2)-y^2(1+y^2)}{x^2+y^2},\\
+      &(3)\ f(x,y)=x\sin\frac1y+y\sin\frac1x.
+      \end{aligned}
+      \]</div>
+      <details>
+        <summary>答案方向</summary>
+        <p>(1) 二重极限不存在：沿 \(y=x\) 得 \(1\)，沿 \(y=0\) 得 \(0\)。两个累次极限都为 \(0\)。</p>
+        <p>(2) 二重极限不存在：沿 \(y=0\) 与 \(x=0\) 分别趋于 \(1\) 和 \(-1\)。两个累次极限分别为 \(1\) 与 \(-1\)。</p>
+        <p>(3) 二重极限存在且为 \(0\)，因为 \(|f(x,y)|\le |x|+|y|\)。但两个累次极限都不存在，因为内层会出现 \(\sin(1/y)\) 或 \(\sin(1/x)\) 的振荡。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 9</span><span class="tag">构造不连续点</span></div>
+      <p>验证下面函数在原点不连续，而在其他点连续：</p>
+      <div class="formula">\[
+      f(x,y)=
+      \begin{cases}
+      \dfrac{2}{x^2}\left(y-\dfrac12x^2\right),&x\gt0,\ \dfrac12x^2\lt y\le x^2,\\[6pt]
+      \dfrac{1}{x^2}(2x^2-y),&x\gt0,\ x^2\lt y\lt2x^2,\\[6pt]
+      0,&\text{其他点}.
+      \end{cases}
+      \]</div>
+      <details>
+        <summary>证明思路</summary>
+        <p>在原点沿抛物线带内可得到非零值，例如取 \(y=x^2\) 时函数值为 \(1\)，而沿其他许多路径函数值为 \(0\)，故原点不连续。其他点离分段边界有正距离，或落在分段边界上时左右表达式相接为同一值，可逐段验证连续。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 10</span><span class="tag">连续范围</span></div>
+      <p>讨论函数的连续范围：</p>
+      <div class="formula">\[
+      f(x,y)=
+      \begin{cases}
+      \dfrac{x^2y}{x^2+y^2},&x^2+y^2\ne0,\\
+      0,&x^2+y^2=0.
+      \end{cases}
+      \]</div>
+      <details>
+        <summary>答案方向</summary>
+        <p>除原点外由四则运算连续。在原点有</p>
+        <div class="formula">\[
+          |f(x,y)|=\frac{x^2|y|}{x^2+y^2}\le |y|\to0,
+        \]</div>
+        <p>所以原点也连续。连续范围为整个 \(R^2\)。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 11</span><span class="tag">差商极限</span></div>
+      <p>设 \(f(t)\) 在区间 \((a,b)\) 上具有连续导数，\(D=(a,b)\times(a,b)\)。定义</p>
+      <div class="formula">\[
+      F(x,y)=
+      \begin{cases}
+      \dfrac{f(x)-f(y)}{x-y},&x\ne y,\\
+      f'(x),&x=y.
+      \end{cases}
+      \]</div>
+      <p>证明对任意 \(c\in(a,b)\)，有</p>
+      <div class="formula">\[
+        \lim_{(x,y)\to(c,c)}F(x,y)=f'(c).
+      \]</div>
+      <details>
+        <summary>证明思路</summary>
+        <p>当 \(x\ne y\) 时，由 Lagrange 中值定理，存在 \(\xi\) 介于 \(x,y\) 之间，使 \(F(x,y)=f'(\xi)\)。当 \((x,y)\to(c,c)\) 时 \(\xi\to c\)，再用 \(f'\) 的连续性。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 12</span><span class="tag">分别连续 + Lipschitz</span></div>
+      <p>设二元函数 \(f(x,y)\) 在开集 \(D\subset R^2\) 内对变量 \(x\) 是连续的，并且对变量 \(y\) 满足 Lipschitz 条件：对任意 \((x,y'),(x,y'')\in D\)，有</p>
+      <div class="formula">\[
+        |f(x,y')-f(x,y'')|\le L|y'-y''|.
+      \]</div>
+      <p>证明 \(f(x,y)\) 在 \(D\) 上连续。</p>
+      <details>
+        <summary>证明思路</summary>
+        <p>在点 \((x_0,y_0)\) 附近拆成两段：</p>
+        <div class="formula">\[
+          |f(x,y)-f(x_0,y_0)|
+          \le |f(x,y)-f(x,y_0)|+|f(x,y_0)-f(x_0,y_0)|.
+        \]</div>
+        <p>第一项由 Lipschitz 条件控制，第二项由关于 \(x\) 的连续性控制。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 13</span><span class="tag">映射运算连续</span></div>
+      <p>证明：若 \(f,g:D\to R^m\) 都是连续映射，则映射 \(f+g\) 与实值函数 \(\langle f,g\rangle\) 在 \(D\) 上都是连续的。</p>
+      <details>
+        <summary>证明思路</summary>
+        <p>按分量证明最省事。若 \(f=(f_1,\ldots,f_m)\)，\(g=(g_1,\ldots,g_m)\)，则 \(f+g=(f_1+g_1,\ldots,f_m+g_m)\)，每个分量连续。内积函数为</p>
+        <div class="formula">\[
+          \langle f,g\rangle=\sum_{j=1}^{m}f_jg_j,
+        \]</div>
+        <p>由实值连续函数的乘法与有限求和保持连续可得。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 14</span><span class="tag">复合映射连续</span></div>
+      <p>证明复合映射连续性定理：设 \(\Omega\subset R^k\)、\(D\subset R^n\) 为开集，\(g:D\to\Omega\)、\(f:\Omega\to R^m\)，且 \(g\) 在 \(D\) 上连续，\(f\) 在 \(\Omega\) 上连续，则</p>
+      <div class="formula">\[
+        f\circ g:D\to R^m,\qquad x\mapsto f(g(x))
+      \]</div>
+      <p>在 \(D\) 上连续。</p>
+      <details>
+        <summary>证明思路</summary>
+        <p>任取 \(x_0\in D\)。由 \(f\) 在 \(g(x_0)\) 连续，给定 \(\varepsilon\) 可找到 \(\eta\)，使 \(|u-g(x_0)|\lt\eta\Rightarrow |f(u)-f(g(x_0))|\lt\varepsilon\)。再由 \(g\) 在 \(x_0\) 连续，找到 \(\delta\)，使 \(|x-x_0|\lt\delta\Rightarrow |g(x)-g(x_0)|\lt\eta\)。合起来即可。</p>
+      </details>
+    </div>
+  </section>
+
+  <section>
+    <h2>八、期末写法模板</h2>
+    <div class="grid two">
+      <div class="box">
+        <strong>证极限存在</strong>
+        <p>把 \(|f(x)-A|\) 估计到关于 \(r=|x-x_0|\) 的表达式，并令 \(r\to0\)。</p>
+      </div>
+      <div class="box">
+        <strong>证极限不存在</strong>
+        <p>找两条路径趋近同一点，算出两个不同极限。</p>
+      </div>
+      <div class="box">
+        <strong>讨论累次极限</strong>
+        <p>先固定一个变量求内层极限，再对剩下变量求外层极限；不要把它自动当成二重极限。</p>
+      </div>
+      <div class="box">
+        <strong>证连续</strong>
+        <p>优先用连续函数运算、复合函数连续、向量值函数分量判别；原点特殊点再用定义或估计。</p>
+      </div>
+    </div>
+    <p class="footer">上一节：<a href="./0011-1-euclidean-space-basic-theorems.html">第十一章 §1：Euclid 空间上的基本定理</a>。路线图：<a href="../reference/textbook-roadmap-euclidean-space.html">教材路线图</a>。</p>
+  </section>
+</main>
+<script>
+  const quiz = {
+    "不能": {
+      choices: ["不能", "一定", "只需两条"],
+      explain: "不能。所有直线路径相同仍可能被曲线路径破坏。"
+    },
+    "相等": {
+      choices: ["相等", "无关系", "相反数"],
+      explain: "相等。二重极限存在且累次极限存在时，累次极限等于二重极限。"
+    },
+    "分量": {
+      choices: ["分量", "路径", "面积"],
+      explain: "分量。向量值函数连续当且仅当每个坐标分量连续。"
+    }
+  };
+  document.querySelectorAll(".quiz-card").forEach((card) => {
+    const answer = card.dataset.answer;
+    const choices = card.querySelector(".choices");
+    const feedback = card.querySelector(".feedback");
+    quiz[answer].choices.forEach((label) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = label;
+      button.addEventListener("click", () => {
+        choices.querySelectorAll("button").forEach((item) => {
+          item.classList.remove("correct", "wrong");
+        });
+        const ok = label === answer;
+        button.classList.add(ok ? "correct" : "wrong");
+        feedback.className = "feedback " + (ok ? "good" : "bad");
+        feedback.textContent = (ok ? "对。" : "再想想。") + quiz[answer].explain;
+        if (window.MathJax) MathJax.typesetPromise([feedback]);
+      });
+      choices.appendChild(button);
+    });
+  });
+</script>
+</body>
+</html>

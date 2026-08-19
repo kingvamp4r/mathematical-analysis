@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第九章 §4：任意项级数</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"]],
+        displayMath: [["\\[", "\\]"]],
+        processEscapes: true
+      },
+      options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202124;
+      --muted: #667085;
+      --line: #d9dee7;
+      --paper: #fffef9;
+      --accent: #0b6865;
+      --accent-dark: #074c49;
+      --soft: #edf8f7;
+      --amber: #fff4e3;
+      --amber-line: #bf7416;
+      --red: #a0183d;
+      --green: #146c43;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f4f0e8;
+      color: var(--ink);
+      font: 17px/1.75 ui-serif, "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+    }
+    main {
+      width: min(1040px, calc(100vw - 32px));
+      margin: 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 50px rgba(20, 30, 40, 0.08);
+    }
+    header {
+      padding: 42px 46px 30px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffef9, #fbf7ef);
+    }
+    section { padding: 28px 46px; border-bottom: 1px solid var(--line); }
+    h1, h2, h3, h4, button, .kicker, .tag, .pill, th {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      letter-spacing: 0;
+    }
+    h1 { margin: 0 0 10px; font-size: 35px; line-height: 1.2; }
+    h2 { margin: 0 0 14px; font-size: 24px; line-height: 1.3; }
+    h3 { margin: 22px 0 8px; font-size: 18px; line-height: 1.35; color: var(--accent-dark); }
+    h4 { margin: 14px 0 6px; font-size: 16px; color: var(--accent-dark); }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    ol, ul { padding-left: 24px; }
+    li { margin: 6px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 15px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #fafafa; }
+    .kicker {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .lead { color: var(--muted); max-width: 82ch; }
+    .formula {
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      padding: 12px 14px;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+    .note {
+      background: var(--amber);
+      border-left: 4px solid var(--amber-line);
+      padding: 12px 14px;
+      margin: 14px 0;
+      color: #704000;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .box, .exercise, .quiz-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 14px 16px;
+    }
+    .box strong {
+      display: block;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      margin-bottom: 6px;
+    }
+    .exercise { margin: 12px 0; }
+    .exercise-title {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+    .tag, .pill {
+      display: inline-block;
+      border: 1px solid #b6d7d4;
+      background: var(--soft);
+      color: var(--accent-dark);
+      font-size: 13px;
+      padding: 2px 7px;
+    }
+    .pill { border-color: var(--line); color: var(--muted); background: #fff; }
+    details {
+      border-top: 1px dashed var(--line);
+      margin-top: 10px;
+      padding-top: 8px;
+    }
+    summary {
+      cursor: pointer;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 650;
+    }
+    .question { background: #f7f7f7; padding: 10px 12px; overflow-x: auto; }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    button {
+      border: 1px solid #b9c1cc;
+      background: #fff;
+      color: var(--ink);
+      padding: 9px 10px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button:hover { border-color: var(--accent); background: var(--soft); }
+    button.correct { border-color: var(--green); background: #eaf7ef; color: var(--green); }
+    button.wrong { border-color: var(--red); background: #fff0f3; color: var(--red); }
+    .feedback { min-height: 28px; margin-top: 10px; color: var(--muted); font-size: 15px; }
+    .feedback.good { color: var(--green); }
+    .feedback.bad { color: var(--red); }
+    .footer { color: var(--muted); font-size: 15px; }
+    @media (max-width: 780px) {
+      main { margin: 16px auto; }
+      header, section { padding: 24px; }
+      h1 { font-size: 28px; }
+      .grid, .two, .choices { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      main { box-shadow: none; border: none; width: 100%; margin: 0; }
+      button { display: none; }
+      details { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="kicker">数学分析 · 第九章 §4</div>
+    <h1>任意项级数</h1>
+    <p class="lead">正项级数只需要研究“部分和有没有上界”；任意项级数的难点在于正负项会互相抵消。本节的主线是：先用 Cauchy 收敛原理抓住本质，再学习交错级数、Abel 与 Dirichlet 判别法，最后区分绝对收敛、条件收敛、重排和乘法。</p>
+  </header>
+
+  <section>
+    <h2>本节主线</h2>
+    <div class="grid">
+      <div class="box">
+        <strong>先看尾和</strong>
+        <p>任意项级数不再有单调部分和，必须用 Cauchy 收敛原理控制任意一段尾和。</p>
+      </div>
+      <div class="box">
+        <strong>再看抵消</strong>
+        <p>交错级数、三角级数等靠正负抵消收敛，重点不是每项绝对值够小，而是部分和能被控制。</p>
+      </div>
+      <div class="box">
+        <strong>最后分类型</strong>
+        <p>绝对收敛最稳，条件收敛最敏感：重排可能改和值，乘法也需要额外条件。</p>
+      </div>
+    </div>
+    <div class="note">考试顺序：先看 \(\sum |x_n|\)；若绝对收敛，原级数必收敛。若不绝对收敛，再看是否是 Leibniz、Dirichlet 或 Abel 型。</div>
+  </section>
+
+  <section>
+    <h2>一、任意项级数的 Cauchy 收敛原理</h2>
+    <p>一个级数如果只有有限个正项或有限个负项，就可以转化为正项级数讨论。真正新的情况是：既有无穷多个正项，又有无穷多个负项。</p>
+
+    <h3>定理 9.4.1：级数的 Cauchy 收敛原理</h3>
+    <p>级数 \(\sum_{n=1}^{\infty}x_n\) 收敛的充要条件是：对任意 \(\varepsilon>0\)，存在正整数 \(N\)，使得当 \(m>n>N\) 时，</p>
+    <div class="formula">\[
+      \left|x_{n+1}+x_{n+2}+\cdots+x_m\right|
+      =
+      \left|\sum_{k=n+1}^{m}x_k\right|
+      <\varepsilon.
+    \]</div>
+    <p>等价地，对任意 \(\varepsilon>0\)，存在 \(N\)，使得对一切 \(n>N\) 和一切正整数 \(p\)，</p>
+    <div class="formula">\[
+      \left|x_{n+1}+x_{n+2}+\cdots+x_{n+p}\right|
+      =
+      \left|\sum_{k=1}^{p}x_{n+k}\right|
+      <\varepsilon.
+    \]</div>
+    <p>取 \(p=1\)，立刻得到必要条件：</p>
+    <div class="formula">\[
+      \sum_{n=1}^{\infty}x_n\text{ 收敛}\quad\Longrightarrow\quad
+      \lim_{n\to\infty}x_n=0.
+    \]</div>
+    <div class="note">注意：一般项趋于 \(0\) 仍然只是必要条件，不是充分条件。本节很多题就是在考“趋于 0 之外，还靠什么收敛”。</div>
+  </section>
+
+  <section>
+    <h2>二、Leibniz 级数与交错判别法</h2>
+
+    <h3>定义 9.4.1：交错级数与 Leibniz 级数</h3>
+    <p>若 \(u_n>0\)，形如</p>
+    <div class="formula">\[
+      \sum_{n=1}^{\infty}(-1)^{n+1}u_n
+    \]</div>
+    <p>的级数称为交错级数。若进一步 \(\{u_n\}\) 单调减少且收敛于 \(0\)，则称它为 Leibniz 级数。</p>
+
+    <h3>定理 9.4.2：Leibniz 判别法</h3>
+    <p>Leibniz 级数必定收敛。也就是说，若</p>
+    <div class="formula">\[
+      u_1\ge u_2\ge \cdots \ge 0,\qquad \lim_{n\to\infty}u_n=0,
+    \]</div>
+    <p>则</p>
+    <div class="formula">\[
+      \sum_{n=1}^{\infty}(-1)^{n+1}u_n
+    \]</div>
+    <p>收敛。</p>
+
+    <h3>证明思路</h3>
+    <p>关键不是把正项和负项分开，而是估计任意一段尾和。因为 \(u_n\) 单调减少，尾和</p>
+    <div class="formula">\[
+      u_{n+1}-u_{n+2}+u_{n+3}-\cdots+(-1)^{p+1}u_{n+p}
+    \]</div>
+    <p>的绝对值总不超过第一项 \(u_{n+1}\)。既然 \(u_{n+1}\to0\)，尾和就能任意小，于是由 Cauchy 收敛原理得收敛。</p>
+
+    <h3>余项估计</h3>
+    <p>若</p>
+    <div class="formula">\[
+      r_n=\sum_{k=n+1}^{\infty}(-1)^{k+1}u_k,
+    \]</div>
+    <p>则</p>
+    <div class="formula">\[
+      |r_n|\le u_{n+1}.
+    \]</div>
+    <p>这在考试里很有用：不仅能判收敛，还能估计用前 \(n\) 项近似时的误差。</p>
+
+    <div class="grid two">
+      <div class="box">
+        <strong>典型例子</strong>
+        <p>\(\sum_{n=1}^{\infty}\frac{(-1)^{n+1}}{n}\) 收敛，但不绝对收敛。</p>
+      </div>
+      <div class="box">
+        <strong>容易漏掉的条件</strong>
+        <p>只知道 \(u_n\to0\) 不够，还需要 \(u_n\) 最终单调减少，或换用 Dirichlet 判别法。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>三、Abel 变换、Dirichlet 判别法与 Abel 判别法</h2>
+
+    <h3>引理 9.4.1：Abel 变换</h3>
+    <p>设 \(\{a_n\}\)、\(\{b_n\}\) 是两数列，记</p>
+    <div class="formula">\[
+      B_k=\sum_{i=1}^{k}b_i.
+    \]</div>
+    <p>则对任意正整数 \(p\)，有</p>
+    <div class="formula">\[
+      \sum_{k=1}^{p}a_kb_k
+      =
+      a_pB_p-\sum_{k=1}^{p-1}(a_{k+1}-a_k)B_k.
+    \]</div>
+    <p>这也叫分部求和公式。它是离散版的分部积分：\(\sum a_kb_k\) 类比 \(\int f\,dg\)，部分和 \(B_k\) 类比原函数。</p>
+
+    <h3>引理 9.4.2：Abel 引理</h3>
+    <p>若 \(\{a_k\}\) 单调，且 \(\{B_k\}\) 有界，即存在 \(M>0\)，使得对一切 \(k\)，</p>
+    <div class="formula">\[
+      |B_k|\le M,
+    \]</div>
+    <p>则</p>
+    <div class="formula">\[
+      \left|\sum_{k=1}^{p}a_kb_k\right|
+      \le M\left(|a_1|+2|a_p|\right).
+    \]</div>
+    <p>直观上：如果 \(b_k\) 的部分和不乱跑，而 \(a_k\) 单调，那么乘起来后的部分和也能被控制。</p>
+
+    <h3>定理 9.4.3：级数的 A-D 判别法</h3>
+    <p>若下列两个条件之一满足，则级数 \(\sum_{n=1}^{\infty}a_nb_n\) 收敛：</p>
+    <ol>
+      <li><strong>Abel 判别法：</strong>\(\{a_n\}\) 单调有界，且 \(\sum_{n=1}^{\infty}b_n\) 收敛；</li>
+      <li><strong>Dirichlet 判别法：</strong>\(\{a_n\}\) 单调趋于 \(0\)，且 \(\left\{\sum_{i=1}^{n}b_i\right\}\) 有界。</li>
+    </ol>
+
+    <table>
+      <thead>
+        <tr><th>类型</th><th>怎么认</th><th>常见题型</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Leibniz</td><td>\((-1)^{n+1}u_n\)，且 \(u_n\downarrow0\)</td><td>交错调和、交错 \(p\)-型</td></tr>
+        <tr><td>Dirichlet</td><td>一个因子单调趋 \(0\)，另一个因子的部分和有界</td><td>\(\sum a_n\sin nx\)、\(\sum a_n\cos nx\)</td></tr>
+        <tr><td>Abel</td><td>一个因子单调有界，另一个因子本身成收敛级数</td><td>已知 \(\sum b_n\) 收敛，讨论 \(\sum a_nb_n\)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>例：三角级数</h3>
+    <p>若 \(\{a_n\}\) 单调趋于 \(0\)，则对任意实数 \(x\)，级数</p>
+    <div class="formula">\[
+      \sum_{n=1}^{\infty}a_n\sin nx
+    \]</div>
+    <p>收敛。理由是：当 \(x\ne 2k\pi\) 时，\(\sum_{k=1}^{n}\sin kx\) 有界；当 \(x=2k\pi\) 时，所有项为 \(0\)。因此由 Dirichlet 判别法收敛。</p>
+  </section>
+
+  <section>
+    <h2>四、绝对收敛与条件收敛</h2>
+
+    <h3>定义 9.4.2</h3>
+    <p>若</p>
+    <div class="formula">\[
+      \sum_{n=1}^{\infty}|x_n|
+    \]</div>
+    <p>收敛，则称 \(\sum x_n\) 为绝对收敛级数。若 \(\sum x_n\) 收敛而 \(\sum |x_n|\) 发散，则称 \(\sum x_n\) 为条件收敛级数。</p>
+
+    <h3>基本事实</h3>
+    <div class="formula">\[
+      \sum |x_n|\text{ 收敛}\quad\Longrightarrow\quad \sum x_n\text{ 收敛}.
+    \]</div>
+    <p>证明入口是 Cauchy 收敛原理与三角不等式：</p>
+    <div class="formula">\[
+      \left|x_{n+1}+\cdots+x_m\right|
+      \le
+      |x_{n+1}|+\cdots+|x_m|.
+    \]</div>
+
+    <h3>定理 9.4.4：正项和负项的拆分</h3>
+    <p>对任意项 \(x_n\)，定义</p>
+    <div class="formula">\[
+      x_n^+=\frac{|x_n|+x_n}{2},\qquad
+      x_n^-=\frac{|x_n|-x_n}{2}.
+    \]</div>
+    <p>则</p>
+    <div class="formula">\[
+      x_n=x_n^+-x_n^-,\qquad |x_n|=x_n^++x_n^-.
+    \]</div>
+    <p>若 \(\sum x_n\) 绝对收敛，则 \(\sum x_n^+\) 与 \(\sum x_n^-\) 都收敛；若 \(\sum x_n\) 条件收敛，则 \(\sum x_n^+\) 与 \(\sum x_n^-\) 都发散到 \(+\infty\)。</p>
+
+    <h3>例：幂参数级数</h3>
+    <p>讨论</p>
+    <div class="formula">\[
+      \sum_{n=1}^{\infty}\frac{x^n}{n^p}
+    \]</div>
+    <p>的敛散性：</p>
+    <table>
+      <thead>
+        <tr><th>参数</th><th>结论</th><th>依据</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>\(|x|<1\)</td><td>绝对收敛</td><td>根值判别，根值极限为 \(|x|\)</td></tr>
+        <tr><td>\(|x|>1\)</td><td>发散</td><td>一般项不趋于 \(0\)</td></tr>
+        <tr><td>\(x=1,\ p>1\)</td><td>绝对收敛</td><td>\(p\)-级数</td></tr>
+        <tr><td>\(x=1,\ p\le1\)</td><td>发散</td><td>\(p\)-级数</td></tr>
+        <tr><td>\(x=-1,\ p>1\)</td><td>绝对收敛</td><td>\(\sum 1/n^p\) 收敛</td></tr>
+        <tr><td>\(x=-1,\ 0<p\le1\)</td><td>条件收敛</td><td>Leibniz 收敛，但绝对值级数发散</td></tr>
+        <tr><td>\(x=-1,\ p\le0\)</td><td>发散</td><td>一般项不趋于 \(0\)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>五、加法交换律、重排与 Riemann 定理</h2>
+
+    <p>有限和可以随便换顺序，但无穷级数不一定。对收敛级数 \(\sum x_n\)，把所有项重新排列得到的新级数称为它的重排级数。</p>
+
+    <h3>定理 9.4.5：绝对收敛级数可重排</h3>
+    <p>若 \(\sum x_n\) 绝对收敛，则任意重排级数 \(\sum x_n'\) 也绝对收敛，且和不变：</p>
+    <div class="formula">\[
+      \sum_{n=1}^{\infty}x_n'
+      =
+      \sum_{n=1}^{\infty}x_n.
+    \]</div>
+
+    <h3>定理 9.4.6：Riemann 重排定理</h3>
+    <p>若 \(\sum x_n\) 条件收敛，则对任意给定的 \(a\)，其中 \(-\infty\le a\le+\infty\)，都存在 \(\sum x_n\) 的一个重排级数 \(\sum x_n'\)，使得</p>
+    <div class="formula">\[
+      \sum_{n=1}^{\infty}x_n'=a.
+    \]</div>
+    <p>直观做法是：正项加到刚超过 \(a\)，再加负项到刚低于 \(a\)，然后重复。因为正项和负项都分别发散到 \(+\infty\)，但每一项趋于 \(0\)，这种上下摆动会逐渐贴近 \(a\)。</p>
+
+    <div class="note">这说明“条件收敛”非常脆弱：它的收敛依赖原来的排列顺序。绝对收敛才真正保留了有限求和的交换律。</div>
+  </section>
+
+  <section>
+    <h2>六、级数的乘法</h2>
+
+    <p>有限和相乘时，所有 \(a_ib_j\) 项加起来，顺序不影响结果。无穷级数相乘时，必须规定这些 \(a_ib_j\) 如何排列。</p>
+
+    <h3>Cauchy 乘积</h3>
+    <p>给定两个级数 \(\sum a_n\)、\(\sum b_n\)，令</p>
+    <div class="formula">\[
+      c_n=\sum_{i+j=n+1}a_ib_j
+      =
+      a_1b_n+a_2b_{n-1}+\cdots+a_nb_1.
+    \]</div>
+    <p>则</p>
+    <div class="formula">\[
+      \sum_{n=1}^{\infty}c_n
+    \]</div>
+    <p>称为 \(\sum a_n\) 与 \(\sum b_n\) 的 Cauchy 乘积。</p>
+
+    <h3>正方形排列与绝对收敛</h3>
+    <p>若按正方形方式排列所有 \(a_ib_j\)，则只要 \(\sum a_n\)、\(\sum b_n\)、以及正方形排列所得级数都收敛，就有</p>
+    <div class="formula">\[
+      \sum d_n
+      =
+      \left(\sum_{n=1}^{\infty}a_n\right)
+      \left(\sum_{n=1}^{\infty}b_n\right).
+    \]</div>
+
+    <h3>定理 9.4.7</h3>
+    <p>若 \(\sum a_n\) 与 \(\sum b_n\) 都绝对收敛，则把所有 \(a_ib_j\) 以任意方式排列求和所得的级数也绝对收敛，且其和等于</p>
+    <div class="formula">\[
+      \left(\sum_{n=1}^{\infty}a_n\right)
+      \left(\sum_{n=1}^{\infty}b_n\right).
+    \]</div>
+
+    <h3>典型应用：指数函数加法公式</h3>
+    <p>用 d'Alembert 判别法可知，对任意 \(x\in\mathbb R\)，</p>
+    <div class="formula">\[
+      f(x)=\sum_{n=0}^{\infty}\frac{x^n}{n!}
+    \]</div>
+    <p>绝对收敛。两个绝对收敛级数的 Cauchy 乘积给出：</p>
+    <div class="formula">\[
+      \left(\sum_{n=0}^{\infty}\frac{x^n}{n!}\right)
+      \left(\sum_{n=0}^{\infty}\frac{y^n}{n!}\right)
+      =
+      \sum_{n=0}^{\infty}\frac{(x+y)^n}{n!}.
+    \]</div>
+    <p>也就是</p>
+    <div class="formula">\[
+      f(x+y)=f(x)f(y).
+    \]</div>
+  </section>
+
+  <section>
+    <h2>七、判题路线图</h2>
+    <table>
+      <thead>
+        <tr><th>看到什么</th><th>先试什么</th><th>提醒</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>\(\sum |x_n|\) 容易判</td><td>绝对收敛</td><td>一旦绝对收敛，原级数立刻收敛。</td></tr>
+        <tr><td>\((-1)^n u_n\)</td><td>Leibniz</td><td>检查 \(u_n\downarrow0\)，并说明是否绝对收敛。</td></tr>
+        <tr><td>\(\sin nx,\cos nx\)</td><td>Dirichlet</td><td>证明三角部分和有界，另一个因子单调趋零。</td></tr>
+        <tr><td>已知 \(\sum b_n\) 收敛，再乘 \(a_n\)</td><td>Abel</td><td>常见条件是 \(a_n\) 单调有界。</td></tr>
+        <tr><td>重排或交换顺序</td><td>先问绝对收敛吗</td><td>条件收敛不能随便重排。</td></tr>
+        <tr><td>乘法或 Cauchy 乘积</td><td>先看绝对收敛</td><td>两个都绝对收敛时最稳。</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>八、即时判断练习</h2>
+    <div class="grid">
+      <div class="quiz-card" data-answer="conditional">
+        <div class="question">\[
+          \sum_{n=1}^{\infty}\frac{(-1)^{n+1}}{n}
+        \]</div>
+        <div class="choices">
+          <button data-choice="absolute">绝对收敛</button>
+          <button data-choice="conditional">条件收敛</button>
+          <button data-choice="diverge">发散</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+      <div class="quiz-card" data-answer="dirichlet">
+        <div class="question">\[
+          \sum_{n=1}^{\infty}\frac{\sin nx}{n}\quad(0<x<2\pi)
+        \]</div>
+        <div class="choices">
+          <button data-choice="ratio">比值判别</button>
+          <button data-choice="dirichlet">Dirichlet 判别</button>
+          <button data-choice="positive">正项比较</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+      <div class="quiz-card" data-answer="absolute">
+        <div class="question">\[
+          \sum_{n=1}^{\infty}\frac{(-1)^n}{n^2}
+        \]</div>
+        <div class="choices">
+          <button data-choice="absolute">绝对收敛</button>
+          <button data-choice="conditional">条件收敛</button>
+          <button data-choice="diverge">发散</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>九、课后题</h2>
+    <p>下面按教材第九章第 4 节习题整理。题面完整保留，提示只给入口；写作业时仍建议先独立算一遍，再展开提示核对方向。</p>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 1 <span class="tag">敛散性、绝对收敛与条件收敛</span></div>
+      <p>讨论下列级数的敛散性，包括条件收敛与绝对收敛：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ 1-\frac1{2!}+\frac13-\frac1{4!}+\frac15+\cdots;\\
+      &(2)\ \sum_{n=1}^{\infty}\frac{(-1)^{n+1}}{n+x}\quad(x\ne -n);\\
+      &(3)\ \sum_{n=1}^{\infty}(-1)^{n+1}\sin\frac{x}{n};\qquad
+      (4)\ \sum_{n=1}^{\infty}\frac{(-1)^{n+1}}{\sqrt[n]{n}};\\
+      &(5)\ \sum_{n=2}^{\infty}(-1)^n\frac{\ln^2 n}{n};\qquad
+      (6)\ \sum_{n=1}^{\infty}\frac1{\sqrt n}\cos\frac{n\pi}{3};\\
+      &(7)\ \sum_{n=1}^{\infty}(-1)^{n-1}\frac{4^n\sin^{2n}x}{n};\\
+      &(8)\ \sum_{n=1}^{\infty}\frac{\sin(n+1)x\cos(n-1)x}{n^p};\\
+      &(9)\ \sum_{n=1}^{\infty}(-1)^{n+1}\frac{n^2}{2^{x^n}};\\
+      &(10)\ \sum_{n=1}^{\infty}(-1)^{n+1}
+      \frac{\ln\left(2+\frac1n\right)}{\sqrt{(3n-2)(3n+2)}};\\
+      &(11)\ \sum_{n=2}^{\infty}\frac{x^n}{n^p\ln^q n};\qquad
+      (12)\ \sum_{n=1}^{\infty}\frac{(-1)^{n+1}}{n}\frac{a}{1+a^n}\quad(a>0).
+      \end{aligned}
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <p>优先分三步：先看绝对值级数；再看是否 Leibniz；含 \(\sin nx,\cos nx\) 的题试 Dirichlet。第 (11) 是参数题，端点 \(x=\pm1\) 要单独讨论。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 2 <span class="tag">Cauchy 收敛原理判发散</span></div>
+      <p>利用 Cauchy 收敛原理证明下列级数发散：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ 1+\frac12-\frac13+\frac14+\frac15-\frac16+\frac17+\frac18-\frac19+\cdots;\\
+      &(2)\ 1-\frac12+\frac13+\frac14-\frac15+\frac16+\frac17-\frac18+\frac19+\cdots.
+      \end{aligned}
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <p>找一段尾和，它不会随 \(n\) 增大而任意小。例如每三个一组或观察正项块与负项块的净贡献。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 3 <span class="tag">正项级数的尾部估计</span></div>
+      <p>设正项级数 \(\sum_{n=1}^{\infty}x_n\) 收敛，\(\{x_n\}\) 单调减少，利用 Cauchy 收敛原理证明：</p>
+      <div class="formula">\[
+      \lim_{n\to\infty}nx_n=0.
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <p>对 \(x_n+x_{n+1}+\cdots+x_{2n}\) 用 Cauchy 收敛原理；再用单调性把它和 \(nx_{2n}\) 或 \(nx_n\) 联系起来。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 4 <span class="tag">Cauchy 条件的量词</span></div>
+      <p>若对任意 \(\varepsilon>0\) 和任意正整数 \(p\)，存在 \(N(\varepsilon,p)\)，使得</p>
+      <div class="formula">\[
+      \left|x_{n+1}+x_{n+2}+\cdots+x_{n+p}\right|<\varepsilon
+      \]</div>
+      <p>对一切 \(n>N\) 成立，问级数 \(\sum_{n=1}^{\infty}x_n\) 是否收敛？</p>
+      <details>
+        <summary>提示</summary>
+        <p>注意 \(N\) 依赖 \(p\)。Cauchy 收敛原理要求一个 \(N(\varepsilon)\) 同时控制所有 \(p\)。试用调和级数作反例。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 5 <span class="tag">等价一般项</span></div>
+      <p>若级数 \(\sum_{n=1}^{\infty}x_n\) 收敛，且</p>
+      <div class="formula">\[
+      \lim_{n\to\infty}\frac{x_n}{y_n}=1,
+      \]</div>
+      <p>问级数 \(\sum_{n=1}^{\infty}y_n\) 是否收敛？</p>
+      <details>
+        <summary>提示</summary>
+        <p>在正项级数中可以用极限比较。若是任意项级数，需要额外小心：等价一般项不能随便保留条件收敛。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 6 <span class="tag">交错级数的单调条件</span></div>
+      <p>设 \(x_n\ge0\)，且 \(\lim_{n\to\infty}x_n=0\)，问交错级数</p>
+      <div class="formula">\[
+      \sum_{n=1}^{\infty}(-1)^{n+1}x_n
+      \]</div>
+      <p>是否收敛？</p>
+      <details>
+        <summary>提示</summary>
+        <p>Leibniz 判别法还需要单调减少。构造反例时，可以让奇数项像 \(1/k\)，偶数项很小。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 7 <span class="tag">由交错发散推出另一级数收敛</span></div>
+      <p>设正项数列 \(\{x_n\}\) 单调减少，且级数 \(\sum_{n=1}^{\infty}(-1)^nx_n\) 发散。问级数</p>
+      <div class="formula">\[
+      \sum_{n=1}^{\infty}\left(\frac1{1+x_n}\right)^n
+      \]</div>
+      <p>是否收敛？并说明理由。</p>
+      <details>
+        <summary>提示</summary>
+        <p>若交错级数在单调正项条件下仍发散，说明 \(x_n\) 不趋于 \(0\)。于是 \(x_n\) 有正下界，后面的级数可与几何级数比较。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 8 <span class="tag">Abel 判别法</span></div>
+      <p>设级数 \(\sum_{n=1}^{\infty}\frac{x_n}{n^{\alpha_0}}\) 收敛，则当 \(\alpha>\alpha_0\) 时，级数</p>
+      <div class="formula">\[
+      \sum_{n=1}^{\infty}\frac{x_n}{n^\alpha}
+      \]</div>
+      <p>也收敛。</p>
+      <details>
+        <summary>提示</summary>
+        <p>写成 \(\frac{x_n}{n^\alpha}=\frac1{n^{\alpha-\alpha_0}}\cdot\frac{x_n}{n^{\alpha_0}}\)，再用 Abel 判别法。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 9 <span class="tag">分部求和与差分</span></div>
+      <p>若 \(\sum_{n=1}^{\infty}nx_n\) 收敛，且 \(\sum_{n=2}^{\infty}n(x_n-x_{n-1})\) 收敛，则级数</p>
+      <div class="formula">\[
+      \sum_{n=1}^{\infty}x_n
+      \]</div>
+      <p>收敛。</p>
+      <details>
+        <summary>提示</summary>
+        <p>令 \(b_n=nx_n\)。把 \(n(x_n-x_{n-1})\) 改写成 \(b_n-b_{n-1}-x_{n-1}\)，再看部分和。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 10 <span class="tag">有界变差乘收敛级数</span></div>
+      <p>若 \(\sum_{n=2}^{\infty}(x_n-x_{n-1})\) 绝对收敛，\(\sum_{n=1}^{\infty}y_n\) 收敛，则级数</p>
+      <div class="formula">\[
+      \sum_{n=1}^{\infty}x_ny_n
+      \]</div>
+      <p>收敛。</p>
+      <details>
+        <summary>提示</summary>
+        <p>\(\sum |x_n-x_{n-1}|\) 收敛说明 \(\{x_n\}\) 有界变差，从而有极限且有界。用 Abel 变换控制尾和。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 11 <span class="tag">Taylor 估计</span></div>
+      <p>设 \(f(x)\) 在 \([-1,1]\) 上具有二阶连续导数，且</p>
+      <div class="formula">\[
+      \lim_{x\to0}\frac{f(x)}{x}=0.
+      \]</div>
+      <p>证明级数</p>
+      <div class="formula">\[
+      \sum_{n=1}^{\infty}f\left(\frac1n\right)
+      \]</div>
+      <p>绝对收敛。</p>
+      <details>
+        <summary>提示</summary>
+        <p>由条件推出 \(f(0)=0\)、\(f'(0)=0\)。再用 Taylor 公式得到 \(f(x)=O(x^2)\)。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 12 <span class="tag">Abel 判别法的逆向使用</span></div>
+      <p>已知任意项级数 \(\sum_{n=1}^{\infty}x_n\) 发散，证明级数</p>
+      <div class="formula">\[
+      \sum_{n=1}^{\infty}\left(1+\frac1n\right)^nx_n
+      \]</div>
+      <p>也发散。</p>
+      <details>
+        <summary>提示</summary>
+        <p>反证。若变换后的级数收敛，再乘上 \(\left(1+\frac1n\right)^{-n}\)，这个因子单调有界并趋于 \(e^{-1}\)，可由 Abel 判别法推出 \(\sum x_n\) 收敛，矛盾。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 13 <span class="tag">比值条件推出 Leibniz 条件</span></div>
+      <p>设 \(x_n>0\)，且</p>
+      <div class="formula">\[
+      \lim_{n\to\infty}n\left(\frac{x_n}{x_{n+1}}-1\right)>0.
+      \]</div>
+      <p>证明：交错级数</p>
+      <div class="formula">\[
+      \sum_{n=1}^{\infty}(-1)^{n+1}x_n
+      \]</div>
+      <p>收敛。</p>
+      <details>
+        <summary>提示</summary>
+        <p>条件说明从某项起 \(\frac{x_n}{x_{n+1}}>1+\frac{c}{n}\)，于是 \(x_n\) 最终单调减少，且可以证明 \(x_n\to0\)。再用 Leibniz 判别法。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 14 <span class="tag">重排后的交错调和级数</span></div>
+      <p>利用</p>
+      <div class="formula">\[
+      1+\frac12+\frac13+\cdots+\frac1n-\ln n\to \gamma\qquad(n\to\infty),
+      \]</div>
+      <p>其中 \(\gamma\) 是 Euler 常数，求下述 \(\sum_{n=1}^{\infty}\frac{(-1)^{n+1}}{n}\) 的重排级数的和：</p>
+      <div class="formula">\[
+      1+\frac13-\frac12+\frac15+\frac17-\frac14+\frac19+\frac1{11}-\frac16+\cdots.
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <p>每两个正的奇数项后放一个负的偶数项。设第 \(n\) 组部分和为 \(\sum_{k=1}^n\left(\frac1{4k-3}+\frac1{4k-1}-\frac1{2k}\right)\)，用 \(H_n-\ln n\to\gamma\) 化简。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 15 <span class="tag">Cauchy 乘积</span></div>
+      <p>利用级数的 Cauchy 乘积证明：</p>
+      <div class="formula">\[
+      (1)\quad
+      \sum_{n=0}^{\infty}\frac1{n!}\cdot
+      \sum_{n=0}^{\infty}\frac{(-1)^n}{n!}=1;
+      \]</div>
+      <div class="formula">\[
+      (2)\quad
+      \left(\sum_{n=0}^{\infty}q^n\right)
+      \left(\sum_{n=0}^{\infty}q^n\right)
+      =
+      \sum_{n=0}^{\infty}(n+1)q^n
+      =
+      \frac1{(1-q)^2}\qquad(|q|<1).
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <p>第 (1) 可看作 \(e\cdot e^{-1}=1\)，也可直接计算 Cauchy 乘积中 \(\sum_{k=0}^n\frac{(-1)^k}{k!(n-k)!}\)。第 (2) 的 Cauchy 乘积每个 \(q^n\) 出现 \(n+1\) 次。</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="footer">
+    <p>来源参考：陈纪修、于崇华、金路《数学分析》第三版下册，第九章 §4。建议学习时把本节和 <a href="./0009-3-positive-series.html">§3 正项级数</a> 连起来看：绝对收敛就是把任意项级数重新交给正项级数判别法处理；条件收敛才需要 Leibniz、Dirichlet、Abel 和重排思想。</p>
+    <p>如果你做题后要批改，先发已做部分即可；我会按“结论、判别法、关键条件是否满足”逐题检查。</p>
+  </section>
+</main>
+
+<script>
+  document.querySelectorAll(".quiz-card").forEach((card) => {
+    const answer = card.dataset.answer;
+    const feedback = card.querySelector(".feedback");
+    card.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("click", () => {
+        card.querySelectorAll("button").forEach((btn) => {
+          btn.classList.remove("correct", "wrong");
+        });
+        if (button.dataset.choice === answer) {
+          button.classList.add("correct");
+          feedback.className = "feedback good";
+          feedback.textContent = "对。这个判断抓住了任意项级数最重要的入口。";
+        } else {
+          button.classList.add("wrong");
+          const correct = card.querySelector(`[data-choice="${answer}"]`);
+          if (correct) correct.classList.add("correct");
+          feedback.className = "feedback bad";
+          feedback.textContent = "再看它是绝对收敛、交错抵消，还是三角部分和有界。";
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

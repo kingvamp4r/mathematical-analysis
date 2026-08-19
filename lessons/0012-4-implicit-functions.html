@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第十二章 §4：隐函数</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"]],
+        displayMath: [["\\[", "\\]"]],
+        processEscapes: true
+      },
+      options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202124;
+      --muted: #667085;
+      --line: #d9dee7;
+      --paper: #fffef9;
+      --accent: #0b6865;
+      --accent-dark: #074c49;
+      --soft: #edf8f7;
+      --amber: #fff4e3;
+      --amber-line: #bf7416;
+      --red: #a0183d;
+      --green: #146c43;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f4f0e8;
+      color: var(--ink);
+      font: 17px/1.75 ui-serif, "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+    }
+    main {
+      width: min(1040px, calc(100vw - 32px));
+      margin: 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 50px rgba(20, 30, 40, 0.08);
+    }
+    header {
+      padding: 42px 46px 30px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffef9, #fbf7ef);
+    }
+    section { padding: 28px 46px; border-bottom: 1px solid var(--line); }
+    h1, h2, h3, h4, button, .kicker, .tag, .pill, th {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      letter-spacing: 0;
+    }
+    h1 { margin: 0 0 10px; font-size: 35px; line-height: 1.2; }
+    h2 { margin: 0 0 14px; font-size: 24px; line-height: 1.3; }
+    h3 { margin: 22px 0 8px; font-size: 18px; line-height: 1.35; color: var(--accent-dark); }
+    h4 { margin: 14px 0 6px; font-size: 16px; color: var(--accent-dark); }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    ol, ul { padding-left: 24px; }
+    li { margin: 6px 0; }
+    .kicker {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .lead { color: var(--muted); max-width: 78ch; }
+    .formula {
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      padding: 12px 14px;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+    .note {
+      background: var(--amber);
+      border-left: 4px solid var(--amber-line);
+      padding: 12px 14px;
+      margin: 14px 0;
+      color: #704000;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .box, .exercise, .quiz-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 14px 16px;
+    }
+    .box strong {
+      display: block;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      margin-bottom: 6px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 15px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #fafafa; }
+    .exercise { margin: 12px 0; }
+    .exercise-title {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+    .tag, .pill {
+      display: inline-block;
+      border: 1px solid #b6d7d4;
+      background: var(--soft);
+      color: var(--accent-dark);
+      font-size: 13px;
+      padding: 2px 7px;
+    }
+    .pill { border-color: var(--line); color: var(--muted); background: #fff; }
+    details {
+      border-top: 1px dashed var(--line);
+      margin-top: 10px;
+      padding-top: 8px;
+    }
+    summary {
+      cursor: pointer;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 650;
+    }
+    .question { background: #f7f7f7; padding: 10px 12px; overflow-x: auto; }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    button {
+      border: 1px solid #b9c1cc;
+      background: #fff;
+      color: var(--ink);
+      padding: 9px 10px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button:hover { border-color: var(--accent); background: var(--soft); }
+    button.correct { border-color: var(--green); background: #eaf7ef; color: var(--green); }
+    button.wrong { border-color: var(--red); background: #fff0f3; color: var(--red); }
+    .feedback { min-height: 28px; margin-top: 10px; color: var(--muted); font-size: 15px; }
+    .feedback.good { color: var(--green); }
+    .feedback.bad { color: var(--red); }
+    .footer { color: var(--muted); font-size: 15px; }
+    @media (max-width: 780px) {
+      main { margin: 16px auto; }
+      header, section { padding: 24px; }
+      h1 { font-size: 28px; }
+      .grid, .two, .choices { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      main { box-shadow: none; border: none; width: 100%; margin: 0; }
+      button { display: none; }
+      details { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="kicker">数学分析 · 第十二章 §4</div>
+    <h1>隐函数</h1>
+    <p class="lead">这一节回答一个很现实的问题：方程 \(F(x,y)=0\) 没有显式写出 \(y=f(x)\)，但在某个点附近能不能把 \(y\) 看成 \(x\) 的函数？如果能，它的导数怎么求？</p>
+  </header>
+
+  <section>
+    <h2>本节主线</h2>
+    <div class="grid">
+      <div class="box">
+        <strong>存在唯一</strong>
+        <p>方程 \(F(x,y)=0\) 附近能不能唯一解出 \(y=f(x)\)。</p>
+      </div>
+      <div class="box">
+        <strong>求导公式</strong>
+        <p>不用真的解出 \(f\)，直接对方程两边求导。</p>
+      </div>
+      <div class="box">
+        <strong>Jacobi 判别</strong>
+        <p>多个方程时，看关于未知函数的 Jacobi 行列式是否非零。</p>
+      </div>
+    </div>
+    <div class="note">一句话：隐函数题先问“能不能局部解出”，再问“解出来后怎么求导”。考试计算通常只需要后半句：对方程求导，解线性方程组。</div>
+  </section>
+
+  <section>
+    <h2>一、单个方程：从圆的例子看隐函数</h2>
+    <p>单位圆</p>
+    <div class="formula">\[
+      x^2+y^2=1
+    \]</div>
+    <p>整体上不能把 \(y\) 看成 \(x\) 的单值函数，因为同一个 \(x\) 可能对应上下两个 \(y\)。但在上半圆附近可以写成</p>
+    <div class="formula">\[
+      y=\sqrt{1-x^2}.
+    \]</div>
+    <p>在下半圆附近可以写成</p>
+    <div class="formula">\[
+      y=-\sqrt{1-x^2}.
+    \]</div>
+    <p>所以隐函数定理是一个局部定理：它不保证全局能解，只保证在某个点附近能唯一解出。</p>
+  </section>
+
+  <section>
+    <h2>二、定理 12.4.1：一元隐函数存在定理</h2>
+    <p>设 \(F(x,y)\) 满足：</p>
+    <ol>
+      <li>\(F(x_0,y_0)=0\)；</li>
+      <li>\(F\) 在矩形邻域内连续，并且 \(\frac{\partial F}{\partial x},\frac{\partial F}{\partial y}\) 连续；</li>
+      <li>\(\frac{\partial F}{\partial y}(x_0,y_0)\ne0\)。</li>
+    </ol>
+    <p>那么在 \(x_0\) 附近，可以由方程</p>
+    <div class="formula">\[
+      F(x,y)=0
+    \]</div>
+    <p>唯一确定一个隐函数</p>
+    <div class="formula">\[
+      y=f(x),\qquad f(x_0)=y_0,
+    \]</div>
+    <p>并且 \(f\) 连续、可导，导数为</p>
+    <div class="formula">\[
+      \frac{dy}{dx}
+      =
+      f'(x)
+      =
+      -\frac{\frac{\partial F}{\partial x}(x,f(x))}
+      {\frac{\partial F}{\partial y}(x,f(x))}.
+    \]</div>
+
+    <h3>证明思路</h3>
+    <p>若 \(\frac{\partial F}{\partial y}(x_0,y_0)>0\)，则在小矩形里 \(\frac{\partial F}{\partial y}>0\)，所以固定 \(x\) 时，\(F(x,y)\) 关于 \(y\) 严格增加。再用介值定理保证有解，用严格单调保证唯一。</p>
+    <p>可导性来自对恒等式 \(F(x,f(x))=0\) 求导：</p>
+    <div class="formula">\[
+      \frac{d}{dx}F(x,f(x))
+      =
+      \frac{\partial F}{\partial x}
+      +
+      \frac{\partial F}{\partial y}\frac{dy}{dx}
+      =
+      0.
+    \]</div>
+  </section>
+
+  <section>
+    <h2>三、定理 12.4.2：多元自变量，一个未知函数</h2>
+    <p>若</p>
+    <div class="formula">\[
+      F(x_1,\ldots,x_n,y)=0
+    \]</div>
+    <p>在点 \((x_1^0,\ldots,x_n^0,y^0)\) 附近满足</p>
+    <div class="formula">\[
+      F(x_1^0,\ldots,x_n^0,y^0)=0,\qquad
+      \frac{\partial F}{\partial y}(x_1^0,\ldots,x_n^0,y^0)\ne0,
+    \]</div>
+    <p>且相关偏导连续，则局部唯一确定</p>
+    <div class="formula">\[
+      y=f(x_1,\ldots,x_n).
+    \]</div>
+    <p>求偏导时仍然对方程两边求导：</p>
+    <div class="formula">\[
+      \frac{\partial y}{\partial x_i}
+      =
+      -\frac{\frac{\partial F}{\partial x_i}}
+      {\frac{\partial F}{\partial y}},
+      \qquad i=1,\ldots,n.
+    \]</div>
+    <div class="note">这条公式的记法：分母永远是“被解出的那个变量”的偏导；分子是你正在对哪个自变量求导。</div>
+  </section>
+
+  <section>
+    <h2>四、多个方程：用 Jacobi 行列式判断</h2>
+    <h3>定理 12.4.3：两个方程、两个未知函数</h3>
+    <p>设方程组</p>
+    <div class="formula">\[
+      \begin{cases}
+      F(x,y,u,v)=0,\\
+      G(x,y,u,v)=0
+      \end{cases}
+    \]</div>
+    <p>希望在某点附近把 \(u,v\) 看成 \(x,y\) 的函数：</p>
+    <div class="formula">\[
+      u=f(x,y),\qquad v=g(x,y).
+    \]</div>
+    <p>关键条件是关于未知量 \(u,v\) 的 Jacobi 行列式非零：</p>
+    <div class="formula">\[
+      \frac{\partial(F,G)}{\partial(u,v)}
+      =
+      \begin{vmatrix}
+      \frac{\partial F}{\partial u} & \frac{\partial F}{\partial v}\\
+      \frac{\partial G}{\partial u} & \frac{\partial G}{\partial v}
+      \end{vmatrix}
+      \ne0.
+    \]</div>
+    <p>导数矩阵满足</p>
+    <div class="formula">\[
+      \begin{pmatrix}
+      \frac{\partial u}{\partial x} & \frac{\partial u}{\partial y}\\
+      \frac{\partial v}{\partial x} & \frac{\partial v}{\partial y}
+      \end{pmatrix}
+      =
+      -
+      \begin{pmatrix}
+      \frac{\partial F}{\partial u} & \frac{\partial F}{\partial v}\\
+      \frac{\partial G}{\partial u} & \frac{\partial G}{\partial v}
+      \end{pmatrix}^{-1}
+      \begin{pmatrix}
+      \frac{\partial F}{\partial x} & \frac{\partial F}{\partial y}\\
+      \frac{\partial G}{\partial x} & \frac{\partial G}{\partial y}
+      \end{pmatrix}.
+    \]</div>
+
+    <h3>定理 12.4.4：一般 \(m\) 个方程</h3>
+    <p>对方程组</p>
+    <div class="formula">\[
+      F_i(x_1,\ldots,x_n,y_1,\ldots,y_m)=0,\qquad i=1,\ldots,m,
+    \]</div>
+    <p>若关于未知量 \(y_1,\ldots,y_m\) 的 Jacobi 行列式非零：</p>
+    <div class="formula">\[
+      \frac{\partial(F_1,\ldots,F_m)}{\partial(y_1,\ldots,y_m)}\ne0,
+    \]</div>
+    <p>则局部唯一确定</p>
+    <div class="formula">\[
+      y_j=f_j(x_1,\ldots,x_n),\qquad j=1,\ldots,m.
+    \]</div>
+  </section>
+
+  <section>
+    <h2>五、逆映射定理</h2>
+    <p>若映射</p>
+    <div class="formula">\[
+      x=x(u,v),\qquad y=y(u,v)
+    \]</div>
+    <p>在点 \((u_0,v_0)\) 附近有连续偏导，并且 Jacobi 行列式</p>
+    <div class="formula">\[
+      \frac{\partial(x,y)}{\partial(u,v)}\ne0,
+    \]</div>
+    <p>则局部存在反函数</p>
+    <div class="formula">\[
+      u=u(x,y),\qquad v=v(x,y).
+    \]</div>
+    <p>反函数的 Jacobi 矩阵是原 Jacobi 矩阵的逆矩阵。</p>
+    <div class="formula">\[
+      \frac{\partial(u,v)}{\partial(x,y)}
+      =
+      \left(
+      \frac{\partial(x,y)}{\partial(u,v)}
+      \right)^{-1}.
+    \]</div>
+    <p>特别地，在二维行列式层面：</p>
+    <div class="formula">\[
+      \frac{\partial(u,v)}{\partial(x,y)}
+      =
+      \frac{1}{\frac{\partial(x,y)}{\partial(u,v)}}.
+    \]</div>
+    <div class="note">极坐标变换中 \(\frac{\partial(x,y)}{\partial(r,\theta)}=r\)。当 \(r\ne0\) 时，局部可以反解出 \(r,\theta\)。原点处 \(r=0\)，角度不唯一，所以不能局部反解。</div>
+  </section>
+
+  <section>
+    <h2>六、考试做题流程</h2>
+    <table>
+      <thead>
+        <tr><th>题型</th><th>动作</th><th>注意点</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>单方程 \(F(x,y)=0\)</td>
+          <td>写 \(\frac{\partial F}{\partial x}+\frac{\partial F}{\partial y}\frac{dy}{dx}=0\)。</td>
+          <td>分母是 \(\frac{\partial F}{\partial y}\)，不能为零。</td>
+        </tr>
+        <tr>
+          <td>单方程 \(F(x,y,z)=0\)</td>
+          <td>若解 \(z=z(x,y)\)，分别对 \(x,y\) 求偏导。</td>
+          <td>\(\frac{\partial z}{\partial x}=-F_x/F_z,\ \frac{\partial z}{\partial y}=-F_y/F_z\)。</td>
+        </tr>
+        <tr>
+          <td>方程组</td>
+          <td>把未知函数的导数组成线性方程组。</td>
+          <td>用关于未知量的 Jacobi 行列式判断可解。</td>
+        </tr>
+        <tr>
+          <td>二阶偏导</td>
+          <td>先求一阶，再对一阶关系继续求导。</td>
+          <td>不要忘记 \(z=z(x,y)\) 或 \(y=y(x)\) 仍然是函数。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>七、即时判断练习</h2>
+    <div class="quiz-card" data-answer="b">
+      <div class="question">若 \(F(x,y)=0\) 要局部解出 \(y=f(x)\)，关键非零条件是哪一个？</div>
+      <div class="choices">
+        <button data-choice="a">\(\frac{\partial F}{\partial x}\ne0\)</button>
+        <button data-choice="b">\(\frac{\partial F}{\partial y}\ne0\)</button>
+        <button data-choice="c">\(F(x,y)\ne0\)</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+    <div class="quiz-card" data-answer="a">
+      <div class="question">方程组想解出 \(u,v\) 为 \(x,y\) 的函数，应检查哪个 Jacobi 行列式？</div>
+      <div class="choices">
+        <button data-choice="a">\(\frac{\partial(F,G)}{\partial(u,v)}\)</button>
+        <button data-choice="b">\(\frac{\partial(F,G)}{\partial(x,y)}\)</button>
+        <button data-choice="c">\(\frac{\partial(u,v)}{\partial(F,G)}\)</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>八、课后题训练</h2>
+    <p>下面按教材第 165-167 页习题 1-14 整理。题面完整保留，提示只给入口；写作业时仍建议先独立算一遍。</p>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 1</span><span class="tag">单方程隐函数求导</span></div>
+      <p>求下列方程所确定的隐函数的导数或偏导数：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \sin y+e^x-xy^2=0,\quad 求\ \frac{dy}{dx};\\
+      &(2)\ x^y=y^x,\quad 求\ \frac{dy}{dx};\\
+      &(3)\ \ln\sqrt{x^2+y^2}=\arctan\frac{y}{x},\quad 求\ \frac{dy}{dx};\\
+      &(4)\ \arctan\frac{x+y}{a}-\frac{y}{a}=0,\quad 求\ \frac{dy}{dx}\ 和\ \frac{d^2y}{dx^2};\\
+      &(5)\ \frac{x}{z}=\ln\frac{z}{y},\quad 求\ \frac{\partial z}{\partial x}\ 和\ \frac{\partial z}{\partial y};\\
+      &(6)\ e^z-xyz=0,\quad 求\ \frac{\partial z}{\partial x},\frac{\partial z}{\partial y},
+      \frac{\partial^2 z}{\partial x^2},\frac{\partial^2 z}{\partial x\partial y};\\
+      &(7)\ z^3-3xyz=a^3,\quad 求\ \frac{\partial z}{\partial x},\frac{\partial z}{\partial y},
+      \frac{\partial^2 z}{\partial x^2},\frac{\partial^2 z}{\partial x\partial y};\\
+      &(8)\ f(x+y,y+z,z+x)=0,\quad 求\ \frac{\partial z}{\partial x}\ 和\ \frac{\partial z}{\partial y};\\
+      &(9)\ z=f(xz,z-y),\quad 求\ \frac{\partial z}{\partial x},\frac{\partial z}{\partial y},\frac{\partial^2 z}{\partial x^2};\\
+      &(10)\ f(x,x+y,x+y+z)=0,\quad 求\ \frac{\partial z}{\partial x},\frac{\partial z}{\partial y},
+      \frac{\partial^2 z}{\partial x^2},\frac{\partial^2 z}{\partial x\partial y}.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>统一写成 \(F=0\)。一阶偏导直接用 \(\frac{\partial z}{\partial x}=-F_x/F_z\)；二阶偏导不要跳步，先保留一阶关系再继续求偏导。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 2</span><span class="tag">高阶导验证</span></div>
+      <p>设 \(y=\tan(x+y)\) 确定 \(y\) 为 \(x\) 的隐函数，验证</p>
+      <div class="formula">\[
+        \frac{d^3y}{dx^3}
+        =
+        \frac{2(3y^4+8y^2+5)}{y^7}.
+      \]</div>
+      <details><summary>提示</summary><p>先从 \(\tan(x+y)=y\) 得到一阶导，再连续求导。每一步都把 \(\sec^2(x+y)\) 用 \(1+\tan^2(x+y)=1+y^2\) 消去。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 3</span><span class="tag">构造型隐函数</span></div>
+      <p>设 \(\varphi\) 是可微函数，证明由</p>
+      <div class="formula">\[
+        \varphi(cx-az,cy-bz)=0
+      \]</div>
+      <p>所确定的隐函数 \(z=f(x,y)\) 满足</p>
+      <div class="formula">\[
+        a\frac{\partial z}{\partial x}
+        +
+        b\frac{\partial z}{\partial y}
+        =
+        c.
+      \]</div>
+      <details><summary>提示</summary><p>分别对 \(x,y\) 求偏导，得到两个含 \(\varphi_1,\varphi_2\) 的方程，再线性组合消去它们。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 4</span><span class="tag">齐次结构</span></div>
+      <p>设方程</p>
+      <div class="formula">\[
+        \varphi\left(x+\frac{z}{y},y+\frac{z}{x}\right)=0
+      \]</div>
+      <p>确定隐函数 \(z=f(x,y)\)，证明它满足</p>
+      <div class="formula">\[
+        x\frac{\partial z}{\partial x}
+        +
+        y\frac{\partial z}{\partial y}
+        =
+        z-xy.
+      \]</div>
+      <details><summary>提示</summary><p>对 \(x,y\) 分别求偏导后，尝试做 \(x\) 倍第一式加 \(y\) 倍第二式。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 5</span><span class="tag">方程组隐函数</span></div>
+      <p>求下列方程组所确定的隐函数的导数或偏导数：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \begin{cases}
+      z-x^2-y^2=0,\\
+      x^2+2y^2+3z^2=4a^2,
+      \end{cases}
+      \quad 求\ \frac{dy}{dx},\frac{dz}{dx},\frac{d^2y}{dx^2},\frac{d^2z}{dx^2};\\
+      &(2)\ \begin{cases}
+      xu+yv=0,\\
+      yu+xv=1,
+      \end{cases}
+      \quad 求\ \frac{\partial u}{\partial x},\frac{\partial u}{\partial y},
+      \frac{\partial^2u}{\partial x^2},\frac{\partial^2u}{\partial x\partial y};\\
+      &(3)\ \begin{cases}
+      u=f(ux,v+y),\\
+      v=g(u-x,v^2y),
+      \end{cases}
+      \quad 求\ \frac{\partial u}{\partial x}\ 和\ \frac{\partial v}{\partial x};\\
+      &(4)\ \begin{cases}
+      x=u+v,\\
+      y=u-v,\\
+      z=u^2v^2,
+      \end{cases}
+      \quad 求\ \frac{\partial z}{\partial x}\ 和\ \frac{\partial z}{\partial y};\\
+      &(5)\ \begin{cases}
+      x=e^u\cos v,\\
+      y=e^u\sin v,\\
+      z=u^2+v^2,
+      \end{cases}
+      \quad 求\ \frac{\partial z}{\partial x}\ 和\ \frac{\partial z}{\partial y}.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>先分清哪些是自变量、哪些是未知函数。方程组求导后得到线性方程组，用 Jacobi 行列式或矩阵法解。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 6</span><span class="tag">求微分</span></div>
+      <p>求微分：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ x+2y+z-2\sqrt{xyz}=0,\quad 求\ dz;\\
+      &(2)\ \begin{cases}
+      x+y=u+v,\\
+      \frac{x}{\sin u}=\frac{y}{\sin v},
+      \end{cases}
+      \quad 求\ du\ 与\ dv.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>把 \(dx,dy,dz,du,dv\) 当作一阶线性关系中的未知量或已知量处理。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 7</span><span class="tag">向量值隐函数</span></div>
+      <p>设</p>
+      <div class="formula">\[
+        x=x(y),\qquad z=z(y)
+      \]</div>
+      <p>是由方程组</p>
+      <div class="formula">\[
+        F(x,y,z)=0,\qquad
+        G\left(\frac{x}{y},\frac{z}{y}\right)=0
+      \]</div>
+      <p>所确定的向量值隐函数，其中二元函数 \(F\) 和 \(G\) 均具有连续偏导数，求</p>
+      <div class="formula">\[
+        \frac{dx}{dy}\quad 和\quad \frac{dz}{dy}.
+      \]</div>
+      <details><summary>提示</summary><p>对 \(y\) 求导，得到关于 \(dx/dy,dz/dy\) 的二元线性方程组。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 8</span><span class="tag">极坐标 Laplace 算子</span></div>
+      <p>设 \(f(x,y)\) 具有二阶连续偏导数。在极坐标</p>
+      <div class="formula">\[
+        x=r\cos\theta,\qquad y=r\sin\theta
+      \]</div>
+      <p>变换下，求</p>
+      <div class="formula">\[
+        \frac{\partial^2 f}{\partial x^2}
+        +
+        \frac{\partial^2 f}{\partial y^2}
+      \]</div>
+      <p>关于极坐标的表达式。</p>
+      <details><summary>提示</summary><p>目标结果是二维 Laplace 算子的极坐标形式：径向二阶项、径向一阶项和角向二阶项。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 9</span><span class="tag">线性变换化简 PDE</span></div>
+      <p>设二元函数 \(f\) 具有二阶连续偏导数。证明：通过适当线性变换</p>
+      <div class="formula">\[
+        u=x+\lambda y,\qquad v=x+\mu y,
+      \]</div>
+      <p>可以将方程</p>
+      <div class="formula">\[
+        A\frac{\partial^2 f}{\partial x^2}
+        +
+        2B\frac{\partial^2 f}{\partial x\partial y}
+        +
+        C\frac{\partial^2 f}{\partial y^2}=0,\qquad AC-B^2<0
+      \]</div>
+      <p>化简为</p>
+      <div class="formula">\[
+        \frac{\partial^2 f}{\partial u\partial v}=0.
+      \]</div>
+      <p>并说明此时 \(\lambda,\mu\) 为二元二次方程 \(A+2Bt+Ct^2=0\) 的两个相异实根。</p>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 10</span><span class="tag">指数变量替换</span></div>
+      <p>通过自变量变换</p>
+      <div class="formula">\[
+        x=e^\xi,\qquad y=e^\eta,
+      \]</div>
+      <p>变换方程</p>
+      <div class="formula">\[
+        ax^2\frac{\partial^2 z}{\partial x^2}
+        +
+        2bxy\frac{\partial^2 z}{\partial x\partial y}
+        +
+        cy^2\frac{\partial^2 z}{\partial y^2}=0,
+      \]</div>
+      <p>其中 \(a,b,c\) 为常数。</p>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 11</span><span class="tag">开方变量替换</span></div>
+      <p>通过自变量变换</p>
+      <div class="formula">\[
+        u=x-2\sqrt y,\qquad v=x+2\sqrt y,
+      \]</div>
+      <p>变换方程</p>
+      <div class="formula">\[
+        \frac{\partial^2 z}{\partial x^2}
+        -
+        y\frac{\partial^2 z}{\partial y^2}
+        =
+        \frac12\frac{\partial z}{\partial y},\qquad y>0.
+      \]</div>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 12</span><span class="tag">同时换自变量和因变量</span></div>
+      <p>导出新的因变量关于新的自变量的偏导数所满足的方程：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ 用
+      \begin{cases}
+      u=x^2+y^2,\\
+      v=\frac1x+\frac1y,
+      \end{cases}
+      \quad 及\quad w=\ln z-(x+y)
+      \quad 变换方程\\
+      &\qquad
+      y\frac{\partial z}{\partial x}
+      -
+      x\frac{\partial z}{\partial y}
+      =
+      (y-x)z;\\[4pt]
+      &(2)\ 用
+      \begin{cases}
+      u=x,\\
+      v=x+y,
+      \end{cases}
+      \quad 及\quad w=x+y+z
+      \quad 变换方程\\
+      &\qquad
+      \frac{\partial^2 z}{\partial x^2}
+      -
+      2\frac{\partial^2 z}{\partial x\partial y}
+      +
+      \left(1+\frac{y}{x}\right)
+      \frac{\partial^2 z}{\partial y^2}=0;\\[4pt]
+      &(3)\ 用
+      \begin{cases}
+      u=x+y,\\
+      v=\frac{y}{x},
+      \end{cases}
+      \quad 及\quad w=\frac{z}{x}
+      \quad 变换方程\\
+      &\qquad
+      \frac{\partial^2 z}{\partial x^2}
+      -
+      2\frac{\partial^2 z}{\partial x\partial y}
+      +
+      \frac{\partial^2 z}{\partial y^2}=0.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>这类题先写依赖图：\(z=e^{w+x+y}\) 或 \(z=xw\)，再把 \(\frac{\partial}{\partial x},\frac{\partial}{\partial y}\) 换成关于 \(u,v\) 的算子。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 13</span><span class="tag">含参数隐函数</span></div>
+      <p>设 \(y=f(x,t)\)，而 \(t\) 是由方程</p>
+      <div class="formula">\[
+        F(x,y,t)=0
+      \]</div>
+      <p>所确定的 \(x,y\) 的隐函数，其中 \(f\) 和 \(F\) 都具有连续偏导数。证明</p>
+      <div class="formula">\[
+        \frac{dy}{dx}
+        =
+        \frac{
+        \frac{\partial f}{\partial x}\frac{\partial F}{\partial t}
+        -
+        \frac{\partial f}{\partial t}\frac{\partial F}{\partial x}
+        }{
+        \frac{\partial F}{\partial t}
+        -
+        \frac{\partial f}{\partial t}\frac{\partial F}{\partial y}
+        }.
+      \]</div>
+      <details><summary>提示</summary><p>这里 \(t=t(x,y)\)，而 \(y=f(x,t(x,y))\)。先对 \(y=f(x,t)\) 和 \(F(x,y,t)=0\) 同时求导，再消去 \(dt/dx\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title"><span>习题 14</span><span class="tag">存在一阶积分</span></div>
+      <p>设二元函数 \(f(x,y):R^2\to R\) 具有连续偏导数。证明：存在一对一的连续向量值函数 \(G(t):R\to R^2\)，使得</p>
+      <div class="formula">\[
+        f\circ G=\text{常数}.
+      \]</div>
+      <details><summary>提示</summary><p>从等值线角度理解：希望沿一条曲线走时 \(f\) 不变。可从常微分方程或梯度正交方向构造曲线。</p></details>
+    </div>
+  </section>
+
+  <section class="footer">
+    <p>来源：陈纪修、于崇华、金路《数学分析》第三版下册，第十二章 §4，教材第 151-167 页。下一节：第十二章 §5：偏导数在几何中的应用。</p>
+    <p>上一节：<a href="./0012-3-mean-value-taylor.html">第十二章 §3：中值定理和 Taylor 公式</a>。复盘：<a href="../reference/euclidean-space-mistakes-good-problems.html">错题集与好题集</a>。路线图：<a href="../reference/textbook-roadmap-euclidean-space.html">教材路线图</a>。</p>
+  </section>
+</main>
+<script>
+  document.querySelectorAll(".quiz-card").forEach((card) => {
+    const answer = card.dataset.answer;
+    const feedback = card.querySelector(".feedback");
+    card.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("click", () => {
+        card.querySelectorAll("button").forEach((b) => b.classList.remove("correct", "wrong"));
+        if (button.dataset.choice === answer) {
+          button.classList.add("correct");
+          feedback.textContent = "对。隐函数定理永远围绕“想解出的变量”做非零判别。";
+          feedback.className = "feedback good";
+        } else {
+          button.classList.add("wrong");
+          feedback.textContent = "再想想：要解出哪个变量，就要看方程对那个变量是否真正敏感。";
+          feedback.className = "feedback bad";
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

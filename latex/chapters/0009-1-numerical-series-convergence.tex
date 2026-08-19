@@ -1,0 +1,401 @@
+% Generated from lessons/0009-1-numerical-series-convergence.html; edit the HTML source, then rerun the converter.
+\section{数项级数的收敛性}
+\lessonmark{数项级数的收敛性}
+
+这一节只解决一个基础问题：无限多个数相加到底是什么意思，什么时候有“和”。考试里要把级数看成部分和数列的极限，而不是把无穷多个数真的一次性加完。
+
+\subsection*{本节主线}
+
+\begin{conceptbox}
+\textbf{定义级数}
+级数 \(\sum x_n\) 的本质是部分和数列 \(S_n=x_1+\cdots+x_n\)。
+\end{conceptbox}
+
+\begin{conceptbox}
+\textbf{判断收敛}
+看 \(S_n\) 是否有有限极限。若有，极限就是级数的和。
+\end{conceptbox}
+
+\begin{conceptbox}
+\textbf{计算套路}
+几何级数、裂项相消、分组、参数化求和，是这一节的主要工具。
+\end{conceptbox}
+
+\begin{notebox}
+一句话记忆：级数收敛不是“项越来越小”，而是“部分和越来越稳定”。
+\end{notebox}
+
+\subsection*{一、定义：级数是部分和的极限}
+
+给定数列 \(x_1,x_2,\ldots,x_n,\ldots\)，把形式和
+
+\[
+      x_1+x_2+\cdots+x_n+\cdots
+      =
+      \sum_{n=1}^{\infty}x_n
+    \]
+
+称为一个数项级数。它的第 \(n\) 个部分和是
+
+\[
+      S_n=\sum_{k=1}^{n}x_k.
+    \]
+
+若部分和数列 \(\{S_n\}\) 收敛，且
+
+\[
+      \lim_{n\to\infty}S_n=S,
+    \]
+
+则称级数 \(\sum_{n=1}^{\infty}x_n\) 收敛，并称 \(S\) 为它的和，记作
+
+\[
+      \sum_{n=1}^{\infty}x_n=S.
+    \]
+
+若 \(\{S_n\}\) 不收敛，则级数发散。
+
+\begin{notebox}
+所以判断级数敛散，第一原则永远是：研究 \(S_n\)，而不是只盯着 \(x_n\)。
+\end{notebox}
+
+\subsection*{二、基本例子}
+
+\subsubsection*{1. 等比级数}
+
+若 \(|q|<1\)，则
+
+\[
+      \sum_{n=0}^{\infty}q^n=\frac{1}{1-q}.
+    \]
+
+证明只用有限等比求和：
+
+\[
+      S_n=1+q+\cdots+q^n=\frac{1-q^{n+1}}{1-q},
+      \qquad q\ne1.
+    \]
+
+当 \(|q|<1\) 时 \(q^{n+1}\to0\)，于是 \(S_n\to \frac1{1-q}\)。若 \(|q|\ge1\)，通常由一般项不趋于 \(0\) 或部分和振荡推出发散。
+
+\subsubsection*{2. \(1-1+1-1+\cdots\) 不收敛}
+
+它的一部分部分和是 \(1\)，另一部分是 \(0\)，所以部分和数列没有极限。
+
+\[
+      S_1=1,\quad S_2=0,\quad S_3=1,\quad S_4=0,\ldots
+    \]
+
+\subsubsection*{3. \(p\)-级数是参照物}
+
+\[
+      \sum_{n=1}^{\infty}\frac1{n^p}
+      \begin{cases}
+      \text{收敛}, & p>1,\\
+      \text{发散}, & 0<p\le1.
+      \end{cases}
+    \]
+
+这一节先把它当作标准结论使用；后面正项级数会系统证明。考试中看到 \(\frac1{n^p}\)、\(\frac1{x^p}\)，要立刻想到它。
+
+\subsection*{三、余项与必要条件}
+
+\subsubsection*{余项}
+
+若级数 \(\sum x_n\) 收敛，和为 \(S\)，则第 \(n\) 个余项是
+
+\[
+      r_n=\sum_{k=n+1}^{\infty}x_k=S-S_n.
+    \]
+
+因为 \(S_n\to S\)，所以
+
+\[
+      r_n\to0.
+    \]
+
+\subsubsection*{定理 9.1.1：收敛级数的一般项趋于零}
+
+若 \(\sum_{n=1}^{\infty}x_n\) 收敛，则
+
+\[
+      \lim_{n\to\infty}x_n=0.
+    \]
+
+\textbf{证明思路：}设 \(S_n=x_1+\cdots+x_n\)，收敛时 \(S_n\to S\)，也有 \(S_{n-1}\to S\)。而
+
+\[
+      x_n=S_n-S_{n-1}\to S-S=0.
+    \]
+
+\begin{notebox}
+这个条件只能用来快速判发散：若 \(x_n\not\to0\)，则 \(\sum x_n\) 一定发散。反过来不成立，例如 \(\sum\frac1n\) 的一般项趋于 \(0\)，但级数发散。
+\end{notebox}
+
+\subsection*{四、线性性质}
+
+\subsubsection*{定理 9.1.2：收敛级数可线性组合}
+
+若
+
+\[
+      \sum_{n=1}^{\infty}a_n=A,\qquad
+      \sum_{n=1}^{\infty}b_n=B,
+    \]
+
+且 \(\alpha,\beta\) 为常数，则
+
+\[
+      \sum_{n=1}^{\infty}(\alpha a_n+\beta b_n)
+      =
+      \alpha A+\beta B.
+    \]
+
+\textbf{证明思路：}取部分和，利用有限和的线性性，再令 \(n\to\infty\)：
+
+\[
+      \sum_{k=1}^{n}(\alpha a_k+\beta b_k)
+      =
+      \alpha\sum_{k=1}^{n}a_k+\beta\sum_{k=1}^{n}b_k.
+    \]
+
+\begin{notebox}
+注意前提：两个原级数都已经收敛。不能随便把两个发散级数拆开再相减。
+\end{notebox}
+
+\subsection*{五、加括号：只能保护已收敛的级数}
+
+\subsubsection*{定理 9.1.3：收敛级数任意加括号，和不变}
+
+若级数 \(\sum x_n\) 收敛，把它的项任意连续分组，例如
+
+\[
+      (x_1+\cdots+x_{n_1})+(x_{n_1+1}+\cdots+x_{n_2})+\cdots
+    \]
+
+所得的新级数仍收敛，且和与原级数相同。
+
+\textbf{证明思路：}新级数的部分和只是原级数部分和数列 \(\{S_n\}\) 的一个子列。原数列收敛时，它的子列也收敛到同一个极限。
+
+\begin{notebox}
+反过来不成立。发散级数可能通过加括号得到看起来“收敛”的结果，例如 \(1-1+1-1+\cdots\) 可以被括成 \((1-1)+(1-1)+\cdots=0\)，也可以括成 \(1+(-1+1)+\cdots=1\)。这说明：不能靠加括号拯救一个本来发散的级数。
+\end{notebox}
+
+\subsection*{六、考试常用计算模板}
+
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{0.18\linewidth}|>{\raggedright\arraybackslash}p{0.42\linewidth}|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{类型} & \textbf{动作} & \textbf{典型形状} \\ \hline
+一般项不趋零 & 直接判发散 & \(\displaystyle \frac{2n}{3n+1}\to\frac23\) \\ \hline
+等比级数 & 化成 \(\sum ar^n\) & \(\displaystyle \sum \frac{1}{2^n},\quad \sum e^{nx}\) \\ \hline
+裂项相消 & 拆成相邻差 & \(\displaystyle \frac1{n(n+2)}=\frac12\left(\frac1n-\frac1{n+2}\right)\) \\ \hline
+二阶差分 & 看作 \(a_{n+2}-2a_{n+1}+a_n\) & \(\sqrt{n+2}-2\sqrt{n+1}+\sqrt n\) \\ \hline
+循环小数 & 整数部分加等比尾巴 & \((36.07360736\cdots)_8\) \\ \hline
+\end{tabularx}
+\end{center}
+
+\subsection*{七、即时判断练习}
+
+\begin{quickcheck}
+若 \(\lim_{n\to\infty}x_n\ne0\)，则 \(\sum x_n\) 怎么样？
+
+\tcblower
+\textbf{答案：}
+\end{quickcheck}
+
+\begin{quickcheck}
+若 \(\sum x_n\) 收敛，则任意连续加括号后得到的新级数？
+
+\tcblower
+\textbf{答案：}
+\end{quickcheck}
+
+\begin{quickcheck}
+\(\sum_{n=1}^{\infty}\frac1{\sqrt[4]{n}}\) 的敛散性是？
+
+\tcblower
+\textbf{答案：}
+\end{quickcheck}
+
+\subsection*{八、课后题训练}
+
+下面按教材第九章第 1 节习题整理。题面完整保留；提示只给入口，写作业时建议先独立算一遍，再展开提示核对方向。
+
+\begin{exercisebox}
+\textbf{习题 1 \badge{敛散性与求和}}
+
+讨论下列级数的敛散性。收敛的话，试求出级数之和：
+
+\[
+      \begin{aligned}
+      &(1)\ \sum_{n=1}^{\infty}\frac1{n(n+2)},\qquad
+      &&(2)\ \sum_{n=1}^{\infty}\frac{2n}{3n+1},\\
+      &(3)\ \sum_{n=1}^{\infty}\frac1{n(n+1)(n+2)},\qquad
+      &&(4)\ \sum_{n=1}^{\infty}\left(\frac1{2^n}-\frac1{3^n}\right),\\
+      &(5)\ \sum_{n=1}^{\infty}\frac1{\sqrt[4]{n}},\qquad
+      &&(6)\ \sum_{n=1}^{\infty}\frac{5^{n-1}+4^{n+1}}{3^{2n}},\\
+      &(7)\ \sum_{n=1}^{\infty}\left(\sqrt{n+2}-2\sqrt{n+1}+\sqrt n\right),\qquad
+      &&(8)\ \sum_{n=1}^{\infty}\frac{2n-1}{3^n},\\
+      &(9)\ \sum_{n=0}^{\infty}q^n\cos n\theta\quad (|q|<1).
+      \end{aligned}
+      \]
+
+\begin{hintbox}
+\begin{itemize}
+ \item (1) 用 \(\displaystyle \frac1{n(n+2)}=\frac12\left(\frac1n-\frac1{n+2}\right)\)，和为 \(\frac34\)。
+ \item (2) 一般项趋于 \(\frac23\)，所以发散。
+ \item (3) 用 \(\displaystyle \frac1{n(n+1)(n+2)}=\frac12\left[\frac1{n(n+1)}-\frac1{(n+1)(n+2)}\right]\)，和为 \(\frac14\)。
+ \item (4) 两个等比级数相减，和为 \(\frac12\)。
+ \item (5) 是 \(p=\frac14\) 的 \(p\)-级数，发散。
+ \item (6) 拆成两个等比级数，和为 \(\frac{69}{20}\)。
+ \item (7) 看成 \(a_{n+2}-2a_{n+1}+a_n\)，其中 \(a_n=\sqrt n\)，和为 \(1-\sqrt2\)。
+ \item (8) 用 \(\sum nr^n=\frac{r}{(1-r)^2}\)，和为 \(1\)。
+ \item (9) 可取实部：\(\displaystyle \sum_{n=0}^{\infty}(qe^{i\theta})^n=\frac1{1-qe^{i\theta}}\)，结果为 \(\displaystyle \frac{1-q\cos\theta}{1-2q\cos\theta+q^2}\)。
+ \end{itemize}
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 2 \badge{含参数等比级数}}
+
+确定 \(x\) 的范围，使下列级数收敛：
+
+\[
+      (1)\ \sum_{n=1}^{\infty}\frac1{(1-x)^n},\qquad
+      (2)\ \sum_{n=1}^{\infty}e^{nx},\qquad
+      (3)\ \sum_{n=1}^{\infty}x^n(1-x).
+      \]
+
+\begin{hintbox}
+全部先识别成等比级数。
+
+\begin{itemize}
+ \item (1) 公比为 \(\frac1{1-x}\)，需 \(\left|\frac1{1-x}\right|<1\)，即 \(x<0\) 或 \(x>2\)。
+ \item (2) 公比为 \(e^x\)，需 \(e^x<1\)，即 \(x<0\)。
+ \item (3) 当 \(|x|<1\) 收敛；当 \(x=1\) 时每项为 \(0\)，也收敛；其余发散。因此范围是 \(-1<x\le1\)。
+ \end{itemize}
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 3 \badge{进位制循环小数}}
+
+求八进制无限循环小数
+
+\[
+        (36.0736073607\cdots)_8
+      \]
+
+的值。
+
+\begin{hintbox}
+整数部分是 \((36)_8=30\)。小数部分的循环节是 \(0736\)，所以
+
+\[
+          0.(0736)_8=\frac{(0736)_8}{8^4-1}
+          =
+          \frac{478}{4095}.
+        \]
+
+因此总值为 \(\displaystyle 30+\frac{478}{4095}=\frac{123328}{4095}\)。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 4 \badge{积分与级数}}
+
+设
+
+\[
+        x_n=\int_0^1 x^2(1-x)^n\,dx,
+      \]
+
+求级数 \(\displaystyle \sum_{n=1}^{\infty}x_n\) 的和。
+
+\begin{hintbox}
+先对有限部分和求和：
+
+\[
+        \sum_{n=1}^{N}x_n
+        =
+        \int_0^1 x^2\sum_{n=1}^{N}(1-x)^n\,dx.
+        \]
+
+令 \(N\to\infty\)，几何和给出 \(\sum_{n=1}^{\infty}(1-x)^n=\frac{1-x}{x}\)，所以
+
+\[
+        \sum_{n=1}^{\infty}x_n
+        =
+        \int_0^1 x(1-x)\,dx
+        =
+        \frac16.
+        \]
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 5 \badge{几何面积与级数}}
+
+设抛物线
+
+\[
+        l_n:\ y=nx^2+\frac1n,\qquad
+        l_n':\ y=(n+1)x^2+\frac1{n+1}
+      \]
+
+的交点的横坐标的绝对值为 \(a_n\;(n=1,2,\ldots)\)。
+
+\begin{enumerate}
+ \item 求抛物线 \(l_n\) 与 \(l_n'\) 所围成的平面图形的面积 \(S_n\)；
+ \item 求级数 \(\displaystyle \sum_{n=1}^{\infty}\frac{S_n}{a_n}\) 的和。
+ \end{enumerate}
+
+\begin{hintbox}
+交点满足
+
+\[
+        nx^2+\frac1n=(n+1)x^2+\frac1{n+1},
+        \qquad
+        a_n^2=\frac1{n(n+1)}.
+        \]
+
+在 \([-a_n,a_n]\) 上，\(l_n\) 在上，面积为
+
+\[
+        S_n=\int_{-a_n}^{a_n}(a_n^2-x^2)\,dx
+        =
+        \frac43a_n^3.
+        \]
+
+于是
+
+\[
+        \frac{S_n}{a_n}=\frac43a_n^2=\frac4{3n(n+1)},
+        \qquad
+        \sum_{n=1}^{\infty}\frac{S_n}{a_n}
+        =
+        \frac43.
+        \]
+\end{hintbox}
+\end{exercisebox}
+
+\subsection*{九、这一节的选题建议}
+
+\begin{conceptbox}
+\textbf{必做}
+习题 1 的 (1)(2)(3)(7)(9)，习题 2，习题 4。
+\end{conceptbox}
+
+\begin{conceptbox}
+\textbf{好题}
+习题 5 把定积分面积和级数合在一起，适合放进好题集。
+\end{conceptbox}
+
+\begin{conceptbox}
+\textbf{检查点}
+每题先问：一般项是否趋零？能否写部分和？能否裂项或化等比？
+\end{conceptbox}
+
+来源参考：教材《数学分析》第三版下册第九章 §1（数项级数的收敛性）。如果哪一道题卡住，可以直接在页面中选中对应题目问我。

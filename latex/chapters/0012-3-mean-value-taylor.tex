@@ -1,0 +1,405 @@
+% Generated from lessons/0012-3-mean-value-taylor.html; edit the HTML source, then rerun the converter.
+\section{中值定理和 Taylor 公式}
+\lessonmark{中值定理和 Taylor 公式}
+
+这一节把一元中值定理和 Taylor 公式搬到多元函数中。核心技巧只有一个：把多元点到点的变化，沿线段参数化成一元函数，再使用一元中值定理或一元 Taylor 公式。
+
+\subsection*{本节主线}
+
+\begin{conceptbox}
+\textbf{凸区域}
+任意两点连成的线段都留在区域内，这样才能沿线段使用一元定理。
+\end{conceptbox}
+
+\begin{conceptbox}
+\textbf{中值定理}
+函数增量等于某个中间点处的梯度与位移的点积。
+\end{conceptbox}
+
+\begin{conceptbox}
+\textbf{Taylor 公式}
+用各阶偏导组成多项式近似函数，余项控制误差。
+\end{conceptbox}
+
+\begin{notebox}
+一句话：这一节不是新发明，而是把 \(\phi(t)=f(x_0+t\Delta x,y_0+t\Delta y)\) 这条线段上的一元函数用熟。
+\end{notebox}
+
+\subsection*{一、凸区域：为什么要保证线段在区域里}
+
+设 \(D\subset R^n\) 是区域。若对任意两点 \(x_0,x_1\in D\) 和任意 \(\lambda\in[0,1]\)，恒有
+
+\[
+      x_0+\lambda(x_1-x_0)\in D,
+    \]
+
+则称 \(D\) 为凸区域。
+
+直观地说：区域里任意两点之间的线段都不能跑出区域。开圆盘、开矩形、整个 \(R^n\) 都是凸区域；环形区域一般不是凸区域。
+
+\begin{notebox}
+后面中值定理和 Taylor 公式都要沿线段走。如果线段跑出定义域，辅助函数 \(\phi(t)\) 可能根本不能在整段上定义。
+\end{notebox}
+
+\subsection*{二、中值定理}
+
+\subsubsection*{定理 12.3.1：二元函数的中值定理}
+
+设二元函数 \(f(x,y)\) 在凸区域 \(D\subset R^2\) 上可微。对 \(D\) 中任意两点
+
+\[
+      (x_0,y_0),\qquad (x_0+\Delta x,y_0+\Delta y),
+    \]
+
+至少存在一个 \(\theta\in(0,1)\)，使得
+
+\[
+      \begin{aligned}
+      &f(x_0+\Delta x,y_0+\Delta y)-f(x_0,y_0)\\
+      &=
+      \frac{\partial f}{\partial x}(x_0+\theta\Delta x,y_0+\theta\Delta y)\Delta x
+      +
+      \frac{\partial f}{\partial y}(x_0+\theta\Delta x,y_0+\theta\Delta y)\Delta y.
+      \end{aligned}
+    \]
+
+\subsubsection*{证明思路}
+
+构造一元函数
+
+\[
+      \phi(t)=f(x_0+t\Delta x,y_0+t\Delta y),\qquad t\in[0,1].
+    \]
+
+凸性保证这条线段在 \(D\) 内。由链式法则，
+
+\[
+      \phi'(t)=
+      \frac{\partial f}{\partial x}(x_0+t\Delta x,y_0+t\Delta y)\Delta x
+      +
+      \frac{\partial f}{\partial y}(x_0+t\Delta x,y_0+t\Delta y)\Delta y.
+    \]
+
+再对 \(\phi\) 用一元 Lagrange 中值定理：
+
+\[
+      \phi(1)-\phi(0)=\phi'(\theta).
+    \]
+
+\subsubsection*{定理 12.3.2：\(n\) 元函数的中值定理}
+
+若 \(f(x_1,\ldots,x_n)\) 在凸区域 \(D\subset R^n\) 上可微，则对 \(D\) 中两点 \(x^0\) 与 \(x^0+\Delta x\)，存在 \(\theta\in(0,1)\)，使
+
+\[
+      f(x^0+\Delta x)-f(x^0)
+      =
+      \sum_{i=1}^n
+      \frac{\partial f}{\partial x_i}(x^0+\theta\Delta x)\Delta x_i.
+    \]
+
+向量形式就是
+
+\[
+      f(y)-f(x)=\nabla f(x+\theta(y-x))\cdot (y-x).
+    \]
+
+\subsection*{三、Taylor 公式}
+
+\subsubsection*{定理 12.3.3：二元函数 Taylor 公式}
+
+若 \(f(x,y)\) 在点 \((x_0,y_0)\) 的某邻域内具有 \(k+1\) 阶连续偏导数，则
+
+\[
+      \begin{aligned}
+      f(x_0+\Delta x,y_0+\Delta y)
+      &=
+      f(x_0,y_0)
+      +
+      \left(\Delta x\frac{\partial}{\partial x}
+      +\Delta y\frac{\partial}{\partial y}\right)f(x_0,y_0)\\
+      &\quad+
+      \frac{1}{2!}
+      \left(\Delta x\frac{\partial}{\partial x}
+      +\Delta y\frac{\partial}{\partial y}\right)^2f(x_0,y_0)
+      +\cdots\\
+      &\quad+
+      \frac{1}{k!}
+      \left(\Delta x\frac{\partial}{\partial x}
+      +\Delta y\frac{\partial}{\partial y}\right)^k f(x_0,y_0)
+      +R_k.
+      \end{aligned}
+    \]
+
+Lagrange 余项为
+
+\[
+      R_k=
+      \frac{1}{(k+1)!}
+      \left(\Delta x\frac{\partial}{\partial x}
+      +\Delta y\frac{\partial}{\partial y}\right)^{k+1}
+      f(x_0+\theta\Delta x,y_0+\theta\Delta y),
+      \qquad 0<\theta<1.
+    \]
+
+若只要求局部近似，常用 Peano 余项：
+
+\[
+      R_k=o\!\left(\left(\sqrt{\Delta x^2+\Delta y^2}\right)^k\right).
+    \]
+
+\subsubsection*{二阶展开要会直接写}
+
+到二阶为止：
+
+\[
+      \begin{aligned}
+      f(x_0+\Delta x,y_0+\Delta y)
+      &=
+      f(x_0,y_0)
+      +
+      \frac{\partial f}{\partial x}(x_0,y_0)\Delta x
+      +
+      \frac{\partial f}{\partial y}(x_0,y_0)\Delta y\\
+      &\quad+
+      \frac12\frac{\partial^2 f}{\partial x^2}(x_0,y_0)\Delta x^2
+      +
+      \frac{\partial^2 f}{\partial x\partial y}(x_0,y_0)\Delta x\Delta y\\
+      &\quad+
+      \frac12\frac{\partial^2 f}{\partial y^2}(x_0,y_0)\Delta y^2
+      +R_2.
+      \end{aligned}
+    \]
+
+\begin{notebox}
+记忆方法：把 \(\Delta x\frac{\partial}{\partial x}+\Delta y\frac{\partial}{\partial y}\) 当成“方向导数算子”，再按一元 Taylor 的形状展开。
+\end{notebox}
+
+\subsubsection*{定理 12.3.4：\(n\) 元 Taylor 公式}
+
+若 \(f(x_1,\ldots,x_n)\) 在点 \(x^0\) 附近具有 \(k+1\) 阶连续偏导数，则
+
+\[
+      f(x^0+\Delta x)
+      =
+      \sum_{r=0}^{k}
+      \frac1{r!}
+      \left(\sum_{i=1}^{n}\Delta x_i\frac{\partial}{\partial x_i}\right)^r
+      f(x^0)
+      +R_k,
+    \]
+
+其中 Lagrange 余项为
+
+\[
+      R_k=
+      \frac1{(k+1)!}
+      \left(\sum_{i=1}^{n}\Delta x_i\frac{\partial}{\partial x_i}\right)^{k+1}
+      f(x^0+\theta\Delta x),
+      \qquad 0<\theta<1.
+    \]
+
+\subsection*{四、教材例题入口}
+
+\begin{conceptbox}
+\textbf{例 12.3.1：近似计算}
+例如 \((1.08)^{3.96}\)，取基点 \((1,4)\)，令 \(\Delta x=0.08,\Delta y=-0.04\)，对 \(f(x,y)=x^y\) 做二阶 Taylor 展开。
+\end{conceptbox}
+
+\begin{conceptbox}
+\textbf{例 12.3.2：五点差分格式}
+用 Taylor 公式可以解释为什么
+
+\[
+          \Delta_h f(x,y)=
+          \frac{f(x+h,y)+f(x-h,y)+f(x,y+h)+f(x,y-h)-4f(x,y)}{h^2}
+        \]
+
+近似 \(\frac{\partial^2f}{\partial x^2}+\frac{\partial^2f}{\partial y^2}\)，误差阶为 \(O(h^2)\)。
+\end{conceptbox}
+
+\subsection*{五、即时判断练习}
+
+\begin{quickcheck}
+多元中值定理为什么要求凸区域？
+
+\tcblower
+\textbf{答案：}需要凸性
+\end{quickcheck}
+
+\begin{quickcheck}
+多元 Taylor 公式的证明核心是什么？
+
+\tcblower
+\textbf{答案：}沿线段变一元
+\end{quickcheck}
+
+\begin{quickcheck}
+Taylor 公式里 \(R_k\) 的主要作用是什么？
+
+\tcblower
+\textbf{答案：}余项控误差
+\end{quickcheck}
+
+\subsection*{六、课后题训练}
+
+下面按教材第 151 页习题 1-8 整理。题面完整保留，提示只给入口；写作业时建议先独立推，再展开提示核对方向。
+
+\begin{exercisebox}
+\textbf{习题 1\badge{中值定理验证}}
+
+对函数 \(f(x,y)=\sin x\cos y\) 应用中值定理证明：存在 \(\theta\in(0,1)\)，使得
+
+\[
+        \frac34
+        =
+        \frac{\pi}{3}\cos\frac{\pi\theta}{3}\cos\frac{\pi\theta}{6}
+        -
+        \frac{\pi}{6}\sin\frac{\pi\theta}{3}\sin\frac{\pi\theta}{6}.
+      \]
+
+\begin{hintbox}
+取两点 \((0,0)\) 与 \((\pi/3,\pi/6)\)。左边来自 \(f(\pi/3,\pi/6)-f(0,0)=3/4\)。右边来自中值定理。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 2\badge{二阶 Taylor 展开}}
+
+写出函数
+
+\[
+        f(x,y)=3x^3+y^3-2x^2y-2xy^2-6x-8y+9
+      \]
+
+在点 \((1,2)\) 的 Taylor 展开式。
+
+\begin{hintbox}
+这是三次多项式。以 \((1,2)\) 为基点，令 \(h=x-1,\ k=y-2\)，直接把 \(x=1+h,\ y=2+k\) 代入展开，通常比逐项算高阶偏导更快。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 3\badge{展开到三阶}}
+
+求函数
+
+\[
+        f(x,y)=\sin x\ln(1+y)
+      \]
+
+在 \((0,0)\) 点的 Taylor 展开式，展开到三阶导数为止。
+
+\begin{hintbox}
+用一元展开相乘最快： \[
+          \sin x=x-\frac{x^3}{6}+o(x^3),\qquad
+          \ln(1+y)=y-\frac{y^2}{2}+\frac{y^3}{3}+o(y^3).
+        \] 总次数超过 3 的项舍去。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 4\badge{一般 \(n\) 阶展开}}
+
+求函数
+
+\[
+        f(x,y)=e^{x+y}
+      \]
+
+在 \((0,0)\) 点的 \(n\) 阶 Taylor 展开式，并写出余项。
+
+\begin{hintbox}
+把 \(x+y\) 看成一个整体。答案应接近 \[
+          e^{x+y}=\sum_{r=0}^{n}\frac{(x+y)^r}{r!}+R_n.
+        \] Lagrange 余项可写成 \[
+          R_n=\frac{e^{\theta(x+y)}}{(n+1)!}(x+y)^{n+1}.
+        \]
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 5\badge{余项控制}}
+
+设
+
+\[
+        f(x,y)=\frac{\cos y}{x},\qquad x>0.
+      \]
+
+\begin{enumerate}
+ \item 求 \(f(x,y)\) 在 \((1,0)\) 点的 Taylor 展开式，展开到二阶导数，并计算余项 \(R_2\)。
+ \item 求 \(f(x,y)\) 在 \((1,0)\) 点的 \(k\) 阶 Taylor 展开式，并证明在 \((1,0)\) 点的某个领域内，余项 \(R_k\) 满足当 \(k\to\infty\) 时，\(R_k\to0\)。
+ \end{enumerate}
+
+\begin{hintbox}
+令 \(h=x-1\)。因为 \[
+          \frac{\cos y}{x}=(1+h)^{-1}\cos y,
+        \] 可用一元级数 \[
+          (1+h)^{-1}=1-h+h^2-\cdots,\qquad
+          \cos y=1-\frac{y^2}{2}+\frac{y^4}{4!}-\cdots.
+        \] 二阶展开为 \(1-h+h^2-\frac12y^2+\) 高阶项。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 6\badge{近似计算}}
+
+利用 Taylor 公式近似计算
+
+\[
+        8.96^{2.03}
+      \]
+
+展开到二阶导数。
+
+\begin{hintbox}
+可取 \(f(x,y)=x^y\)，基点 \((9,2)\)，令 \(\Delta x=-0.04,\ \Delta y=0.03\)。先求 \(f,\frac{\partial f}{\partial x},\frac{\partial f}{\partial y}\) 以及二阶偏导在 \((9,2)\) 的值。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 7\badge{方向导数为零}}
+
+设 \(f(x,y)\) 在 \(R^2\) 上可微，\(l_1\) 与 \(l_2\) 是 \(R^2\) 上两个线性无关的单位向量，即方向。若
+
+\[
+        \frac{\partial f}{\partial l_i}(x,y)=0,\qquad i=1,2,
+      \]
+
+证明：在 \(R^2\) 上 \(f(x,y)\) 为常数。
+
+\begin{hintbox}
+两个线性无关方向的方向导数都为 \(0\)，说明梯度与两个线性无关向量都正交，因此 \(\nabla f=0\)。再用本节推论：区域内偏导数恒为零，则函数为常数。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 8\badge{算子恒等式}}
+
+设
+
+\[
+        f(x,y)=\sin\frac{y}{x},\qquad x\ne0,
+      \]
+
+证明：
+
+\[
+        \left(
+        x\frac{\partial}{\partial x}
+        +
+        y\frac{\partial}{\partial y}
+        \right)^k
+        f(x,y)=0,\qquad k\ge1.
+      \]
+
+\begin{hintbox}
+先证 \(k=1\)： \[
+          x\frac{\partial f}{\partial x}+y\frac{\partial f}{\partial y}=0.
+        \] 这是因为 \(f(tx,ty)=f(x,y)\)，函数沿径向不变。若一阶作用已经得到 \(0\)，再作用 \(k-1\) 次仍为 \(0\)。
+\end{hintbox}
+\end{exercisebox}
+
+来源：陈纪修、于崇华、金路《数学分析》第三版下册，第十二章 §3，教材第 146-151 页。下一节：第十二章 §4：隐函数。
+
+上一节：第十二章 §2：多元复合函数的求导法则。复盘：错题集与好题集。路线图：教材路线图。

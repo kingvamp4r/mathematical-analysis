@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第七章 §3：微积分基本定理</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]], processEscapes: true },
+      options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202124;
+      --muted: #667085;
+      --line: #d9dee7;
+      --paper: #fffef9;
+      --accent: #0b6865;
+      --accent-dark: #074c49;
+      --soft: #edf8f7;
+      --amber: #fff4e3;
+      --amber-line: #bf7416;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f4f0e8;
+      color: var(--ink);
+      font: 17px/1.75 ui-serif, "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+    }
+    main {
+      width: min(1040px, calc(100vw - 32px));
+      margin: 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 50px rgba(20, 30, 40, 0.08);
+    }
+    header {
+      padding: 42px 46px 30px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffef9, #fbf7ef);
+    }
+    section { padding: 28px 46px; border-bottom: 1px solid var(--line); }
+    h1, h2, h3, h4, .kicker, .tag, th {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      letter-spacing: 0;
+    }
+    h1 { margin: 0 0 10px; font-size: 35px; line-height: 1.2; }
+    h2 { margin: 0 0 14px; font-size: 24px; line-height: 1.3; }
+    h3 { margin: 20px 0 8px; font-size: 18px; color: var(--accent-dark); }
+    h4 { margin: 14px 0 6px; font-size: 16px; color: var(--accent-dark); }
+    p { margin: 10px 0; }
+    ol, ul { padding-left: 24px; }
+    li { margin: 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 15px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px 8px; vertical-align: top; text-align: left; }
+    th { background: #fafafa; }
+    .kicker { color: var(--accent); font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+    .lead { color: var(--muted); max-width: 78ch; }
+    .formula { background: var(--soft); border-left: 4px solid var(--accent); padding: 12px 14px; margin: 12px 0; overflow-x: auto; }
+    .note { background: var(--amber); border-left: 4px solid var(--amber-line); padding: 12px 14px; margin: 14px 0; color: #704000; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .box, .exercise { border: 1px solid var(--line); background: #fff; padding: 14px 16px; }
+    .box strong {
+      display: block;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      margin-bottom: 6px;
+    }
+    .exercise { margin: 12px 0; }
+    .exercise-title {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+    .tag { display: inline-block; border: 1px solid #b6d7d4; background: var(--soft); color: var(--accent-dark); font-size: 13px; padding: 2px 7px; }
+    details { border-top: 1px dashed var(--line); margin-top: 10px; padding-top: 8px; }
+    summary { cursor: pointer; color: var(--accent-dark); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; font-weight: 650; }
+    .footer { color: var(--muted); font-size: 15px; }
+    @media (max-width: 780px) {
+      main { margin: 16px auto; }
+      header, section { padding: 24px; }
+      h1 { font-size: 28px; }
+      .grid, .two { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      main { box-shadow: none; border: none; width: 100%; margin: 0; }
+      details { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="kicker">数学分析 · 第七章 §3</div>
+    <h1>微积分基本定理</h1>
+    <p class="lead">本节把“积分是极限和”与“导数是变化率”接起来。考试中最常见的动作是：变上限定积分求导、Newton-Leibniz 计算定积分、换元、分部积分，以及把求和极限看成 Riemann 和。</p>
+  </header>
+
+  <section>
+    <h2>本节主线</h2>
+    <div class="grid">
+      <div class="box">
+        <strong>积分产生原函数</strong>
+        <p>\(F(x)=\int_a^x f(t)\,dt\) 在 \(f\) 连续时满足 \(F'(x)=f(x)\)。</p>
+      </div>
+      <div class="box">
+        <strong>原函数计算积分</strong>
+        <p>若 \(\Phi'(x)=f(x)\)，则 \(\int_a^b f(x)\,dx=\Phi(b)-\Phi(a)\)。</p>
+      </div>
+      <div class="box">
+        <strong>计算技术</strong>
+        <p>换元和分部积分，本质是链式法则与乘积求导法则的积分版。</p>
+      </div>
+    </div>
+    <div class="note">这节最重要的感觉：变上限定积分求导时，“上限动到哪里，就把被积函数代到哪里”，再乘以上限的导数；下限同理但带负号。</div>
+  </section>
+
+  <section>
+    <h2>一、变上限定积分</h2>
+    <h3>基本定理第一部分</h3>
+    <p>若 \(f\) 在 \([a,b]\) 上连续，定义</p>
+    <div class="formula">\[
+      F(x)=\int_a^x f(t)\,dt,\qquad x\in[a,b],
+    \]</div>
+    <p>则 \(F\) 在 \((a,b)\) 内可导，且</p>
+    <div class="formula">\[
+      F'(x)=f(x).
+    \]</div>
+    <p><strong>证明思路：</strong></p>
+    <div class="formula">\[
+      \frac{F(x+h)-F(x)}{h}
+      =
+      \frac1h\int_x^{x+h}f(t)\,dt.
+    \]</div>
+    <p>右边是小区间 \([x,x+h]\) 上的平均值；当 \(h\to0\) 时，由 \(f\) 的连续性，平均值趋于 \(f(x)\)。</p>
+
+    <h3>上下限都是函数</h3>
+    <p>若 \(f\) 连续，\(\alpha,\beta\) 可导，则</p>
+    <div class="formula">\[
+      \frac{d}{dx}\int_{\alpha(x)}^{\beta(x)}f(t)\,dt
+      =
+      f(\beta(x))\beta'(x)-f(\alpha(x))\alpha'(x).
+    \]</div>
+    <p>这是考试最常用公式。上限贡献正号，下限贡献负号。</p>
+  </section>
+
+  <section>
+    <h2>二、Newton-Leibniz 公式</h2>
+    <p>若 \(f\) 在 \([a,b]\) 上连续，\(\Phi\) 是 \(f\) 的一个原函数，即 \(\Phi'(x)=f(x)\)，则</p>
+    <div class="formula">\[
+      \int_a^b f(x)\,dx=\Phi(b)-\Phi(a).
+    \]</div>
+    <p><strong>证明思路：</strong>令 \(F(x)=\int_a^x f(t)\,dt\)。由第一部分 \(F'(x)=f(x)\)，所以 \(F\) 与 \(\Phi\) 只差一个常数。代入端点即可。</p>
+    <div class="note">计算定积分时，原函数只是工具；最终答案是端点差，不要忘记代上下限。</div>
+  </section>
+
+  <section>
+    <h2>三、换元积分法</h2>
+    <p>若 \(f\) 连续，\(\varphi\) 有连续导数，则</p>
+    <div class="formula">\[
+      \int_\alpha^\beta f(\varphi(t))\varphi'(t)\,dt
+      =
+      \int_{\varphi(\alpha)}^{\varphi(\beta)} f(u)\,du.
+    \]</div>
+    <p><strong>证明思路：</strong>若 \(F'(u)=f(u)\)，则 \([F(\varphi(t))]'=f(\varphi(t))\varphi'(t)\)。这就是链式法则。</p>
+    <table>
+      <thead><tr><th>常见换元信号</th><th>尝试</th></tr></thead>
+      <tbody>
+        <tr><td>根式 \(a^2-x^2\)</td><td>三角换元 \(x=a\sin t\) 或 \(x=a\cos t\)</td></tr>
+        <tr><td>\(\ln x\)</td><td>令 \(u=\ln x\)，常配合 \(dx/x\)</td></tr>
+        <tr><td>对称区间</td><td>令 \(x=a+b-t\)，把区间反过来</td></tr>
+        <tr><td>Riemann 和</td><td>识别 \(\frac1n\sum f(k/n)\)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>四、分部积分法</h2>
+    <p>若 \(u,v\) 有连续导数，则</p>
+    <div class="formula">\[
+      \int_a^b u(x)v'(x)\,dx
+      =
+      \bigl[u(x)v(x)\bigr]_a^b-\int_a^b u'(x)v(x)\,dx.
+    \]</div>
+    <p><strong>证明思路：</strong>由 \((uv)'=u'v+uv'\)，两边积分。</p>
+    <div class="note">看到 \(x\sin x\)、\(\ln x\)、\(\arctan x\)、\(x^m e^x\) 这类“一个代数因子乘一个容易积分/求导的因子”，优先想到分部积分。</div>
+  </section>
+
+  <section>
+    <h2>五、对称性、周期性与 Riemann 和</h2>
+    <h3>对称替换</h3>
+    <div class="formula">\[
+      \int_a^b f(x)\,dx=\int_a^b f(a+b-x)\,dx.
+    \]</div>
+    <p>这条来自换元 \(u=a+b-x\)。它常用于把含 \(x\) 的积分和含 \(a+b-x\) 的积分相加。</p>
+    <div class="formula">\[
+      \int_0^\pi x f(\sin x)\,dx
+      =
+      \frac{\pi}{2}\int_0^\pi f(\sin x)\,dx.
+    \]</div>
+
+    <h3>三角正交性</h3>
+    <p>在 \([-\pi,\pi]\) 上，三角函数族具有正交性：</p>
+    <div class="formula">\[
+      \int_{-\pi}^{\pi}\sin mx\cos nx\,dx=0,
+    \]</div>
+    <div class="formula">\[
+      \int_{-\pi}^{\pi}\sin mx\sin nx\,dx=
+      \begin{cases}
+      0,&m\ne n,\\
+      \pi,&m=n,
+      \end{cases}
+      \qquad
+      \int_{-\pi}^{\pi}\cos mx\cos nx\,dx=
+      \begin{cases}
+      0,&m\ne n,\\
+      \pi,&m=n\ne0,\\
+      2\pi,&m=n=0.
+      \end{cases}
+    \]</div>
+
+    <h3>Riemann 和极限</h3>
+    <p>若形如</p>
+    <div class="formula">\[
+      \frac1n\sum_{k=1}^n f\!\left(\frac{k}{n}\right),
+    \]</div>
+    <p>通常对应</p>
+    <div class="formula">\[
+      \int_0^1 f(x)\,dx.
+    \]</div>
+    <p>关键是识别“采样点” \(\frac{k}{n}\) 和“小宽度” \(\frac1n\)。</p>
+  </section>
+
+  <section>
+    <h2>六、课后题训练</h2>
+    <p>下面按教材第 264-267 页习题 1-26 整理。题面保留，提示只给入口；写作业时建议先独立算一遍，再展开提示核对方向。</p>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 1 <span class="tag">变上限求导</span></div>
+      <p>设函数 \(f(x)\) 连续，求下列函数 \(F(x)\) 的导数：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ F(x)=\int_x^b f(t)\,dt;\\
+      &(2)\ F(x)=\int_a^{\ln x} f(t)\,dt;\\
+      &(3)\ F(x)=\int_a^{\int_0^x\sin^2s\,ds}\frac{1}{1+t^2}\,dt.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>上限贡献正号，下限贡献负号；第 (3) 小题是两层链式法则。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 2 <span class="tag">极限与 L'Hospital</span></div>
+      <p>求下列极限：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \lim_{x\to0}\frac{\int_0^x\cos t^2\,dt}{x};\\
+      &(2)\ \lim_{x\to0}\frac{x^2}{\int_{\cos x}^{1}e^{-1/w^2}\,dw};\\
+      &(3)\ \lim_{x\to+\infty}\frac{\int_0^x(\arctan v)^2\,dv}{\sqrt{1+x^2}};\\
+      &(4)\ \lim_{x\to+\infty}\frac{\left(\int_0^x e^{u^2}\,du\right)^2}{\int_0^x e^{2u^2}\,du}.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>分子或分母含变上限定积分时，求导会把被积函数“吐出来”。第 (4) 小题要小心链式法则。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 3 <span class="tag">单调性</span></div>
+      <p>设 \(f(x)\) 是 \([0,+\infty)\) 上的连续函数且恒有 \(f(x)>0\)，证明</p>
+      <div class="formula">\[
+        g(x)=\frac{\int_0^x t f(t)\,dt}{\int_0^x f(t)\,dt}
+      \]</div>
+      <p>是定义在 \([0,+\infty)\) 上的单调增加函数。</p>
+      <details><summary>提示</summary><p>把 \(g(x)\) 看成权重为 \(f(t)\) 的平均值；也可直接对商求导，再把分子整理成双重积分或“平均值差”。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 4 <span class="tag">极值</span></div>
+      <p>求函数</p>
+      <div class="formula">\[
+        f(x)=\int_0^x(t-1)(t-2)^2\,dt
+      \]</div>
+      <p>的极值。</p>
+      <details><summary>提示</summary><p>由微积分基本定理，先求 \(f'(x)\)，再研究临界点附近符号。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 5 <span class="tag">中值定理求极限</span></div>
+      <p>利用中值定理求下列极限：</p>
+      <div class="formula">\[
+      (1)\ \lim_{n\to\infty}\int_0^1\frac{x^n}{1+x}\,dx,
+      \qquad
+      (2)\ \lim_{n\to\infty}\int_n^{n+p}\frac{\sin x}{x}\,dx\quad(p\in\mathbb N^*).
+      \]</div>
+      <details><summary>提示</summary><p>第 (1) 题可用夹逼；第 (2) 题区间长度固定但 \(1/x\to0\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 6 <span class="tag">定积分计算</span></div>
+      <p>求下列定积分：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \int_0^1 x^2(2-x^2)^2\,dx;\\
+      &(2)\ \int_1^2\frac{(x-1)(x^2-x+1)}{2x^2}\,dx;\\
+      &(3)\ \int_0^2(2^x+3^x)^2\,dx;\\
+      &(4)\ \int_0^{1/2}x(1-4x^2)^{10}\,dx;\\
+      &(5)\ \int_{-1}^{1}\frac{(x+1)\,dx}{(x^2+2x+5)^2};\\
+      &(6)\ \int_0^1\arcsin x\,dx;\\
+      &(7)\ \int_{-\pi/4}^{\pi/4}\frac{x}{\cos^2x}\,dx;\\
+      &(8)\ \int_0^{\pi/4}x\tan^2x\,dx;\\
+      &(9)\ \int_0^{\pi/2}e^x\sin^2x\,dx;\\
+      &(10)\ \int_1^e\sin(\ln x)\,dx;\\
+      &(11)\ \int_0^1 x^2\arctan x\,dx;\\
+      &(12)\ \int_1^{e+1}x^2\ln(x-1)\,dx;\\
+      &(13)\ \int_0^{\sqrt{\ln2}}x^3e^{-x^2}\,dx;\\
+      &(14)\ \int_0^1 e^{2\sqrt{x+1}}\,dx;\\
+      &(15)\ \int_0^1\frac{dx}{\sqrt{1+e^{2x}}};\\
+      &(16)\ \int_{-1/2}^{1/2}\frac{dx}{\sqrt{(1-x^2)^3}};\\
+      &(17)\ \int_0^1\left(\frac{x-1}{x+1}\right)^4dx;\\
+      &(18)\ \int_0^1\frac{x^2+1}{x^4+1}\,dx;\\
+      &(19)\ \int_1^{\sqrt2}\frac{dx}{x\sqrt{1+x^2}};\\
+      &(20)\ \int_0^1x\sqrt{\frac{x}{2-x}}\,dx.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>先分类：多项式展开、换元、分部积分、奇偶性/对称性、三角换元。不要一上来硬算。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 7 <span class="tag">Riemann 和</span></div>
+      <p>求下列极限：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \lim_{n\to\infty}\left(\frac1{n^2}+\frac2{n^2}+\frac3{n^2}+\cdots+\frac{n-1}{n^2}\right);\\
+      &(2)\ \lim_{n\to\infty}\frac{1^p+2^p+\cdots+n^p}{n^{p+1}}\quad(p>0);\\
+      &(3)\ \lim_{n\to\infty}\frac1n\left(\sin\frac{\pi}{n}+\sin\frac{2\pi}{n}+\cdots+\sin\frac{(n-1)\pi}{n}\right).
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>把每一项写成 \(f(k/n)\cdot(1/n)\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 8 <span class="tag">参数积分</span></div>
+      <p>求下列定积分：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \int_0^\pi \cos^n x\,dx;\\
+      &(2)\ \int_{-\pi}^{\pi}\sin^n x\,dx;\\
+      &(3)\ \int_0^a(a^2-x^2)^n\,dx;\\
+      &(4)\ \int_0^{1/2}x^2(1-4x^2)^{10}\,dx;\\
+      &(5)\ \int_0^1 x^n\ln^m x\,dx;\\
+      &(6)\ \int_1^e x\ln^n x\,dx.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>第 (1)(2) 题分 \(n\) 奇偶；第 (5) 题可反复分部积分或令 \(x=e^{-t}\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 9 <span class="tag">对称性</span></div>
+      <p>设 \(f(x)\) 在 \([0,1]\) 上连续，证明：</p>
+      <div class="formula">\[
+      (1)\ \int_0^{\pi/2}f(\cos x)\,dx=\int_0^{\pi/2}f(\sin x)\,dx,
+      \qquad
+      (2)\ \int_0^\pi x f(\sin x)\,dx=\frac{\pi}{2}\int_0^\pi f(\sin x)\,dx.
+      \]</div>
+      <details><summary>提示</summary><p>第 (1) 题令 \(x=\pi/2-t\)；第 (2) 题令 \(x=\pi-t\)，再与原式相加。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 10 <span class="tag">对称性计算</span></div>
+      <p>利用上题结果计算：</p>
+      <div class="formula">\[
+      (1)\ \int_0^\pi x\sin^4x\,dx,\quad
+      (2)\ \int_0^\pi \frac{x\sin x}{1+\cos^2x}\,dx,\quad
+      (3)\ \int_0^\pi \frac{x}{1+\sin^2x}\,dx.
+      \]</div>
+      <details><summary>提示</summary><p>先把 \(x\) 消掉，变成 \(\frac{\pi}{2}\) 倍普通三角积分。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 11 <span class="tag">分段函数</span></div>
+      <p>求下列定积分：</p>
+      <div class="formula">\[
+      (1)\ \int_0^6 x^2[x]\,dx,\quad
+      (2)\ \int_0^2\operatorname{sgn}(x-x^3)\,dx,\quad
+      (3)\ \int_0^1 x|x-a|\,dx,\quad
+      (4)\ \int_0^2[e^x]\,dx.
+      \]</div>
+      <details><summary>提示</summary><p>找分段点：整数点、零点、绝对值折点、取整函数跳跃点。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 12 <span class="tag">对称函数</span></div>
+      <p>设 \(f(x)\) 在 \([a,b]\) 上可积且关于 \(x=T\) 对称，这里 \(a<T<b\)。证明</p>
+      <div class="formula">\[
+        \int_a^b f(x)\,dx=\int_a^{2T-b} f(x)\,dx+2\int_T^b f(x)\,dx,
+      \]</div>
+      <p>并给出几何解释。</p>
+      <details><summary>提示</summary><p>把 \([2T-b,b]\) 关于 \(T\) 配对，左、右面积相等。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 13 <span class="tag">分段与平移</span></div>
+      <p>设</p>
+      <div class="formula">\[
+      f(x)=
+      \begin{cases}
+      xe^{-x^2},&x\ge0,\\
+      \frac1{1+e^x},&x<0,
+      \end{cases}
+      \]</div>
+      <p>计算 \(I=\int_1^4 f(x-2)\,dx\)。</p>
+      <details><summary>提示</summary><p>令 \(u=x-2\)，区间变为 \([-1,2]\)，再在 \(u=0\) 分段。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 14 <span class="tag">含参积分求导</span></div>
+      <p>设函数</p>
+      <div class="formula">\[
+      f(x)=\frac12\int_0^x (x-t)^2g(t)\,dt,
+      \]</div>
+      <p>其中 \(g(x)\) 在 \((-\infty,+\infty)\) 上连续，且 \(g(1)=5,\int_0^1g(t)\,dt=2\)。证明</p>
+      <div class="formula">\[
+      f'(x)=x\int_0^xg(t)\,dt-\int_0^x tg(t)\,dt,
+      \]</div>
+      <p>并计算 \(f''(1)\) 和 \(f'''(1)\)。</p>
+      <details><summary>提示</summary><p>可以先展开 \((x-t)^2\)，也可以用 Leibniz 公式。注意上限项中 \((x-x)^2=0\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 15 <span class="tag">积分方程</span></div>
+      <p>设 \((0,+\infty)\) 上连续函数 \(f(x)\) 满足</p>
+      <div class="formula">\[
+      f(x)=\ln x-\int_1^x f(t)\,dt,
+      \]</div>
+      <p>求 \(\int_1^e f(x)\,dx\)。</p>
+      <details><summary>提示</summary><p>令 \(F(x)=\int_1^x f(t)\,dt\)，把题目变成关于 \(F\) 的一阶微分方程。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 16 <span class="tag">积分方程换元</span></div>
+      <p>设函数 \(f(x)\) 连续，且</p>
+      <div class="formula">\[
+      \int_0^1tf(2x-t)\,dt=\frac12\arctan(x^2),\qquad f(1)=1.
+      \]</div>
+      <p>求 \(\int_1^2 f(x)\,dx\)。</p>
+      <details><summary>提示</summary><p>对 \(x\) 求导或令 \(u=2x-t\)，把未知积分区间显露出来。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 17 <span class="tag">周期绝对值</span></div>
+      <p>求</p>
+      <div class="formula">\[
+      \int_0^{n\pi}x|\sin x|\,dx,
+      \]</div>
+      <p>其中 \(n\) 为正整数。</p>
+      <details><summary>提示</summary><p>按每个 \([k\pi,(k+1)\pi]\) 分段，令 \(x=k\pi+t\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 18 <span class="tag">平均增长率</span></div>
+      <p>设函数</p>
+      <div class="formula">\[
+      S(x)=\int_0^x|\cos t|\,dt,
+      \]</div>
+      <p>求 \(\lim_{x\to+\infty}S(x)/x\)。</p>
+      <details><summary>提示</summary><p>\(|\cos t|\) 的周期为 \(\pi\)。长期平均值等于一个周期积分除以周期长度。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 19 <span class="tag">尺度不变</span></div>
+      <p>设 \(f(x)\) 在 \((0,+\infty)\) 上连续，且对于任意 \(a>0\) 有</p>
+      <div class="formula">\[
+      g(x)=\int_x^{ax}f(t)\,dt=\text{常数},\qquad x\in(0,+\infty).
+      \]</div>
+      <p>证明 \(f(x)=c/x\)，其中 \(c\) 为常数。</p>
+      <details><summary>提示</summary><p>对 \(x\) 求导：上限 \(ax\) 与下限 \(x\) 都会产生项。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 20 <span class="tag">对称换元</span></div>
+      <p>设 \(f(x)\) 在 \((0,+\infty)\) 上连续，证明：</p>
+      <div class="formula">\[
+      \int_1^4 f\!\left(\frac{x}{2}+\frac{2}{x}\right)\frac{\ln x}{x}\,dx
+      =
+      (\ln2)\int_1^4 f\!\left(\frac{x}{2}+\frac{2}{x}\right)\frac{1}{x}\,dx.
+      \]</div>
+      <details><summary>提示</summary><p>令 \(x=4/t\)，观察 \(\frac{x}{2}+\frac{2}{x}\) 不变，而 \(\ln x\) 与 \(\ln 4-\ln t\) 互补。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 21 <span class="tag">估计不等式</span></div>
+      <p>设 \(f'(x)\) 在 \([a,b]\) 上连续，证明：</p>
+      <div class="formula">\[
+      \max_{a\le x\le b}|f(x)|
+      \le
+      \left|\frac1{b-a}\int_a^b f(x)\,dx\right|
+      +\int_a^b|f'(x)|\,dx.
+      \]</div>
+      <details><summary>提示</summary><p>先把 \(f(x)\) 写成区间平均值加一个偏差；偏差用 \(f'\) 控制。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 22 <span class="tag">二重积分影子</span></div>
+      <p>设 \(f(x)\) 在 \((-\infty,+\infty)\) 上连续，证明：</p>
+      <div class="formula">\[
+      \int_0^x f(u)(x-u)\,du
+      =
+      \int_0^x\left(\int_0^u f(t)\,dt\right)du.
+      \]</div>
+      <details><summary>提示</summary><p>两边对 \(x\) 求导，初值同为 \(0\)。也可以把右边改写为三角区域上的累积。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 23 <span class="tag">凸函数</span></div>
+      <p>设 \(f(x)\) 在 \([0,a]\) 上二阶可导 \((a>0)\)，且 \(f''(x)\ge0\)，证明：</p>
+      <div class="formula">\[
+      \int_0^a f(x)\,dx\ge af(a/2).
+      \]</div>
+      <details><summary>提示</summary><p>\(f''\ge0\) 表示凸性；把 \(x\) 与 \(a-x\) 配对。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 24 <span class="tag">凹函数与 Jensen</span></div>
+      <p>设函数 \(f(x)\) 在 \([0,1]\) 上二阶可导，且 \(f''(x)\le0\)，\(x\in[0,1]\)。证明：</p>
+      <div class="formula">\[
+      \int_0^1 f(x^2)\,dx\le f(1/3).
+      \]</div>
+      <details><summary>提示</summary><p>凹函数满足 Jensen 反向；注意 \(\int_0^1x^2dx=1/3\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 25 <span class="tag">单调函数与振荡</span></div>
+      <p>设 \(f(x)\) 为 \([0,2\pi]\) 上的单调减少函数，证明：对任何正整数 \(n\) 成立</p>
+      <div class="formula">\[
+      \int_0^{2\pi} f(x)\sin nx\,dx\ge0.
+      \]</div>
+      <details><summary>提示</summary><p>把区间按 \(\sin nx\) 的正负半波分组，利用单调性比较配对的函数值。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 26 <span class="tag">零点存在</span></div>
+      <p>设函数 \(f(x)\) 在 \([0,\pi]\) 上连续，且</p>
+      <div class="formula">\[
+      \int_0^\pi f(x)\,dx=0,\qquad
+      \int_0^\pi f(x)\cos x\,dx=0.
+      \]</div>
+      <p>证明：在 \((0,\pi)\) 内至少存在两个不同点 \(\xi_1,\xi_2\)，使得</p>
+      <div class="formula">\[
+      f(\xi_1)=f(\xi_2)=0.
+      \]</div>
+      <details><summary>提示</summary><p>若零点太少，\(f\) 的符号结构会受限；再结合权重 \(1\) 和 \(\cos x\) 的积分条件推出矛盾。</p></details>
+    </div>
+  </section>
+
+  <section class="footer">
+    <p>来源：教材第七章 §3（教材页 251-267）整理；公式用 LaTeX 渲染，课后题按教材顺序录入。</p>
+  </section>
+</main>
+</body>
+</html>

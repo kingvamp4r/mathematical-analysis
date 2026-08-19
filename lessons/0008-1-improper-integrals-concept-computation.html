@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第八章 §1：反常积分的概念和计算</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"]],
+        displayMath: [["\\[", "\\]"]],
+        processEscapes: true
+      },
+      options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202124;
+      --muted: #667085;
+      --line: #d9dee7;
+      --paper: #fffef9;
+      --accent: #0b6865;
+      --accent-dark: #074c49;
+      --soft: #edf8f7;
+      --amber: #fff4e3;
+      --amber-line: #bf7416;
+      --red: #a0183d;
+      --green: #146c43;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f4f0e8;
+      color: var(--ink);
+      font: 17px/1.75 ui-serif, "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+    }
+    main {
+      width: min(1040px, calc(100vw - 32px));
+      margin: 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 50px rgba(20, 30, 40, 0.08);
+    }
+    header {
+      padding: 42px 46px 30px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffef9, #fbf7ef);
+    }
+    section { padding: 28px 46px; border-bottom: 1px solid var(--line); }
+    h1, h2, h3, h4, button, .kicker, .tag, .pill, th {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      letter-spacing: 0;
+    }
+    h1 { margin: 0 0 10px; font-size: 35px; line-height: 1.2; }
+    h2 { margin: 0 0 14px; font-size: 24px; line-height: 1.3; }
+    h3 { margin: 22px 0 8px; font-size: 18px; line-height: 1.35; color: var(--accent-dark); }
+    h4 { margin: 14px 0 6px; font-size: 16px; color: var(--accent-dark); }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    ol, ul { padding-left: 24px; }
+    li { margin: 6px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 15px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #fafafa; }
+    .kicker {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .lead { color: var(--muted); max-width: 78ch; }
+    .formula {
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      padding: 12px 14px;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+    .note {
+      background: var(--amber);
+      border-left: 4px solid var(--amber-line);
+      padding: 12px 14px;
+      margin: 14px 0;
+      color: #704000;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .box, .exercise, .quiz-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 14px 16px;
+    }
+    .box strong {
+      display: block;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      margin-bottom: 6px;
+    }
+    .exercise { margin: 12px 0; }
+    .exercise-title {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+    .tag, .pill {
+      display: inline-block;
+      border: 1px solid #b6d7d4;
+      background: var(--soft);
+      color: var(--accent-dark);
+      font-size: 13px;
+      padding: 2px 7px;
+    }
+    .pill { border-color: var(--line); color: var(--muted); background: #fff; }
+    details {
+      border-top: 1px dashed var(--line);
+      margin-top: 10px;
+      padding-top: 8px;
+    }
+    summary {
+      cursor: pointer;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 650;
+    }
+    .question { background: #f7f7f7; padding: 10px 12px; overflow-x: auto; }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    button {
+      border: 1px solid #b9c1cc;
+      background: #fff;
+      color: var(--ink);
+      padding: 9px 10px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button:hover { border-color: var(--accent); background: var(--soft); }
+    button.correct { border-color: var(--green); background: #eaf7ef; color: var(--green); }
+    button.wrong { border-color: var(--red); background: #fff0f3; color: var(--red); }
+    .feedback { min-height: 28px; margin-top: 10px; color: var(--muted); font-size: 15px; }
+    .feedback.good { color: var(--green); }
+    .feedback.bad { color: var(--red); }
+    .footer { color: var(--muted); font-size: 15px; }
+    @media (max-width: 780px) {
+      main { margin: 16px auto; }
+      header, section { padding: 24px; }
+      h1 { font-size: 28px; }
+      .grid, .two, .choices { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      main { box-shadow: none; border: none; width: 100%; margin: 0; }
+      button { display: none; }
+      details { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="kicker">数学分析 · 第八章 §1</div>
+    <h1>反常积分的概念和计算</h1>
+    <p class="lead">这一节只解决一个核心问题：定积分原来要求“区间有限、函数有界”，现在把其中一个限制放开以后，怎样用极限重新定义积分，并判断它到底有没有意义。</p>
+  </header>
+
+  <section>
+    <h2>本节主线</h2>
+    <div class="grid">
+      <div class="box">
+        <strong>无穷限</strong>
+        <p>区间变成 \([a,+\infty)\)、\((-\infty,b]\) 或 \((-\infty,+\infty)\)。</p>
+      </div>
+      <div class="box">
+        <strong>无界函数</strong>
+        <p>区间有限，但被积函数在端点或内点附近无界，也叫瑕积分。</p>
+      </div>
+      <div class="box">
+        <strong>计算方法</strong>
+        <p>先截断，后积分，最后取极限；不能跳过“极限是否存在”。</p>
+      </div>
+    </div>
+    <div class="note">反常积分不是一种新的积分技巧，而是把“积分值”定义成一族正常定积分的极限。</div>
+  </section>
+
+  <section>
+    <h2>一、无穷区间上的反常积分</h2>
+    <p>设 \(f(x)\) 在 \([a,+\infty)\) 上有定义，并且在任意有限区间 \([a,A]\subset[a,+\infty)\) 上可积。若极限</p>
+    <div class="formula">\[
+      \lim_{A\to+\infty}\int_a^A f(x)\,dx
+    \]</div>
+    <p>存在，则称反常积分</p>
+    <div class="formula">\[
+      \int_a^{+\infty} f(x)\,dx
+    \]</div>
+    <p>收敛，并定义为上述极限；否则称发散。</p>
+
+    <h3>两端无穷时不能只看整体符号</h3>
+    <p>对</p>
+    <div class="formula">\[
+      \int_{-\infty}^{+\infty}f(x)\,dx
+    \]</div>
+    <p>通常要选取任意 \(c\in\mathbb R\)，分别看</p>
+    <div class="formula">\[
+      \int_{-\infty}^{c}f(x)\,dx,\qquad
+      \int_{c}^{+\infty}f(x)\,dx.
+    \]</div>
+    <p>只有两边都收敛，才说整体收敛，并定义</p>
+    <div class="formula">\[
+      \int_{-\infty}^{+\infty}f(x)\,dx
+      =
+      \int_{-\infty}^{c}f(x)\,dx+
+      \int_{c}^{+\infty}f(x)\,dx.
+    \]</div>
+    <div class="note">这和 Cauchy 主值不同。主值可能存在，但普通反常积分仍然发散。</div>
+  </section>
+
+  <section>
+    <h2>二、无界函数的反常积分：瑕积分</h2>
+    <p>如果 \(f(x)\) 在 \([a,b)\) 上可积，但在 \(b\) 附近无界，则定义</p>
+    <div class="formula">\[
+      \int_a^b f(x)\,dx
+      =
+      \lim_{\eta\to0+}\int_a^{b-\eta}f(x)\,dx.
+    \]</div>
+    <p>若极限存在，则收敛；否则发散。</p>
+
+    <h3>瑕点在区间内部</h3>
+    <p>如果 \(c\in(a,b)\) 是瑕点，则必须拆成两段：</p>
+    <div class="formula">\[
+      \int_a^b f(x)\,dx
+      =
+      \int_a^c f(x)\,dx+
+      \int_c^b f(x)\,dx.
+    \]</div>
+    <p>只有两段都收敛，原积分才收敛。</p>
+    <div class="note">这条特别重要：不能因为左右两边发散相互抵消，就说普通反常积分收敛。</div>
+  </section>
+
+  <section>
+    <h2>三、两个 \(p\)-积分模板</h2>
+    <div class="grid two">
+      <div class="box">
+        <strong>无穷远处</strong>
+        <div class="formula">\[
+          \int_1^{+\infty}\frac{dx}{x^p}
+          \begin{cases}
+          \text{收敛},&p>1,\\
+          \text{发散},&p\le1.
+          \end{cases}
+        \]</div>
+      </div>
+      <div class="box">
+        <strong>零点附近</strong>
+        <div class="formula">\[
+          \int_0^1\frac{dx}{x^p}
+          \begin{cases}
+          \text{收敛},&p<1,\\
+          \text{发散},&p\ge1.
+          \end{cases}
+        \]</div>
+      </div>
+    </div>
+    <p>记忆方法：无穷远处需要“降得快”，所以 \(p>1\)；零点附近需要“爆得慢”，所以 \(p<1\)。</p>
+  </section>
+
+  <section>
+    <h2>四、计算反常积分的四步法</h2>
+    <ol>
+      <li>先找反常点：无穷端点、函数无界点、分母为零点、对数奇点。</li>
+      <li>把每个反常点截断，写成正常定积分的极限。</li>
+      <li>在有限区间上正常积分，可以用换元、分部积分、递推公式。</li>
+      <li>最后取极限，并明确写“收敛”或“发散”。</li>
+    </ol>
+    <div class="note">考试中最常见失分：直接写原函数代上下限，却没有说明上限趋于无穷或瑕点趋近过程。</div>
+  </section>
+
+  <section>
+    <h2>五、常见计算模型</h2>
+
+    <h3>模型 1：指数衰减配三角函数</h3>
+    <p>可以用分部积分两次，也可以用复指数：</p>
+    <div class="formula">\[
+      \int_0^{+\infty}e^{-ax}\sin bx\,dx
+      =
+      \frac{b}{a^2+b^2},
+      \qquad
+      \int_0^{+\infty}e^{-ax}\cos bx\,dx
+      =
+      \frac{a}{a^2+b^2},
+      \quad a>0.
+    \]</div>
+
+    <h3>模型 2：对称区间与奇函数</h3>
+    <p>普通反常积分必须先分别判断两端是否收敛。若两边都收敛，奇函数积分才可以用对称性为 \(0\)。</p>
+
+    <h3>模型 3：含 \(\ln x\) 的 \(0\) 到 \(1\) 积分</h3>
+    <p>常用换元</p>
+    <div class="formula">\[
+      x=e^{-t},\qquad dx=-e^{-t}\,dt.
+    \]</div>
+    <p>把 \(x\to0+\) 变成 \(t\to+\infty\)。这也是把无界函数反常积分化为无穷区间反常积分的基本方法。</p>
+
+    <h3>模型 4：Cauchy 主值</h3>
+    <p>Cauchy 主值是一种“对称截断”：</p>
+    <div class="formula">\[
+      (\operatorname{cpv})\int_{-\infty}^{+\infty}f(x)\,dx
+      =
+      \lim_{A\to+\infty}\int_{-A}^{A}f(x)\,dx.
+    \]</div>
+    <p>有限区间内有瑕点 \(c\) 时，主值通常形如</p>
+    <div class="formula">\[
+      (\operatorname{cpv})\int_a^b f(x)\,dx
+      =
+      \lim_{\varepsilon\to0+}
+      \left[
+        \int_a^{c-\varepsilon}f(x)\,dx+
+        \int_{c+\varepsilon}^{b}f(x)\,dx
+      \right].
+    \]</div>
+    <div class="note">主值存在不等于反常积分收敛。比如 \((\operatorname{cpv})\int_{-1}^1\frac{dx}{x}=0\)，但普通反常积分发散。</div>
+  </section>
+
+  <section>
+    <h2>六、几个必须会说清楚的反例意识</h2>
+    <table>
+      <thead>
+        <tr><th>误判</th><th>正确说法</th><th>典型反例</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>反常积分收敛，则被积函数有界</td>
+          <td>不一定</td>
+          <td>教材例 8.1.7 构造了连续甚至可微但无界的例子。</td>
+        </tr>
+        <tr>
+          <td>\(\lim_{x\to+\infty}f(x)=0\) 可推出 \(\int_a^\infty f\) 收敛</td>
+          <td>不一定</td>
+          <td>\(\int_1^\infty \frac{dx}{x}\) 发散。</td>
+        </tr>
+        <tr>
+          <td>\(\int_a^\infty f\) 收敛总推出 \(\lim f=0\)</td>
+          <td>不一定；要加额外条件</td>
+          <td>若 \(f\) 有极限，则极限必须为 \(0\)。若 \(f\) 可导且 \(\int f,\int f'\) 都收敛，也能推出。</td>
+        </tr>
+        <tr>
+          <td>主值存在就说明积分收敛</td>
+          <td>不一定</td>
+          <td>\((\operatorname{cpv})\int_{-1}^1\frac{dx}{x}=0\)，普通积分发散。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>七、即时判断练习</h2>
+    <div class="quiz-card" data-quiz>
+      <div class="question">若 \(\int_{-\infty}^{+\infty} f(x)\,dx\) 普通意义收敛，能否推出其 Cauchy 主值存在且相等？</div>
+      <div class="choices">
+        <button data-correct="true">能推出</button>
+        <button>不能推</button>
+        <button>看奇偶</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+    <div class="quiz-card" data-quiz>
+      <div class="question">\(\int_0^1 x^{-p}\,dx\) 什么时候收敛？</div>
+      <div class="choices">
+        <button>\(p>1\)</button>
+        <button data-correct="true">\(p<1\)</button>
+        <button>\(p=1\)</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+    <div class="quiz-card" data-quiz>
+      <div class="question">若 \((\operatorname{cpv})\int_{-1}^{1}\frac{dx}{x}=0\)，普通反常积分是否收敛？</div>
+      <div class="choices">
+        <button>收敛</button>
+        <button data-correct="true">发散</button>
+        <button>不确定</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>八、课后题训练</h2>
+    <p>下面按教材第 314-315 页习题整理。题面完整保留，提示只给入口；写作业时建议先独立算一遍，再展开提示核对方向。</p>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 1 <span class="tag">物理背景</span></div>
+      <p>物理学中称电场力将单位正电荷从电场中某点移至无穷远处所做的功为电场在该点处的电位。一个带电量为 \(q\) 的点电荷产生的电场对距离 \(r\) 处的单位正电荷的电场力为 \(F=k\frac{q}{r^2}\)（\(k\) 为常数），求距电场中心 \(x\) 处的电位。</p>
+      <details><summary>提示</summary><p>电位是从 \(x\) 到 \(+\infty\) 的功：\(\int_x^{+\infty}kq/r^2\,dr\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 2 <span class="tag">线性性质</span></div>
+      <p>证明：若 \(\int_a^{+\infty}f(x)\,dx\) 和 \(\int_a^{+\infty}g(x)\,dx\) 收敛，\(k_1,k_2\) 为常数，则</p>
+      <div class="formula">\[
+        \int_a^{+\infty}\left[k_1f(x)+k_2g(x)\right]dx
+      \]</div>
+      <p>也收敛，且</p>
+      <div class="formula">\[
+        \int_a^{+\infty}\left[k_1f(x)+k_2g(x)\right]dx
+        =
+        k_1\int_a^{+\infty}f(x)\,dx+
+        k_2\int_a^{+\infty}g(x)\,dx.
+      \]</div>
+      <details><summary>提示</summary><p>先在 \([a,A]\) 上用正常积分线性性质，再令 \(A\to+\infty\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 3 <span class="tag">无穷区间计算</span></div>
+      <p>计算下列无穷区间上的反常积分（发散也是一种计算结果）：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \int_0^{+\infty}e^{-2x}\sin5x\,dx,\qquad
+      (2)\ \int_0^{+\infty}e^{-3x}\cos2x\,dx,\\
+      &(3)\ \int_0^{+\infty}\frac{1}{x^2+x+1}\,dx,\qquad
+      (4)\ \int_0^{+\infty}\frac{1}{(x^2+a^2)(x^2+b^2)}\,dx\quad(a>0,b>0),\\
+      &(5)\ \int_0^{+\infty}xe^{-ax^2}\,dx\quad(a\in\mathbb R),\qquad
+      (6)\ \int_2^{+\infty}\frac{1}{x\ln^p x}\,dx\quad(p\in\mathbb R),\\
+      &(7)\ \int_{-\infty}^{+\infty}\frac{1}{(x^2+1)^{3/2}}\,dx,\qquad
+      (8)\ \int_0^{+\infty}\frac{1}{(e^x+e^{-x})^2}\,dx,\\
+      &(9)\ \int_0^{+\infty}\frac{1}{x^4+1}\,dx,\qquad
+      (10)\ \int_0^{+\infty}\frac{\ln x}{1+x^2}\,dx.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>(6) 令 \(u=\ln x\)。 (10) 试换元 \(x=1/t\)，看它与自身的关系。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 4 <span class="tag">瑕积分计算</span></div>
+      <p>计算下列无界函数的反常积分（发散也是一种计算结果）：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \int_0^1\frac{x}{\sqrt{1-x^2}}\,dx,\qquad
+      (2)\ \int_1^e\frac{1}{x\sqrt{1-\ln^2x}}\,dx,\\
+      &(3)\ \int_1^2\frac{x}{\sqrt{x-1}}\,dx,\qquad
+      (4)\ \int_0^1\frac{1}{(2-x)\sqrt{1-x}}\,dx,\\
+      &(5)\ \int_{-1}^1\frac{1}{x^3}\sin\frac{1}{x^2}\,dx,\qquad
+      (6)\ \int_0^{\pi/2}\frac{1}{\sqrt{\tan x}}\,dx.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>先标出瑕点。(5) 的瑕点在内部 \(x=0\)，必须拆成左右两段。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 5 <span class="tag">极限</span></div>
+      <p>求极限</p>
+      <div class="formula">\[
+        \lim_{n\to\infty}\frac{\sqrt[n]{n!}}{n}.
+      \]</div>
+      <details><summary>提示</summary><p>取对数，把 \(\frac1n\ln n!\) 看成 Riemann 和：\(\frac1n\sum_{k=1}^n\ln(k/n)+\ln n\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 6 <span class="tag">特殊计算</span></div>
+      <p>计算下列反常积分：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \int_0^{\pi/2}\ln\cos x\,dx,\qquad
+      (2)\ \int_0^\pi x\ln\sin x\,dx,\\
+      &(3)\ \int_0^{\pi/2}x\cot x\,dx,\qquad
+      (4)\ \int_0^1\frac{\arcsin x}{x}\,dx,\\
+      &(5)\ \int_0^1\frac{\ln x}{\sqrt{1-x^2}}\,dx.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>(1) 用 \(x\mapsto \pi/2-x\)；(2) 用对称性；(4) 可分部积分。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 7 <span class="tag">Cauchy 主值</span></div>
+      <p>求下列反常积分的 Cauchy 主值：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ (\operatorname{cpv})\int_{-\infty}^{+\infty}\frac{1+x}{1+x^2}\,dx,\\
+      &(2)\ (\operatorname{cpv})\int_1^4\frac{1}{x-2}\,dx,\\
+      &(3)\ (\operatorname{cpv})\int_{1/2}^{1}\frac{1}{x\ln x}\,dx.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>先写主值定义。不要把主值和普通收敛混为一谈。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 8 <span class="tag">换元理解</span></div>
+      <p>说明一个无界函数的反常积分可以化为无穷区间的反常积分。</p>
+      <details><summary>提示</summary><p>典型换元：端点瑕点 \(x\to b-\) 可令 \(t=1/(b-x)\)，把 \(x\to b-\) 变成 \(t\to+\infty\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 9 <span class="tag">性质与反例</span></div>
+      <p>(1) 以 \(\int_a^{+\infty}f(x)\,dx\) 为例，叙述并证明反常积分的保序性和区间可加性；</p>
+      <p>(2) 举例说明，对于反常积分不再成立乘积可积性。</p>
+      <details><summary>提示</summary><p>(1) 在 \([a,A]\) 上先证，再取极限。(2) 找两个各自反常可积但乘积发散的函数。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 10 <span class="tag">对称换元</span></div>
+      <p>证明：当 \(a>0\) 时，只要下式两边的反常积分有意义，就有</p>
+      <div class="formula">\[
+        \int_0^{+\infty}
+        f\!\left(\frac{x}{a}-\frac{a}{x}\right)
+        \frac{\ln x}{x}\,dx
+        =
+        \ln a
+        \int_0^{+\infty}
+        f\!\left(\frac{x}{a}-\frac{a}{x}\right)
+        \frac{1}{x}\,dx.
+      \]</div>
+      <details><summary>提示</summary><p>令 \(x=a^2/t\)，观察 \(\frac{x}{a}-\frac{a}{x}\) 的变化和 \(\ln x\) 的变化。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 11 <span class="tag">极限必要条件</span></div>
+      <p>设 \(\int_a^{+\infty}f(x)\,dx\) 收敛，且 \(\lim_{x\to+\infty}f(x)=A\)。证明 \(A=0\)。</p>
+      <details><summary>提示</summary><p>若 \(A\ne0\)，则尾部 \(f(x)\) 与一个非零常数同号且绝对值有正下界，积分不可能收敛。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 12 <span class="tag">导数条件</span></div>
+      <p>设 \(f(x)\) 在 \([a,+\infty)\) 上可导，且 \(\int_a^{+\infty}f(x)\,dx\) 与 \(\int_a^{+\infty}f'(x)\,dx\) 都收敛。证明</p>
+      <div class="formula">\[
+        \lim_{x\to+\infty}f(x)=0.
+      \]</div>
+      <details><summary>提示</summary><p>由 \(\int_a^{+\infty}f'(x)\,dx\) 收敛推出 \(f(x)\) 有有限极限，再用习题 11。</p></details>
+    </div>
+
+    <h3>计算实习题</h3>
+    <p>在教师指导下，试编制一个通用的 Gauss-Legendre 求积公式程序，在电子计算机上实际计算下列反常积分值，并与精确值比较：</p>
+    <div class="exercise">
+      <div class="exercise-title">计算实习题 <span class="tag">数值积分</span></div>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \int_0^1\frac{\ln(1-x)}{x}\,dx,\qquad &&\text{精确值 }-\frac{\pi^2}{6};\\
+      &(2)\ \int_0^1\ln x\ln(1-x)\,dx,\qquad &&\text{精确值 }2-\frac{\pi^2}{6};\\
+      &(3)\ \int_0^{\pi/2}\ln\cos x\,dx,\qquad &&\text{精确值 }-\frac{\pi}{2}\ln2;\\
+      &(4)\ \int_0^{+\infty}\frac{\sin x}{x}\,dx,\qquad &&\text{精确值 }\frac{\pi}{2};\\
+      &(5)\ \int_0^{+\infty}\sin(x^2)\,dx,\qquad &&\text{精确值 }\frac12\sqrt{\frac{\pi}{2}}.
+      \end{aligned}
+      \]</div>
+    </div>
+  </section>
+
+  <section class="footer">
+    <p>来源：教材《数学分析》第三版上册，第八章 §1，教材第 305-315 页。配套页面：<a href="./0012-4-implicit-functions.html">§12.4 隐函数</a>。下一节将进入 <a href="./0013-2-improper-integral-tests.html">§8.2 反常积分的收敛判别法</a>。</p>
+    <p>提醒：遇到不清楚的步骤，直接在页面里标注或截图问我；我们会把典型错因继续整理进好题集。</p>
+  </section>
+</main>
+
+<script>
+  document.querySelectorAll('[data-quiz]').forEach((card) => {
+    const buttons = card.querySelectorAll('button');
+    const feedback = card.querySelector('.feedback');
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        buttons.forEach((b) => b.classList.remove('correct', 'wrong'));
+        const ok = button.dataset.correct === 'true';
+        button.classList.add(ok ? 'correct' : 'wrong');
+        feedback.className = 'feedback ' + (ok ? 'good' : 'bad');
+        feedback.textContent = ok ? '对。关键是回到反常积分的极限定义。' : '再想想：这里要区分普通收敛、瑕点和主值。';
+      });
+    });
+  });
+</script>
+</body>
+</html>

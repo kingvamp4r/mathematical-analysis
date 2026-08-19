@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第七章 §4：定积分在几何计算中的应用</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]], processEscapes: true },
+      options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202124;
+      --muted: #667085;
+      --line: #d9dee7;
+      --paper: #fffef9;
+      --accent: #0b6865;
+      --accent-dark: #074c49;
+      --soft: #edf8f7;
+      --amber: #fff4e3;
+      --amber-line: #bf7416;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f4f0e8;
+      color: var(--ink);
+      font: 17px/1.75 ui-serif, "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+    }
+    main {
+      width: min(1040px, calc(100vw - 32px));
+      margin: 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 50px rgba(20, 30, 40, 0.08);
+    }
+    header {
+      padding: 42px 46px 30px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffef9, #fbf7ef);
+    }
+    section { padding: 28px 46px; border-bottom: 1px solid var(--line); }
+    h1, h2, h3, h4, .kicker, .tag, th {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      letter-spacing: 0;
+    }
+    h1 { margin: 0 0 10px; font-size: 35px; line-height: 1.2; }
+    h2 { margin: 0 0 14px; font-size: 24px; line-height: 1.3; }
+    h3 { margin: 20px 0 8px; font-size: 18px; color: var(--accent-dark); }
+    h4 { margin: 14px 0 6px; font-size: 16px; color: var(--accent-dark); }
+    p { margin: 10px 0; }
+    ol, ul { padding-left: 24px; }
+    li { margin: 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 15px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px 8px; vertical-align: top; text-align: left; }
+    th { background: #fafafa; }
+    .kicker { color: var(--accent); font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+    .lead { color: var(--muted); max-width: 78ch; }
+    .formula { background: var(--soft); border-left: 4px solid var(--accent); padding: 12px 14px; margin: 12px 0; overflow-x: auto; }
+    .note { background: var(--amber); border-left: 4px solid var(--amber-line); padding: 12px 14px; margin: 14px 0; color: #704000; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .box, .exercise { border: 1px solid var(--line); background: #fff; padding: 14px 16px; }
+    .box strong {
+      display: block;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      margin-bottom: 6px;
+    }
+    .exercise { margin: 12px 0; }
+    .exercise-title {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+    .tag { display: inline-block; border: 1px solid #b6d7d4; background: var(--soft); color: var(--accent-dark); font-size: 13px; padding: 2px 7px; }
+    details { border-top: 1px dashed var(--line); margin-top: 10px; padding-top: 8px; }
+    summary { cursor: pointer; color: var(--accent-dark); font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; font-weight: 650; }
+    .footer { color: var(--muted); font-size: 15px; }
+    @media (max-width: 780px) {
+      main { margin: 16px auto; }
+      header, section { padding: 24px; }
+      h1 { font-size: 28px; }
+      .grid, .two { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      main { box-shadow: none; border: none; width: 100%; margin: 0; }
+      details { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="kicker">数学分析 · 第七章 §4</div>
+    <h1>定积分在几何计算中的应用</h1>
+    <p class="lead">这一节的核心不是背很多公式，而是学会把几何量切成“微小片段”，再用定积分累加。面积、弧长、体积、旋转曲面面积、曲率都遵循同一个动作：选变量、写微元、定上下限。</p>
+  </header>
+
+  <section>
+    <h2>本节做题流程</h2>
+    <div class="grid">
+      <div class="box">
+        <strong>先画图</strong>
+        <p>确定谁在上、谁在下，谁是外半径、谁是内半径，是否要分段。</p>
+      </div>
+      <div class="box">
+        <strong>选微元</strong>
+        <p>面积用小矩形，体积用薄片或圆柱壳，弧长用微小线段。</p>
+      </div>
+      <div class="box">
+        <strong>检查符号</strong>
+        <p>面积、长度、体积非负；若公式可能带方向，必须取绝对值或分段。</p>
+      </div>
+    </div>
+    <div class="note">这一节最容易错在“范围”和“分段”：交点、参数区间、极坐标角度范围、旋转半径都要先确认。</div>
+  </section>
+
+  <section>
+    <h2>一、平面图形面积</h2>
+    <h3>直角坐标</h3>
+    <div class="formula">\[
+      S=\int_a^b |f(x)|\,dx,\qquad
+      S=\int_a^b |f(x)-g(x)|\,dx.
+    \]</div>
+    <p>若已经知道 \(f(x)\ge g(x)\)，则可直接写</p>
+    <div class="formula">\[
+      S=\int_a^b [f(x)-g(x)]\,dx.
+    \]</div>
+
+    <h3>参数方程</h3>
+    <p>若曲线由 \(x=x(t),y=y(t)\) 给出，可用</p>
+    <div class="formula">\[
+      S=\int y\,dx=\int_{\alpha}^{\beta}y(t)x'(t)\,dt
+    \]</div>
+    <p>配合方向判断正负。闭合曲线通常要按图形方向取绝对值或利用对称性。</p>
+
+    <h3>极坐标</h3>
+    <div class="formula">\[
+      S=\frac12\int_{\alpha}^{\beta}r^2(\theta)\,d\theta.
+    \]</div>
+    <p>这是把扇形面积微元 \(\frac12r^2d\theta\) 累加。</p>
+  </section>
+
+  <section>
+    <h2>二、弧长</h2>
+    <table>
+      <thead><tr><th>曲线形式</th><th>弧长公式</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>\(y=f(x),\ a\le x\le b\)</td>
+          <td>\(\displaystyle L=\int_a^b\sqrt{1+[f'(x)]^2}\,dx\)</td>
+        </tr>
+        <tr>
+          <td>\(x=x(t),y=y(t),\ \alpha\le t\le\beta\)</td>
+          <td>\(\displaystyle L=\int_\alpha^\beta\sqrt{[x'(t)]^2+[y'(t)]^2}\,dt\)</td>
+        </tr>
+        <tr>
+          <td>\(r=r(\theta),\ \alpha\le\theta\le\beta\)</td>
+          <td>\(\displaystyle L=\int_\alpha^\beta\sqrt{r^2(\theta)+[r'(\theta)]^2}\,d\theta\)</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><strong>证明思路：</strong>小段曲线近似为直线段，长度微元满足 \(ds=\sqrt{dx^2+dy^2}\)。</p>
+  </section>
+
+  <section>
+    <h2>三、体积</h2>
+    <h3>截面积法</h3>
+    <p>若垂直于 \(x\) 轴的截面积为 \(A(x)\)，则</p>
+    <div class="formula">\[
+      V=\int_a^b A(x)\,dx.
+    \]</div>
+
+    <h3>旋转体：圆盘与垫片</h3>
+    <div class="formula">\[
+      V=\pi\int_a^b \bigl(R^2(x)-r^2(x)\bigr)\,dx.
+    \]</div>
+    <p>这里 \(R\) 是外半径，\(r\) 是内半径。</p>
+
+    <h3>旋转体：圆柱壳</h3>
+    <div class="formula">\[
+      V=2\pi\int_a^b \text{半径}\cdot\text{高度}\,dx.
+    \]</div>
+    <p>绕 \(y\) 轴旋转时，常见形式是 \(V=2\pi\int_a^b x f(x)\,dx\)。</p>
+  </section>
+
+  <section>
+    <h2>四、旋转曲面面积</h2>
+    <p>曲线 \(y=f(x)\ge0\) 绕 \(x\) 轴旋转一周，曲面面积为</p>
+    <div class="formula">\[
+      S=2\pi\int_a^b y\sqrt{1+(y')^2}\,dx.
+    \]</div>
+    <p>若参数方程 \(x=x(t),y=y(t)\) 绕 \(x\) 轴旋转，则</p>
+    <div class="formula">\[
+      S=2\pi\int_\alpha^\beta y(t)\sqrt{[x'(t)]^2+[y'(t)]^2}\,dt.
+    \]</div>
+    <p>绕 \(y\) 轴时，把半径 \(y\) 换成 \(x\)。</p>
+  </section>
+
+  <section>
+    <h2>五、曲率与曲率半径</h2>
+    <p>曲率衡量曲线弯曲得有多快。曲率越大，曲线越弯；曲率半径 \(\rho=1/\kappa\)。</p>
+    <table>
+      <thead><tr><th>形式</th><th>曲率公式</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>\(y=y(x)\)</td>
+          <td>\(\displaystyle \kappa=\frac{|y''|}{(1+(y')^2)^{3/2}}\)</td>
+        </tr>
+        <tr>
+          <td>\(x=x(t),y=y(t)\)</td>
+          <td>\(\displaystyle \kappa=\frac{|x'y''-y'x''|}{([x']^2+[y']^2)^{3/2}}\)</td>
+        </tr>
+        <tr>
+          <td>\(r=r(\theta)\)</td>
+          <td>\(\displaystyle \kappa=\frac{|r^2+2(r')^2-rr''|}{(r^2+(r')^2)^{3/2}}\)</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>六、课后题训练</h2>
+    <p>下面按教材第 281-283 页习题 1-19 整理。题面完整保留，提示给出主要切入点。</p>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 1 <span class="tag">平面面积</span></div>
+      <p>求下列曲线所围的图形面积：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ y=\frac1x,\ y=x,\ x=2;\\
+      &(2)\ y^2=4(x+1),\ y^2=4(1-x);\\
+      &(3)\ y=x,\ y=x+\sin^2x,\ x=0,\ x=\pi;\\
+      &(4)\ y=e^x,\ y=e^{-x},\ x=1;\\
+      &(5)\ y=|\ln x|,\ y=0,\ x=0.1,\ x=10;\\
+      &(6)\ x=2t-t^2,\ y=2t^2-t^3,\ 0\le t\le2;\\
+      &(7)\ x=a\cos^3t,\ y=a\sin^3t,\ 0\le t\le2\pi;\\
+      &(8)\ r=a\theta,\ \theta=0,\theta=2\pi;\\
+      &(9)\ r=ae^\theta,\ \theta=0,\theta=2\pi;\\
+      &(10)\ r=a\cos\theta+b,\quad b\ge a>0;\\
+      &(11)\ r=3\cos\theta,\ r=1+\cos\theta,\quad -\pi/3\le\theta\le\pi/3;\\
+      &(12)\ r^2=a^2\cos2\theta;\\
+      &(13)\ r=a\cos2\theta;\\
+      &(14)\ x^3+y^3=3axy;\\
+      &(15)\ x^4+y^4=a^2(x^2+y^2).
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>直角坐标题先找交点；参数和极坐标题优先利用对称性。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 2 <span class="tag">面积最值</span></div>
+      <p>求由抛物线 \(y^2=4ax\) 与过其焦点的弦所围的图形面积的最小值。</p>
+      <details><summary>提示</summary><p>把过焦点的弦参数化，先写面积，再对参数求最小值。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 3 <span class="tag">弧长</span></div>
+      <p>求下列曲线的弧长：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ y=x^{3/2},\quad0\le x\le4;\\
+      &(2)\ x=\frac{y^2}{4}-\frac{\ln y}{2},\quad1\le y\le e;\\
+      &(3)\ y=\ln\cos x,\quad0\le x\le a<\frac{\pi}{2};\\
+      &(4)\ x=a\cos^3t,\ y=a\sin^3t,\quad0\le t\le2\pi;\\
+      &(5)\ x=a(\cos t+t\sin t),\ y=a(\sin t-t\cos t),\quad0\le t\le2\pi;\\
+      &(6)\ r=a(1-\cos\theta),\quad0\le\theta\le2\pi;\\
+      &(7)\ r=a\theta,\quad0\le\theta\le2\pi;\\
+      &(8)\ r=a\sin^3\frac{\theta}{3},\quad0\le\theta\le3\pi.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>识别曲线形式后直接选弧长公式；参数曲线先算 \(\sqrt{[x']^2+[y']^2}\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 4 <span class="tag">旋轮线弧长</span></div>
+      <p>在旋轮线的第一拱上，求分该拱的长度为 \(1:3\) 的点的坐标。</p>
+      <details><summary>提示</summary><p>先写旋轮线参数方程的弧长函数 \(s(t)\)，再令 \(s(t)\) 等于总长的相应比例。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 5 <span class="tag">截面积体积</span></div>
+      <p>求下列几何体的体积：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \text{正椭圆台：上底长半轴 }a\text{、短半轴 }b,\text{ 下底长半轴 }A\text{、短半轴 }B,\text{ 高 }h;\\
+      &(2)\ \text{椭球体 }\frac{x^2}{a^2}+\frac{y^2}{b^2}+\frac{z^2}{c^2}=1;\\
+      &(3)\ \text{直圆柱面 }x^2+y^2=a^2\text{ 和 }x^2+z^2=a^2\text{ 所围几何体};\\
+      &(4)\ \text{球面 }x^2+y^2+z^2=a^2\text{ 和直圆柱面 }x^2+y^2=ax\text{ 所围几何体}.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>统一使用截面积法。第 (3) 是经典 Steinmetz 体；第 (4) 可用柱坐标或按圆柱投影区域积分。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 6 <span class="tag">旋转体公式证明</span></div>
+      <p>证明以下旋转体的体积公式：</p>
+      <div class="formula">\[
+      (1)\quad
+      V=2\pi\int_a^b xf(x)\,dx,
+      \]</div>
+      <p>其中 \(f(x)\ge0\) 连续，区域为 \(0\le a\le x\le b,\ 0\le y\le f(x)\)，绕 \(y\) 轴旋转一周。</p>
+      <div class="formula">\[
+      (2)\quad
+      V=\frac{2\pi}{3}\int_\alpha^\beta r^3(\theta)\sin\theta\,d\theta,
+      \]</div>
+      <p>其中极坐标区域为 \(0\le\alpha\le\theta\le\beta\le\pi,\ 0\le r\le r(\theta)\)，绕极轴旋转一周。</p>
+      <details><summary>提示</summary><p>第 (1) 用圆柱壳；第 (2) 把小扇形绕极轴旋转得到近似圆锥壳。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 7 <span class="tag">旋转体体积</span></div>
+      <p>求下列曲线绕指定轴旋转一周所围成的旋转体体积：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \frac{x^2}{a^2}+\frac{y^2}{b^2}=1,\text{ 绕 }x\text{ 轴};\\
+      &(2)\ y=\sin x,\ y=0,\ 0\le x\le\pi,\quad (i)\text{ 绕 }x\text{ 轴},\ (ii)\text{ 绕 }y\text{ 轴};\\
+      &(3)\ x=a\cos^3t,\ y=a\sin^3t,\ 0\le t\le\pi,\text{ 绕 }x\text{ 轴};\\
+      &(4)\ x=a(t-\sin t),\ y=a(1-\cos t),\ 0\le t\le2\pi,\ y=0,\\
+      &\qquad (i)\text{ 绕 }y\text{ 轴},\ (ii)\text{ 绕直线 }y=2a;\\
+      &(5)\ x^2+(y-b)^2=a^2,\quad0<a\le b,\text{ 绕 }x\text{ 轴};\\
+      &(6)\ r=a(1-\cos\theta),\text{ 绕极轴};\\
+      &(7)\ r=ae^\theta,\quad0\le\theta\le\pi,\text{ 绕极轴};\\
+      &(8)\ (x^2+y^2)^2=a^2(x^2-y^2),\text{ 绕 }x\text{ 轴}.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>绕 \(x\) 轴常用圆盘/垫片；绕 \(y\) 轴常用圆柱壳；极坐标绕极轴用习题 6(2) 的公式。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 8 <span class="tag">体积相等</span></div>
+      <p>将抛物线 \(y=x(x-a)\) 与 \(y=0\) 所界的区域在 \(x\in[0,a]\) 和 \(x\in[a,c]\) 的部分分别绕 \(x\) 轴旋转一周后，所得旋转体的体积相等，求 \(c\) 与 \(a\) 的关系。</p>
+      <details><summary>提示</summary><p>分别写 \(\pi\int y^2dx\)，注意 \(y^2=x^2(x-a)^2\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 9 <span class="tag">半体积</span></div>
+      <p>记 \(V(\xi)\) 是曲线</p>
+      <div class="formula">\[
+      y=\frac{\sqrt{x}}{1+x^2}
+      \]</div>
+      <p>与 \(y=0\) 所界的区域在 \(x\in[0,\xi]\) 的部分绕 \(x\) 轴旋转一周所得旋转体体积，求常数 \(a\) 使得</p>
+      <div class="formula">\[
+      V(a)=\frac12\lim_{\xi\to+\infty}V(\xi).
+      \]</div>
+      <details><summary>提示</summary><p>先写 \(V(\xi)=\pi\int_0^\xi \frac{x}{(1+x^2)^2}dx\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 10 <span class="tag">穿孔椭球</span></div>
+      <p>将椭圆</p>
+      <div class="formula">\[
+      \frac{x^2}{a^2}+\frac{y^2}{b^2}=1
+      \]</div>
+      <p>绕 \(x\) 轴旋转一周围成一个旋转椭球体，再沿 \(x\) 轴方向用半径为 \(r\ (r<b)\) 的钻头打一个穿心的圆孔，剩下的体积恰为原来椭球体体积的一半，求 \(r\) 的值。</p>
+      <details><summary>提示</summary><p>剩余体积可看成在 \(|y|\ge r\) 的部分绕轴留下的体积；先求孔的 \(x\) 方向范围。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 11 <span class="tag">面积最值与体积</span></div>
+      <p>设直线 \(y=ax\ (0<a<1)\) 与抛物线 \(y=x^2\) 所围成图形面积为 \(S_1\)，且它们与直线 \(x=1\) 所围成图形面积为 \(S_2\)。</p>
+      <p>(1) 试确定 \(a\) 的值，使得 \(S_1+S_2\) 达到最小，并求出最小值；</p>
+      <p>(2) 求该最小值所对应的平面图形绕 \(x\) 轴旋转一周所得旋转体的体积。</p>
+      <details><summary>提示</summary><p>交点是 \(x=0,a\)。先分区间写 \(S_1,S_2\)，再对 \(a\) 求最小。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 12 <span class="tag">微分方程与体积最值</span></div>
+      <p>设函数 \(f(x)\) 在闭区间 \([0,1]\) 上连续，在开区间 \((0,1)\) 上大于零，并满足</p>
+      <div class="formula">\[
+      xf'(x)=f(x)+\frac{3a}{2}x^2\qquad(a\text{ 为常数}).
+      \]</div>
+      <p>进一步，假设曲线 \(y=f(x)\) 与直线 \(x=1\) 和 \(y=0\) 所围的图形 \(S\) 的面积为 \(2\)。</p>
+      <p>(1) 求函数 \(f(x)\)；</p>
+      <p>(2) 当 \(a\) 为何值时，图形 \(S\) 绕 \(x\) 轴旋转一周所得旋转体体积最小？</p>
+      <details><summary>提示</summary><p>先把方程改成 \(\left(f(x)/x\right)'\) 的形式，再用面积条件确定常数。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 13 <span class="tag">旋转曲面面积</span></div>
+      <p>求下列旋转曲面的面积：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ y^2=2px,\quad0\le x\le a,\text{ 绕 }x\text{ 轴};\\
+      &(2)\ y=\sin x,\quad0\le x\le\pi,\text{ 绕 }x\text{ 轴};\\
+      &(3)\ \frac{x^2}{a^2}+\frac{y^2}{b^2}=1,\text{ 绕 }x\text{ 轴};\\
+      &(4)\ x=a\cos^3t,\ y=a\sin^3t,\quad0\le t\le\pi,\text{ 绕 }x\text{ 轴};\\
+      &(5)\ r=a(1-\cos\theta),\text{ 绕极轴};\\
+      &(6)\ r^2=a^2\cos2\theta,\quad (i)\text{ 绕极轴},\ (ii)\text{ 绕射线 }\theta=\pi/2.
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>统一记住：曲面面积微元 \(dS=2\pi\cdot\text{旋转半径}\cdot ds\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 14 <span class="tag">切线与曲面面积</span></div>
+      <p>设曲线 \(y=\sqrt{x-1}\)，过原点作其切线，求由该曲线、所作切线及 \(x\) 轴所围成的平面图形绕 \(x\) 轴旋转一周所得旋转体的表面积。</p>
+      <details><summary>提示</summary><p>先求过原点切线的切点，再分别计算曲线段与直线段旋转形成的曲面面积。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 15 <span class="tag">柱面面积公式</span></div>
+      <p>证明：由空间曲线</p>
+      <div class="formula">\[
+      x=x(t),\quad y=y(t),\quad z=z(t),\qquad t\in[T_1,T_2]
+      \]</div>
+      <p>垂直投影到 \(Oxy\) 平面所形成的柱面的面积公式为</p>
+      <div class="formula">\[
+      S=\int_{T_1}^{T_2}z(t)\sqrt{[x'(t)]^2+[y'(t)]^2}\,dt,
+      \]</div>
+      <p>这里假设 \(x'(t),y'(t),z'(t)\) 在 \([T_1,T_2]\) 上连续，且 \(z(t)\ge0\)。</p>
+      <details><summary>提示</summary><p>底边微元是投影曲线弧长 \(ds\)，柱面小片面积近似为高度 \(z(t)\) 乘以 \(ds\)。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 16 <span class="tag">指定点曲率</span></div>
+      <p>求下列曲线在指定点的曲率和曲率半径：</p>
+      <div class="formula">\[
+      (1)\ xy=4,\text{ 在点 }(2,2);
+      \qquad
+      (2)\ x=a(t-\sin t),\ y=a(1-\cos t),\text{ 在 }t=\pi/2\text{ 对应的点}.
+      \]</div>
+      <details><summary>提示</summary><p>第 (1) 可隐函数求 \(y'\)、\(y''\)；第 (2) 用参数曲率公式。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 17 <span class="tag">曲率公式应用</span></div>
+      <p>求下列曲线的曲率和曲率半径：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ y^2=2px\quad(p>0);\\
+      &(2)\ \frac{x^2}{a^2}-\frac{y^2}{b^2}=1;\\
+      &(3)\ x^{2/3}+y^{2/3}=a^{2/3}\quad(a>0);\\
+      &(4)\ x=a(\cos t+t\sin t),\ y=a(\sin t-t\cos t)\quad(a>0).
+      \end{aligned}
+      \]</div>
+      <details><summary>提示</summary><p>能参数化的优先参数化，避免隐函数二阶求导太重。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 18 <span class="tag">曲率圆</span></div>
+      <p>求曲线 \(y=\ln x\) 在点 \((1,0)\) 处的曲率圆方程。</p>
+      <details><summary>提示</summary><p>先求曲率半径，再找主法线方向上的圆心。</p></details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 19 <span class="tag">极坐标曲率证明</span></div>
+      <p>设曲线的极坐标方程为 \(r=r(\theta),\theta\in[\alpha,\beta]\subset[0,2\pi]\)，且 \(r(\theta)\) 二阶可导。证明它在点 \((r,\theta)\) 处的曲率为</p>
+      <div class="formula">\[
+      K=\frac{|r^2+2(r')^2-rr''|}{(r^2+(r')^2)^{3/2}}.
+      \]</div>
+      <details><summary>提示</summary><p>把 \(x=r\cos\theta,\ y=r\sin\theta\) 看成参数方程，再代入参数曲率公式。</p></details>
+    </div>
+  </section>
+
+  <section class="footer">
+    <p>来源：教材第七章 §4（教材页 267-283）整理；公式用 LaTeX 渲染，课后题按教材顺序录入。</p>
+  </section>
+</main>
+</body>
+</html>

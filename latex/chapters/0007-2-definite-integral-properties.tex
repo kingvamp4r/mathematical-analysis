@@ -1,0 +1,398 @@
+% Generated from lessons/0007-2-definite-integral-properties.html; edit the HTML source, then rerun the converter.
+\section{定积分的基本性质}
+\lessonmark{定积分的基本性质}
+
+这一节不是为了多记几条公式，而是把“定积分是带符号面积/极限和”变成可证明、可估计、可比较的工具。考试中它常用于证明不等式、判断积分大小和处理抽象函数题。
+
+\subsection*{本节主线}
+
+\begin{conceptbox}
+\textbf{代数性}
+线性、有限点改值不变、区间可加性。核心来自 Riemann 和的极限。
+\end{conceptbox}
+
+\begin{conceptbox}
+\textbf{顺序性}
+函数大小关系可以传给积分大小关系，这是估计积分的基本入口。
+\end{conceptbox}
+
+\begin{conceptbox}
+\textbf{平均值}
+连续函数的积分等于“某点函数值 \(\times\) 区间长度”，把面积变成一个代表高度。
+\end{conceptbox}
+
+\begin{notebox}
+遇到定积分证明题，先问：能不能用线性拆开？能不能用保序夹住？能不能找一个平均值点？
+\end{notebox}
+
+\subsection*{一、代数性质}
+
+\subsubsection*{线性性质}
+
+若 \(f,g\) 在 \([a,b]\) 上可积，\(k_1,k_2\) 为常数，则 \(k_1f+k_2g\) 可积，并且
+
+\[
+      \int_a^b [k_1f(x)+k_2g(x)]\,dx
+      =
+      k_1\int_a^b f(x)\,dx+k_2\int_a^b g(x)\,dx.
+    \]
+
+\textbf{证明思路：}对同一划分写 Riemann 和，有限求和本身满足线性，再令分割细度趋于 \(0\)。
+
+\subsubsection*{乘积可积性}
+
+若 \(f,g\) 在 \([a,b]\) 上可积，则 \(fg\) 也可积。但一般不成立
+
+\[
+      \int_a^b f(x)g(x)\,dx
+      =
+      \left(\int_a^b f(x)\,dx\right)
+      \left(\int_a^b g(x)\,dx\right).
+    \]
+
+\textbf{证明思路：}用有界性和振幅估计：小区间内 \(fg\) 的振幅可由 \(f,g\) 的振幅控制。
+
+\subsubsection*{有限点改值不变}
+
+若 \(f\) 在 \([a,b]\) 上可积，而 \(g\) 只在有限个点上与 \(f\) 取值不同，则 \(g\) 也可积，且
+
+\[
+      \int_a^b f(x)\,dx=\int_a^b g(x)\,dx.
+    \]
+
+有限个点没有长度，所以不会改变积分值。
+
+\subsubsection*{区间可加性}
+
+若相关积分存在，则对任意实数 \(a,b,c\)，有
+
+\[
+      \int_a^b f(x)\,dx=\int_a^c f(x)\,dx+\int_c^b f(x)\,dx.
+    \]
+
+这里配合约定 \(\int_a^b f=-\int_b^a f\)。证明时先证 \(c\in[a,b]\)，再用方向约定推广。
+
+\subsection*{二、顺序性质}
+
+\subsubsection*{保序性}
+
+若 \(f,g\) 在 \([a,b]\) 上可积，且 \(f(x)\ge g(x)\)，则
+
+\[
+      \int_a^b f(x)\,dx\ge \int_a^b g(x)\,dx.
+    \]
+
+特别地，若 \(f(x)\ge0\)，则 \(\int_a^b f(x)\,dx\ge0\)。
+
+\subsubsection*{绝对值估计}
+
+若 \(f\) 在 \([a,b]\) 上可积，则 \(|f|\) 可积，且
+
+\[
+      \left|\int_a^b f(x)\,dx\right|
+      \le
+      \int_a^b |f(x)|\,dx.
+    \]
+
+\textbf{证明思路：}由 \(-|f(x)|\le f(x)\le |f(x)|\)，两边积分后夹住。
+
+\subsubsection*{上下界估计}
+
+若 \(m\le f(x)\le M\)，则
+
+\[
+      m(b-a)\le \int_a^b f(x)\,dx\le M(b-a).
+    \]
+
+这条常用来粗估积分，尤其是不要求精确计算的证明题。
+
+\subsection*{三、积分第一中值定理}
+
+若 \(f,g\) 在 \([a,b]\) 上可积，且 \(g\) 在 \([a,b]\) 上不变号，记 \(m,M\) 分别为 \(f\) 的下确界与上确界，则存在 \(\eta\in[m,M]\)，使得
+
+\[
+      \int_a^b f(x)g(x)\,dx
+      =
+      \eta\int_a^b g(x)\,dx.
+    \]
+
+特别地，若 \(f\) 连续，\(g\) 不变号，则存在 \(\xi\in[a,b]\)，使得
+
+\[
+      \int_a^b f(x)g(x)\,dx
+      =
+      f(\xi)\int_a^b g(x)\,dx.
+    \]
+
+再特别地，当 \(g(x)\equiv1\) 时，得到
+
+\[
+      \int_a^b f(x)\,dx=f(\xi)(b-a).
+    \]
+
+\begin{notebox}
+这不是说每一点的函数值都等于平均高度，而是说连续函数一定能在某个点取到平均高度。
+\end{notebox}
+
+\subsection*{四、常见不等式入口}
+
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{0.18\linewidth}|>{\raggedright\arraybackslash}p{0.42\linewidth}|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{不等式} & \textbf{形式} & \textbf{考试用途} \\ \hline
+Jensen 型 & \(\displaystyle \frac1{b-a}\int_a^b \ln f(x)\,dx
+            \le
+            \ln\left(\frac1{b-a}\int_a^b f(x)\,dx\right)\) & \(\ln x\) 是凹函数，常用“平均后再取函数”和“取函数后再平均”的比较。 \\ \hline
+Hölder 不等式 & \(\displaystyle \int_a^b |f(x)g(x)|\,dx
+            \le
+            \left(\int_a^b |f|^p\right)^{1/p}
+            \left(\int_a^b |g|^q\right)^{1/q},\quad
+            \frac1p+\frac1q=1.\) & 证明 Schwarz、Minkowski 等积分不等式的母式。 \\ \hline
+Schwarz 不等式 & \(\displaystyle \left(\int_a^b f(x)g(x)\,dx\right)^2
+            \le
+            \int_a^b f^2(x)\,dx\int_a^b g^2(x)\,dx.\) & 把乘积积分估计成平方积分，和向量内积的 Cauchy-Schwarz 同源。 \\ \hline
+\end{tabularx}
+\end{center}
+
+\subsection*{五、证明题常用模板}
+
+\begin{conceptbox}
+\textbf{证明积分等式}
+先用线性或区间可加性化简；若出现有限点差异，直接说明有限点改值不影响积分。
+\end{conceptbox}
+
+\begin{conceptbox}
+\textbf{证明积分不等式}
+先在被积函数层面建立大小关系，再积分。若没有明显大小关系，试 Schwarz、Hölder 或 Jensen。
+\end{conceptbox}
+
+\begin{conceptbox}
+\textbf{证明存在点}
+优先想到积分中值定理。若要证明导数为 \(0\)，常转为 Rolle 定理。
+\end{conceptbox}
+
+\begin{conceptbox}
+\textbf{证明函数恒为零}
+若 \(\int f^2=0\)，则 \(f^2\ge0\)。连续情形下只要某点 \(f\ne0\)，附近就会贡献正面积，矛盾。
+\end{conceptbox}
+
+\subsection*{六、课后题训练}
+
+下面按教材第 250-251 页习题 1-13 整理。题面完整保留，提示只给入口。
+
+\begin{exercisebox}
+\textbf{习题 1 \badge{有限点改值}}
+
+设 \(f(x)\) 在 \([a,b]\) 上可积，\(g(x)\) 在 \([a,b]\) 上定义，且在 \([a,b]\) 中除了有限个点之外，都有 \(f(x)=g(x)\)。证明 \(g(x)\) 在 \([a,b]\) 上也可积，并且
+
+\[
+        \int_a^b f(x)\,dx=\int_a^b g(x)\,dx.
+      \]
+
+\begin{hintbox}
+有限个点可用很短的小区间罩住，总长度任意小。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 2 \badge{乘积积分反例}}
+
+设 \(f(x)\) 和 \(g(x)\) 在 \([a,b]\) 上都可积，请举例说明在一般情况下
+
+\[
+        \int_a^b f(x)g(x)\,dx
+        \ne
+        \left(\int_a^b f(x)\,dx\right)
+        \left(\int_a^b g(x)\,dx\right).
+      \]
+
+\begin{hintbox}
+取最简单区间和多项式函数即可，例如 \(f=g=x\)。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 3 \badge{区间可加性}}
+
+证明：对任意实数 \(a,b,c\)，只要 \(\int_a^b f(x)\,dx\)、\(\int_a^c f(x)\,dx\) 和 \(\int_c^b f(x)\,dx\) 都存在，就成立
+
+\[
+        \int_a^b f(x)\,dx
+        =
+        \int_a^c f(x)\,dx+\int_c^b f(x)\,dx.
+      \]
+
+\begin{hintbox}
+先证 \(a\le c\le b\)，再用 \(\int_a^b=-\int_b^a\) 处理顺序。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 4 \badge{比较大小}}
+
+判断下列积分的大小：
+
+\[
+      \begin{aligned}
+      &(1)\ \int_0^1 x\,dx\ \text{和}\ \int_0^1 x^2\,dx;\\
+      &(2)\ \int_1^2 x\,dx\ \text{和}\ \int_1^2 x^2\,dx;\\
+      &(3)\ \int_{-2}^{-1}\left(\frac12\right)^x dx\ \text{和}\ \int_0^1 2^x\,dx;\\
+      &(4)\ \int_0^{\pi/2}\sin x\,dx\ \text{和}\ \int_0^{\pi/2}x\,dx.
+      \end{aligned}
+      \]
+
+\begin{hintbox}
+优先比较被积函数在积分区间上的大小。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 5 \badge{正函数正积分}}
+
+设 \(f(x)\) 在 \([a,b]\) 上连续，\(f(x)\ge0\) 但不恒为 \(0\)。证明
+
+\[
+        \int_a^b f(x)\,dx>0.
+      \]
+
+\begin{hintbox}
+若某点 \(f(x_0)>0\)，由连续性可得附近一小段上仍为正。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 6 \badge{平方积分为零}}
+
+设 \(f(x)\) 在 \([a,b]\) 上连续，且
+
+\[
+        \int_a^b f^2(x)\,dx=0.
+      \]
+
+证明 \(f(x)\) 在 \([a,b]\) 上恒为 \(0\)。
+
+\begin{hintbox}
+对 \(f^2\) 使用上一题。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 7 \badge{积分条件推出驻点}}
+
+设函数 \(f(x)\) 在 \([a,b]\) 上连续，在 \((a,b)\) 内可导，且满足
+
+\[
+        \frac{2}{b-a}\int_a^{(a+b)/2} f(x)\,dx=f(b).
+      \]
+
+证明：存在 \(\xi\in(a,b)\)，使得 \(f'(\xi)=0\)。
+
+\begin{hintbox}
+由积分中值定理得到某点函数值等于 \(f(b)\)，再用 Rolle 定理。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 8 \badge{Jensen 型}}
+
+设 \(\varphi(t)\) 在 \([0,a]\) 上连续，\(f(x)\) 在 \((-\infty,+\infty)\) 上二阶可导，且 \(f''(x)\ge0\)。证明：
+
+\[
+        f\left(\frac1a\int_0^a \varphi(t)\,dt\right)
+        \le
+        \frac1a\int_0^a f(\varphi(t))\,dt.
+      \]
+
+\begin{hintbox}
+\(f''\ge0\) 表示凸函数。可先对离散平均证明，再取极限。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 9 \badge{单调函数估计}}
+
+设 \(f(x)\) 在 \([0,1]\) 上连续，且单调减少。证明对任意 \(\alpha\in[0,1]\)，成立
+
+\[
+        \int_0^\alpha f(x)\,dx\ge
+        \alpha\int_0^1 f(x)\,dx.
+      \]
+
+\begin{hintbox}
+左边是前段平均值乘 \(\alpha\)，单调减少时前段平均值不小于整体平均值。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 10 \badge{Young 不等式}}
+
+设 \(y=f(x)\) 是 \([0,+\infty)\) 上严格单调增加的连续函数，且 \(f(0)=0\)，记它的反函数为 \(x=f^{-1}(y)\)。证明：
+
+\[
+        \int_0^a f(x)\,dx+\int_0^b f^{-1}(y)\,dy\ge ab,
+        \qquad a>0,\ b>0.
+      \]
+
+\begin{hintbox}
+画出 \(y=f(x)\) 与反函数区域；等号对应 \(b=f(a)\)。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 11 \badge{积分连续性}}
+
+证明定积分的连续性：设函数 \(f(x)\) 和 \(f_h(x)=f(x+h)\) 在 \([a,b]\) 上可积，则有
+
+\[
+        \lim_{h\to0}\int_a^b |f_h(x)-f(x)|\,dx=0.
+      \]
+
+\begin{hintbox}
+连续函数先证；一般可积函数用“连续函数逼近”或教材中的振幅估计。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 12 \badge{Schwarz 与 Minkowski}}
+
+设 \(f(x)\) 和 \(g(x)\) 在 \([a,b]\) 上都可积，证明不等式：
+
+\[
+      \begin{aligned}
+      &(1)\quad
+      \left[\int_a^b f(x)g(x)\,dx\right]^2
+      \le
+      \int_a^b f^2(x)\,dx\cdot\int_a^b g^2(x)\,dx;\\
+      &(2)\quad
+      \left\{\int_a^b [f(x)+g(x)]^2\,dx\right\}^{1/2}
+      \le
+      \left\{\int_a^b f^2(x)\,dx\right\}^{1/2}
+      +
+      \left\{\int_a^b g^2(x)\,dx\right\}^{1/2}.
+      \end{aligned}
+      \]
+
+\begin{hintbox}
+第 (1) 题可用二次函数判别式或 Hölder；第 (2) 题展开平方后用第 (1) 题。
+\end{hintbox}
+\end{exercisebox}
+
+\begin{exercisebox}
+\textbf{习题 13 \badge{最大值极限}}
+
+设 \(f(x)\) 和 \(g(x)\) 在 \([a,b]\) 上连续，且 \(f(x)\ge0,\ g(x)>0\)。证明
+
+\[
+        \lim_{n\to\infty}
+        \left\{\int_a^b [f(x)]^n g(x)\,dx\right\}^{1/n}
+        =
+        \max_{a\le x\le b} f(x).
+      \]
+
+\begin{hintbox}
+上界用 \(f(x)\le M\)。下界在最大点附近取一个小区间，利用连续性保证 \(f(x)>M-\varepsilon\)。
+\end{hintbox}
+\end{exercisebox}
+
+来源：陈纪修、于崇华、金路《数学分析》第三版上册，第七章 §2，教材第 244-251 页。建议学完后优先追问：积分中值定理为什么需要连续性、Young 不等式的图形意义、Schwarz 不等式的二次函数证明。

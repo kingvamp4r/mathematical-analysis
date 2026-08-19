@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第九章 §5：无穷乘积</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"]],
+        displayMath: [["\\[", "\\]"]],
+        processEscapes: true
+      },
+      options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202124;
+      --muted: #667085;
+      --line: #d9dee7;
+      --paper: #fffef9;
+      --accent: #0b6865;
+      --accent-dark: #074c49;
+      --soft: #edf8f7;
+      --amber: #fff4e3;
+      --amber-line: #bf7416;
+      --red: #a0183d;
+      --green: #146c43;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f4f0e8;
+      color: var(--ink);
+      font: 17px/1.75 ui-serif, "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+    }
+    main {
+      width: min(1040px, calc(100vw - 32px));
+      margin: 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 50px rgba(20, 30, 40, 0.08);
+    }
+    header {
+      padding: 42px 46px 30px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffef9, #fbf7ef);
+    }
+    section { padding: 28px 46px; border-bottom: 1px solid var(--line); }
+    h1, h2, h3, h4, button, .kicker, .tag, .pill, th {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      letter-spacing: 0;
+    }
+    h1 { margin: 0 0 10px; font-size: 35px; line-height: 1.2; }
+    h2 { margin: 0 0 14px; font-size: 24px; line-height: 1.3; }
+    h3 { margin: 22px 0 8px; font-size: 18px; line-height: 1.35; color: var(--accent-dark); }
+    h4 { margin: 14px 0 6px; font-size: 16px; color: var(--accent-dark); }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    ol, ul { padding-left: 24px; }
+    li { margin: 6px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 15px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #fafafa; }
+    .kicker {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .lead { color: var(--muted); max-width: 82ch; }
+    .formula {
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      padding: 12px 14px;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+    .note {
+      background: var(--amber);
+      border-left: 4px solid var(--amber-line);
+      padding: 12px 14px;
+      margin: 14px 0;
+      color: #704000;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .box, .exercise, .quiz-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 14px 16px;
+    }
+    .box strong {
+      display: block;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      margin-bottom: 6px;
+    }
+    .exercise { margin: 12px 0; }
+    .exercise-title {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+    .tag, .pill {
+      display: inline-block;
+      border: 1px solid #b6d7d4;
+      background: var(--soft);
+      color: var(--accent-dark);
+      font-size: 13px;
+      padding: 2px 7px;
+    }
+    .pill { border-color: var(--line); color: var(--muted); background: #fff; }
+    details {
+      border-top: 1px dashed var(--line);
+      margin-top: 10px;
+      padding-top: 8px;
+    }
+    summary {
+      cursor: pointer;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 650;
+    }
+    .question { background: #f7f7f7; padding: 10px 12px; overflow-x: auto; }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    button {
+      border: 1px solid #b9c1cc;
+      background: #fff;
+      color: var(--ink);
+      padding: 9px 10px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button:hover { border-color: var(--accent); background: var(--soft); }
+    button.correct { border-color: var(--green); background: #eaf7ef; color: var(--green); }
+    button.wrong { border-color: var(--red); background: #fff0f3; color: var(--red); }
+    .feedback { min-height: 28px; margin-top: 10px; color: var(--muted); font-size: 15px; }
+    .feedback.good { color: var(--green); }
+    .feedback.bad { color: var(--red); }
+    .footer { color: var(--muted); font-size: 15px; }
+    @media (max-width: 780px) {
+      main { margin: 16px auto; }
+      header, section { padding: 24px; }
+      h1 { font-size: 28px; }
+      .grid, .two, .choices { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      main { box-shadow: none; border: none; width: 100%; margin: 0; }
+      button { display: none; }
+      details { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="kicker">数学分析 · 第九章 §5</div>
+    <h1>无穷乘积</h1>
+    <p class="lead">这一节表面上是“连乘”，本质上仍然是极限问题。最重要的桥梁是：把乘积写成 \(\prod(1+a_n)\) 后取对数，就会回到你已经熟悉的级数世界。定义、必要条件、对数判别、Wallis 公式和 \(\sin x\) 的无穷乘积，是这一节的五个核心点。</p>
+  </header>
+
+  <section>
+    <h2>本节主线</h2>
+    <div class="grid">
+      <div class="box">
+        <strong>先盯部分积</strong>
+        <p>无穷乘积是否“收敛”，只看部分积 \(P_n=\prod_{k=1}^n p_k\) 是否趋于非零有限数。</p>
+      </div>
+      <div class="box">
+        <strong>再过对数桥</strong>
+        <p>当 \(p_n&gt;0\) 时，\(\prod p_n\) 的问题可转成 \(\sum \ln p_n\) 的问题。</p>
+      </div>
+      <div class="box">
+        <strong>最后分类讨论</strong>
+        <p>同号项直接比 \(\sum a_n\)，变号项要多看一步 \(\sum a_n^2\)，绝对收敛则回到 \(\sum |a_n|\)。</p>
+      </div>
+    </div>
+    <div class="note">考试顺序：先写 \(p_n=1+a_n\)，再检查 \(a_n\to0\)；若最终同号，直接看 \(\sum a_n\)；若 \(\sum a_n\) 已知收敛，再看 \(\sum a_n^2\)；涉及具体值时优先想 Wallis 公式或裂项相消。</div>
+  </section>
+
+  <section>
+    <h2>一、无穷乘积的定义</h2>
+
+    <h3>定义 9.5.1</h3>
+    <p>设 \(p_1,p_2,\ldots,p_n,\ldots\)（每个 \(p_n\neq0\)）是一列实数。把</p>
+    <div class="formula">\[
+      p_1\cdot p_2\cdot \cdots \cdot p_n\cdots
+    \]</div>
+    <p>称为无穷乘积，记作</p>
+    <div class="formula">\[
+      \prod_{n=1}^{\infty}p_n.
+    \]</div>
+    <p>对应的部分积数列为</p>
+    <div class="formula">\[
+      P_1=p_1,\quad P_2=p_1p_2,\quad \ldots,\quad P_n=\prod_{k=1}^{n}p_k.
+    \]</div>
+    <p>如果 \(\{P_n\}\) 收敛到一个非零有限数 \(P\)，就称无穷乘积收敛，且</p>
+    <div class="formula">\[
+      \prod_{n=1}^{\infty}p_n=P.
+    \]</div>
+    <p>如果 \(\{P_n\}\) 发散，或 \(\{P_n\}\) 收敛于 \(0\)，都称无穷乘积发散。</p>
+
+    <div class="note">这里和级数最大的区别是：乘积“趋于 0”不叫收敛，而叫“发散于 0”。因为我们关心的是能否稳定停在一个非零值上。</div>
+  </section>
+
+  <section>
+    <h2>二、收敛的必要条件</h2>
+
+    <h3>定理 9.5.1</h3>
+    <p>若无穷乘积 \(\prod_{n=1}^{\infty}p_n\) 收敛，则：</p>
+    <div class="formula">\[
+      (1)\ \lim_{n\to\infty}p_n=1;
+      \qquad
+      (2)\ \lim_{m\to\infty}\prod_{n=m+1}^{\infty}p_n=1.
+    \]</div>
+
+    <h3>证明思路</h3>
+    <p>若 \(P_n\to P\neq0\)，则</p>
+    <div class="formula">\[
+      p_n=\frac{P_n}{P_{n-1}}\to \frac{P}{P}=1.
+    \]</div>
+    <p>尾积也同理：</p>
+    <div class="formula">\[
+      \prod_{n=m+1}^{\infty}p_n=\frac{P}{P_m}\to 1.
+    \]</div>
+
+    <p>常把 \(p_n\) 写成</p>
+    <div class="formula">\[
+      p_n=1+a_n.
+    \]</div>
+    <p>于是定理 9.5.1 的第一个结论就变成：</p>
+    <div class="formula">\[
+      \prod_{n=1}^{\infty}(1+a_n)\text{ 收敛}\quad\Longrightarrow\quad a_n\to0.
+    \]</div>
+
+    <div class="grid two">
+      <div class="box">
+        <strong>例 9.5.1</strong>
+        <p>\(\displaystyle p_n=1-\frac{1}{n+1}\)。则</p>
+        <div class="formula">\[
+          P_n=\prod_{k=1}^{n}\left(1-\frac{1}{k+1}\right)
+          =\frac12\cdot\frac23\cdots\frac{n}{n+1}
+          =\frac{1}{n+1}\to0.
+        \]</div>
+        <p>所以这个无穷乘积发散于 \(0\)。</p>
+      </div>
+      <div class="box">
+        <strong>必要条件的用途</strong>
+        <p>若 \(p_n\not\to1\)，可以立刻判发散，不用再做任何复杂计算。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>三、Wallis 公式与基础例子</h2>
+
+    <h3>例 9.5.2：Wallis 公式</h3>
+    <p>设</p>
+    <div class="formula">\[
+      p_n=1-\frac{1}{(2n)^2},\qquad n=1,2,\ldots
+    \]</div>
+    <p>则无穷乘积</p>
+    <div class="formula">\[
+      \prod_{n=1}^{\infty}\left(1-\frac{1}{(2n)^2}\right)
+    \]</div>
+    <p>收敛，并且</p>
+    <div class="formula">\[
+      \prod_{n=1}^{\infty}\left(1-\frac{1}{(2n)^2}\right)=\frac{2}{\pi}.
+    \]</div>
+    <p>换个形式，就是著名的 Wallis 公式：</p>
+    <div class="formula">\[
+      \frac{\pi}{2}
+      =
+      \frac21\cdot\frac23\cdot\frac43\cdot\frac45\cdot\frac65\cdot\frac67\cdots
+      =
+      \prod_{n=1}^{\infty}\frac{4n^2}{4n^2-1}.
+    \]</div>
+
+    <h3>证明入口</h3>
+    <p>令</p>
+    <div class="formula">\[
+      I_n=\int_0^{\pi/2}\sin^n x\,dx.
+    \]</div>
+    <p>利用递推可得</p>
+    <div class="formula">\[
+      I_{2n}=\frac{(2n-1)!!}{(2n)!!}\cdot\frac{\pi}{2},
+      \qquad
+      I_{2n+1}=\frac{(2n)!!}{(2n+1)!!}.
+    \]</div>
+    <p>再用</p>
+    <div class="formula">\[
+      I_{2n+1}<I_{2n}<I_{2n-1}
+    \]</div>
+    <p>和夹逼定理，就能得到 \(\frac{I_{2n}}{I_{2n+1}}\to1\)，最后整理出 Wallis 公式。</p>
+
+    <h3>例 9.5.3：余弦乘积</h3>
+    <p>设 \(p_n=\cos \dfrac{x}{2^n}\)，则当 \(0&lt;x&lt;\pi\) 时，</p>
+    <div class="formula">\[
+      \prod_{n=1}^{\infty}\cos\frac{x}{2^n}=\frac{\sin x}{x}.
+    \]</div>
+    <p>令 \(x=\dfrac{\pi}{2}\)，便得到 Viète 公式：</p>
+    <div class="formula">\[
+      \frac{2}{\pi}
+      =
+      \cos\frac{\pi}{4}\cdot\cos\frac{\pi}{8}\cdot\cos\frac{\pi}{16}\cdots.
+    \]</div>
+    <div class="note">这一节里最常用的具体公式，就是 Wallis 和 \(\prod \cos \frac{x}{2^n}=\frac{\sin x}{x}\)。遇到带 \(\sin x\)、\(\pi\)、双阶乘的题，先想这两个。</div>
+  </section>
+
+  <section>
+    <h2>四、无穷乘积与无穷级数</h2>
+
+    <p>由定理 9.5.1 可知，若无穷乘积 \(\prod p_n\) 收敛，则从某项起 \(p_n&gt;0\)。因此讨论收敛性时，可以默认最终都能取对数。</p>
+
+    <h3>定理 9.5.2</h3>
+    <p>无穷乘积</p>
+    <div class="formula">\[
+      \prod_{n=1}^{\infty}p_n
+    \]</div>
+    <p>收敛的充要条件是级数</p>
+    <div class="formula">\[
+      \sum_{n=1}^{\infty}\ln p_n
+    \]</div>
+    <p>收敛。</p>
+
+    <h3>证明思路</h3>
+    <p>设 \(\sum\ln p_n\) 的部分和为 \(S_n\)。由于</p>
+    <div class="formula">\[
+      P_n=\prod_{k=1}^{n}p_k=e^{S_n},
+    \]</div>
+    <p>\(\{P_n\}\) 收敛到非零有限数当且仅当 \(\{S_n\}\) 收敛到有限数。这就是无穷乘积和无穷级数之间的桥。</p>
+
+    <h3>推论 9.5.1：同号情形</h3>
+    <p>若 \(a_n&gt;0\) 或 \(a_n&lt;0\)（从某项起保持同号），则</p>
+    <div class="formula">\[
+      \prod_{n=1}^{\infty}(1+a_n)\text{ 收敛}
+      \quad\Longleftrightarrow\quad
+      \sum_{n=1}^{\infty}a_n\text{ 收敛}.
+    \]</div>
+    <p>理由是 \(a_n\to0\) 时，\(\ln(1+a_n)\sim a_n\)。</p>
+
+    <h3>推论 9.5.2：变号情形</h3>
+    <p>若级数 \(\sum a_n\) 收敛，则无穷乘积</p>
+    <div class="formula">\[
+      \prod_{n=1}^{\infty}(1+a_n)
+    \]</div>
+    <p>收敛的充要条件是级数</p>
+    <div class="formula">\[
+      \sum_{n=1}^{\infty}a_n^2
+    \]</div>
+    <p>收敛。</p>
+
+    <h3>为什么会出现 \(a_n^2\)</h3>
+    <p>当 \(\sum a_n\) 已经收敛时，\(\ln(1+a_n)\) 和 \(a_n\) 的差异主要落在二次项：</p>
+    <div class="formula">\[
+      \ln(1+a_n)=a_n-\frac{a_n^2}{2}+o(a_n^2).
+    \]</div>
+    <p>所以对 \(\sum \ln(1+a_n)\) 来说，真正决定成败的是 \(\sum a_n^2\)。</p>
+  </section>
+
+  <section>
+    <h2>五、绝对收敛</h2>
+
+    <h3>例 9.5.4</h3>
+    <p>讨论无穷乘积</p>
+    <div class="formula">\[
+      \prod_{n=1}^{\infty}\left(1+\frac{(-1)^{n+1}}{n^x}\right)
+    \]</div>
+    <p>的敛散性。</p>
+    <table>
+      <thead>
+        <tr><th>参数</th><th>结论</th><th>理由</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>\(x\le0\)</td><td>发散</td><td>必要条件 \(a_n\to0\) 不成立</td></tr>
+        <tr><td>\(0&lt;x\le\frac12\)</td><td>发散</td><td>\(\sum a_n\) 收敛，但 \(\sum a_n^2=\sum 1/n^{2x}\) 发散</td></tr>
+        <tr><td>\(x&gt;\frac12\)</td><td>收敛</td><td>\(\sum a_n\) 与 \(\sum a_n^2\) 都收敛</td></tr>
+      </tbody>
+    </table>
+
+    <h3>定义 9.5.2</h3>
+    <p>当级数 \(\sum |\ln p_n|\) 绝对收敛时，称无穷乘积 \(\prod p_n\) 绝对收敛。</p>
+
+    <h3>定理 9.5.3</h3>
+    <p>设 \(a_n&gt;-1\)。下述三个命题等价：</p>
+    <ol>
+      <li>无穷乘积 \(\prod_{n=1}^{\infty}(1+a_n)\) 绝对收敛；</li>
+      <li>无穷乘积 \(\prod_{n=1}^{\infty}(1+|a_n|)\) 收敛；</li>
+      <li>级数 \(\sum_{n=1}^{\infty}|a_n|\) 收敛。</li>
+    </ol>
+    <p>所以对考试来说，可以直接记成：</p>
+    <div class="formula">\[
+      \prod(1+a_n)\text{ 绝对收敛}
+      \quad\Longleftrightarrow\quad
+      \sum |a_n|\text{ 收敛}.
+    \]</div>
+
+    <div class="note">把例 9.5.4 往前再推一步：\(\prod(1+\frac{(-1)^{n+1}}{n^x})\) 在 \(x&gt;1\) 时绝对收敛，在 \(\frac12&lt;x\le1\) 时只是非绝对收敛。</div>
+  </section>
+
+  <section>
+    <h2>六、Stirling 公式与两个重要例题</h2>
+
+    <h3>例 9.5.5：Stirling 公式</h3>
+    <p>证明</p>
+    <div class="formula">\[
+      n!\sim \sqrt{2\pi}\,n^{n+\frac12}e^{-n}\qquad(n\to\infty).
+    \]</div>
+    <p>教材做法是设</p>
+    <div class="formula">\[
+      b_n=\frac{n!\,e^n}{n^{n+\frac12}}.
+    \]</div>
+    <p>然后考察</p>
+    <div class="formula">\[
+      \frac{b_n}{b_{n-1}}
+      =
+      e\left(1-\frac1n\right)^{n-\frac12}
+      =
+      1-\frac{1}{12n^2}+o\!\left(\frac1{n^2}\right).
+    \]</div>
+    <p>于是 \(1+a_n=\frac{b_n}{b_{n-1}}\)，并且 \(\sum a_n\) 收敛，所以相应无穷乘积收敛到非零常数。再利用 Wallis 公式，可算出该常数正是 \(\sqrt{2\pi}\)。</p>
+
+    <h3>例 9.5.6</h3>
+    <p>求极限</p>
+    <div class="formula">\[
+      \lim_{n\to\infty}\frac{n}{\sqrt[n]{n!}}.
+    \]</div>
+    <p>由 Stirling 公式：</p>
+    <div class="formula">\[
+      n!\sim \sqrt{2\pi}\,n^{n+\frac12}e^{-n},
+    \]</div>
+    <p>取 \(n\) 次方根得到</p>
+    <div class="formula">\[
+      \sqrt[n]{n!}\sim \sqrt[n]{\sqrt{2\pi}\,n^{n+\frac12}e^{-n}}\sim \frac{n}{e},
+    \]</div>
+    <p>故</p>
+    <div class="formula">\[
+      \lim_{n\to\infty}\frac{n}{\sqrt[n]{n!}}=e.
+    \]</div>
+
+    <h3>例 9.5.7：\(\sin x\) 的无穷乘积展开</h3>
+    <p>证明</p>
+    <div class="formula">\[
+      \sin x=x\prod_{n=1}^{\infty}\left(1-\frac{x^2}{n^2\pi^2}\right).
+    \]</div>
+    <p>这是本节最漂亮的公式之一。教材用三角恒等式、根的结构和无穷乘积收敛性逐步推出。你可以把它记成“\(\sin x\) 的零点在 \(\pm n\pi\)，所以展开式里自然出现 \(1-\frac{x^2}{n^2\pi^2}\)”。</p>
+  </section>
+
+  <section>
+    <h2>七、判题路线图</h2>
+    <table>
+      <thead>
+        <tr><th>看到什么</th><th>先试什么</th><th>提醒</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>\(\prod p_n\)</td><td>先看 \(p_n\to1\) 吗</td><td>不趋于 \(1\) 直接发散。</td></tr>
+        <tr><td>\(\prod(1+a_n)\) 且 \(a_n\) 最终同号</td><td>比较 \(\sum a_n\)</td><td>这是最快的一类题。</td></tr>
+        <tr><td>\(\sum a_n\) 已知收敛</td><td>再看 \(\sum a_n^2\)</td><td>这是变号题的核心分界。</td></tr>
+        <tr><td>要判绝对收敛</td><td>看 \(\sum |a_n|\)</td><td>等价于 \(\sum |\ln(1+a_n)|\) 绝对收敛。</td></tr>
+        <tr><td>题里出现双阶乘、\(\pi\)、\(\sin x\)</td><td>想 Wallis 或 \(\sin x\) 乘积</td><td>通常不是纯比较题。</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>八、即时判断练习</h2>
+    <div class="grid">
+      <div class="quiz-card" data-answer="zero">
+        <div class="question">\[
+          \prod_{n=1}^{\infty}\left(1-\frac{1}{n+1}\right)
+        \]</div>
+        <div class="choices">
+          <button data-choice="conv">收敛</button>
+          <button data-choice="zero">发散于 \(0\)</button>
+          <button data-choice="inf">发散于 \(+\infty\)</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+      <div class="quiz-card" data-answer="conv">
+        <div class="question">\[
+          \prod_{n=1}^{\infty}\left(1+\frac{1}{n^2}\right)
+        \]</div>
+        <div class="choices">
+          <button data-choice="conv">收敛</button>
+          <button data-choice="zero">发散于 \(0\)</button>
+          <button data-choice="inf">发散于 \(+\infty\)</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+      <div class="quiz-card" data-answer="half">
+        <div class="question">\[
+          \prod_{n=1}^{\infty}\left(1+\frac{(-1)^{n+1}}{n^x}\right)
+          \text{ 的临界指数是？}
+        \]</div>
+        <div class="choices">
+          <button data-choice="one">\(x=1\)</button>
+          <button data-choice="half">\(x=\frac12\)</button>
+          <button data-choice="two">\(x=2\)</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>九、课后题</h2>
+    <p>下面按教材第九章第 5 节习题整理。题面完整保留，提示只给入口；写作业时建议先独立判断，再展开提示核对方向。</p>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 1 <span class="tag">讨论无穷乘积的敛散性</span></div>
+      <p>讨论下列无穷乘积的敛散性：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \prod_{n=1}^{\infty}\frac{n^2}{n^2+1};\qquad
+      (2)\ \prod_{n=2}^{\infty}\sqrt{\frac{n+1}{n-1}};\\
+      &(3)\ \prod_{n=3}^{\infty}\cos\frac{\pi}{n};\qquad
+      (4)\ \prod_{n=1}^{\infty}n\sin\frac1n;\\
+      &(5)\ \prod_{n=1}^{\infty}e^{1/n^2};\qquad
+      (6)\ \prod_{n=1}^{\infty}\left(1-\frac{x^2}{n^2\pi^2}\right);\\
+      &(7)\ \prod_{n=1}^{\infty}\left(1+\frac{x^n}{2^n}\right);\qquad
+      (8)\ \prod_{n=1}^{\infty}\sqrt{1+\frac1n};\\
+      &(9)\ \prod_{n=1}^{\infty}\left[\left(1+\frac{x}{n}\right)e^{-x/n}\right];\qquad
+      (10)\ \prod_{n=1}^{\infty}\left[\left(1+\frac1{n^p}\right)\cos\frac{\pi}{n^q}\right]\quad(p,q>0).
+      \end{aligned}
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <p>先统一写成 \(\prod(1+a_n)\)。第 (1)(3)(4)(5)(8) 先看 \(\sum a_n\)；第 (6) 可用 \(\sin x\) 的无穷乘积；第 (9) 取对数后会出现 \(x/n-\ln(1+x/n)\sim x^2/(2n^2)\)。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 2 <span class="tag">计算无穷乘积的值</span></div>
+      <p>计算下列无穷乘积的值：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \prod_{n=2}^{\infty}\left(1-\frac1{n^2}\right);\\
+      &(2)\ \prod_{n=2}^{\infty}\left(1-\frac{2}{n(n+1)}\right);\\
+      &(3)\ \prod_{n=2}^{\infty}\frac{n^3-1}{n^3+1}.
+      \end{aligned}
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <p>这三题都适合先写部分积。第 (1) 可直接裂项；第 (2)(3) 先因式分解，再观察相消结构。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 3 <span class="tag">余弦乘积与平方和</span></div>
+      <p>设 \(0&lt;x_n&lt;\dfrac{\pi}{2}\)，\(\displaystyle\sum_{n=1}^{\infty}x_n^2\) 收敛，则 \(\displaystyle\prod_{n=1}^{\infty}\cos x_n\) 收敛。</p>
+      <details>
+        <summary>提示</summary>
+        <p>利用 \(\ln\cos x\sim-\dfrac{x^2}{2}\)（当 \(x\to0\)）。把乘积转成 \(\sum \ln(\cos x_n)\) 再比较。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 4 <span class="tag">正切乘积的绝对收敛</span></div>
+      <p>设 \(|a_n|&lt;\dfrac{\pi}{4}\)，\(\displaystyle\sum_{n=1}^{\infty}|a_n|\) 收敛，则 \(\displaystyle\prod_{n=1}^{\infty}\tan\left(\frac{\pi}{4}+a_n\right)\) 绝对收敛。</p>
+      <details>
+        <summary>提示</summary>
+        <p>可写成 \(\tan(\frac{\pi}{4}+a)=\dfrac{1+\tan a}{1-\tan a}\)，再取对数并利用 \(\tan a\sim a\)。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 5 <span class="tag">Wallis 型极限</span></div>
+      <p>证明：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ \lim_{n\to\infty}\frac{1\cdot3\cdot5\cdots(2n-1)}{2\cdot4\cdot6\cdots(2n)}=0;\\
+      &(2)\ \lim_{n\to\infty}\frac{\beta(\beta+1)(\beta+2)\cdots(\beta+n)}
+      {\alpha(\alpha+1)(\alpha+2)\cdots(\alpha+n)}=0\qquad(0&lt;\beta&lt;\alpha).
+      \end{aligned}
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <p>第 (1) 直接联想 Wallis 公式。第 (2) 写成无穷乘积或对数和，都能把它压到第 (1) 或积分比较上。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 6 <span class="tag">无穷乘积恒等式</span></div>
+      <p>设 \(|q|&lt;1\)，证明：</p>
+      <div class="formula">\[
+        \prod_{n=1}^{\infty}(1+q^n)=\frac{1}{\prod_{n=1}^{\infty}(1-q^{2n-1})}.
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <p>把 \(\prod(1-q^n)\) 分成奇数项和偶数项，再用 \(1-q^{2n}=(1-q^n)(1+q^n)\)。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 7 <span class="tag">反例构造</span></div>
+      <p>设</p>
+      <div class="formula">\[
+        a_{2n-1}=-\frac1{\sqrt n},
+        \qquad
+        a_{2n}=\frac1{\sqrt n}+\frac1n\left(1+\frac1{\sqrt n}\right),
+      \]</div>
+      <p>证明级数 \(\displaystyle\sum_{n=1}^{\infty}a_n\) 与 \(\displaystyle\sum_{n=1}^{\infty}a_n^2\) 都发散，但无穷乘积 \(\displaystyle\prod_{n=2}^{\infty}(1+a_n)\) 收敛。</p>
+      <details>
+        <summary>提示</summary>
+        <p>先把奇偶两项合并，直接算 \((1+a_{2n-1})(1+a_{2n})\)。这题的关键不是分别看 \(a_n\) 和 \(a_n^2\)，而是看成对后的乘积有无望远镜结构。</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="footer">
+    <p>来源参考：陈纪修、于崇华、金路《数学分析》第三版下册，第九章 §5。建议把本节和 [第九章 §3 正项级数](./0009-3-positive-series.html)、[第九章 §4 任意项级数](./0009-4-arbitrary-series.html) 连起来看：无穷乘积真正的难点，不在“乘”，而在“如何把它重新送回级数判别法”。</p>
+    <p>如果你做题后要批改，先发已做部分即可；我会按“必要条件、对数化、判别法、结论”这条线逐题检查。</p>
+  </section>
+</main>
+
+<script>
+  document.querySelectorAll(".quiz-card").forEach((card) => {
+    const answer = card.dataset.answer;
+    const feedback = card.querySelector(".feedback");
+    card.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("click", () => {
+        card.querySelectorAll("button").forEach((btn) => {
+          btn.classList.remove("correct", "wrong");
+        });
+        if (button.dataset.choice === answer) {
+          button.classList.add("correct");
+          feedback.className = "feedback good";
+          feedback.textContent = "对。判断入口抓准了。";
+        } else {
+          button.classList.add("wrong");
+          const correct = card.querySelector(`[data-choice="${answer}"]`);
+          if (correct) correct.classList.add("correct");
+          feedback.className = "feedback bad";
+          feedback.textContent = "再看它是同号、变号，还是先要用必要条件排除。";
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>教材路线图：Euclid 空间上的极限和连续</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202124;
+      --muted: #62666d;
+      --line: #d8dde6;
+      --paper: #fffdf8;
+      --accent: #0b6b6b;
+      --soft: #edf7f6;
+      --gold: #9a5b00;
+      --gold-bg: #fff5df;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f5f1ea;
+      color: var(--ink);
+      font: 17px/1.72 ui-serif, "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+    }
+    main {
+      width: min(920px, calc(100vw - 32px));
+      margin: 32px auto;
+      padding: 40px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 50px rgba(20, 30, 40, 0.08);
+    }
+    h1, h2, h3 {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      letter-spacing: 0;
+      line-height: 1.25;
+    }
+    h1 { margin: 0 0 8px; font-size: 34px; }
+    h2 { margin: 34px 0 12px; font-size: 22px; border-top: 1px solid var(--line); padding-top: 18px; }
+    h3 { margin: 20px 0 8px; font-size: 18px; color: var(--accent); }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 15px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      background: #fafafa;
+      color: #374151;
+    }
+    .lead { color: var(--muted); max-width: 70ch; }
+    .note {
+      background: var(--gold-bg);
+      border-left: 4px solid var(--gold);
+      padding: 12px 14px;
+      color: #704000;
+    }
+    .route {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .step {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 12px;
+      min-height: 142px;
+    }
+    .step strong {
+      display: block;
+      color: var(--accent);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      margin-bottom: 6px;
+    }
+    .footer {
+      margin-top: 30px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    @media (max-width: 800px) {
+      main { padding: 24px; margin: 16px auto; }
+      h1 { font-size: 28px; }
+      .route { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      main { box-shadow: none; border: none; margin: 0; width: 100%; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>教材路线图：Euclid 空间上的极限和连续</h1>
+  <p class="lead">按你加入的《数学分析》第三版下册整理。后续小课会优先贴着第十一章走：先点集语言，再多元函数极限，最后连续性和紧集性质。</p>
+
+  <div class="note">这本 PDF 是扫描版，不能直接全文检索。目录定位时可用粗略换算：教材页码 + 20 ≈ PDF 页码。例如教材第 98 页约在 PDF 第 118 页。</div>
+
+  <h2>第十一章结构</h2>
+  <table>
+    <thead>
+      <tr><th>教材位置</th><th>内容</th><th>期末要会什么</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>§1 p.98-106</td>
+        <td>Euclid 空间上的距离与极限；开集与闭集；Euclid 空间上的基本定理；聚集。</td>
+        <td>会用球邻域、序列、聚点判断点集性质，并能写短证明。</td>
+      </tr>
+      <tr>
+        <td>§2 p.107-114</td>
+        <td>多元函数；多元函数的极限；累次极限；多元函数的连续性；向量值函数。</td>
+        <td>会判多元极限存在与否，知道路径法只能证不存在，ε-δ 或夹逼才能证存在。</td>
+      </tr>
+      <tr>
+        <td>§3 p.115-118</td>
+        <td>连续函数的性质；紧集上的连续映射；连通集与连通集上的连续映射。</td>
+        <td>会把“紧集 + 连续”转化为最值、闭有界像、连续映射性质等考试结论。</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>建议复习顺序</h2>
+  <div class="route">
+    <div class="step">
+      <strong>1. 点集语言</strong>
+      开球、邻域、内点、开集、闭集、聚点、闭包、边界。
+    </div>
+    <div class="step">
+      <strong>2. 序列判别</strong>
+      把一维极限迁移到 R^n：坐标收敛、范数收敛、闭集序列判别。
+    </div>
+    <div class="step">
+      <strong>3. 多元极限</strong>
+      路径法、累次极限、夹逼法、极坐标估计。
+    </div>
+    <div class="step">
+      <strong>4. 连续与紧性</strong>
+      紧集上连续映射、最大最小值、反例意识。
+    </div>
+  </div>
+
+  <h2>当前材料</h2>
+  <p>已完成：<a href="../lessons/0001-open-closed-by-balls.html">第 1 课：用球邻域判断开闭</a>，对应教材第十一章 §1 中“开集与闭集”。</p>
+  <p>已完成：<a href="../lessons/0002-cluster-closure-boundary.html">第 2 课：聚点、闭包、边界</a>，对应教材第十一章 §1 中“聚集”。</p>
+  <p>已完成：<a href="../lessons/0011-1-euclidean-space-basic-theorems.html">第十一章 §1：Euclid 空间上的基本定理</a>，这是按教材整节组织、含课后题的主复习页。</p>
+  <p>已完成：<a href="../lessons/0011-2-multivariable-continuous-functions.html">第十一章 §2：多元连续函数</a>，这是按教材整节组织、含完整课后题训练的主复习页。</p>
+  <p>已完成：<a href="../lessons/0011-3-continuous-function-properties.html">第十一章 §3：连续函数的性质</a>，重点整理紧集、最值、一致连续、连通集和中间值定理。</p>
+  <p>已完成：<a href="../lessons/0012-1-partial-derivatives-total-differential.html">第十二章 §1：偏导数与全微分</a>，重点整理偏导、方向导数、可微、梯度、高阶偏导和 Jacobi 矩阵。</p>
+  <p>已开启：<a href="../lessons/0012-2-chain-rule-multivariable.html">第十二章 §2：多元复合函数的求导法则</a>，重点整理链式法则、Jacobi 矩阵乘法、一阶全微分形式不变性和变量替换题。</p>
+  <p>已开启：<a href="../lessons/0012-3-mean-value-taylor.html">第十二章 §3：中值定理和 Taylor 公式</a>，重点整理凸区域、多元中值定理、Taylor 公式、Lagrange 余项和 Peano 余项。</p>
+  <p>已开启：<a href="../lessons/0012-4-implicit-functions.html">第十二章 §4：隐函数</a>，重点整理隐函数存在定理、隐函数求导、方程组的 Jacobi 判别和逆映射定理。</p>
+  <p>配套速查：<a href="./euclidean-space-exam-cheatsheet.html">欧氏空间期末速查表</a>。</p>
+  <p>配套复盘：<a href="./euclidean-space-mistakes-good-problems.html">错题集与好题集：Euclid 空间、极限与连续</a>，收录对话中反复出现的疑问、误区和代表题。</p>
+
+  <p class="footer">下一步建议：先看第十二章 §4 的定理 12.4.1 和 12.4.2，再做习题 1 的代表小题，熟悉“对方程求导、解线性关系”的套路。</p>
+</main>
+</body>
+</html>

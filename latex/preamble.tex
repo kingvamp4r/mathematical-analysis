@@ -1,0 +1,85 @@
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tabularx,array,booktabs}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{bookmark}
+
+\geometry{a4paper,top=25mm,bottom=25mm,left=27mm,right=27mm,headheight=15pt}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.35em}
+\setlength{\emergencystretch}{4em}
+\renewcommand{\arraystretch}{1.12}
+\setlist{itemsep=0.25em,topsep=0.4em}
+\allowdisplaybreaks[3]
+\let\cleardoublepage\clearpage
+
+\definecolor{AnalysisInk}{HTML}{202020}
+\definecolor{AnalysisTeal}{HTML}{444444}
+\definecolor{AnalysisTealDark}{HTML}{202020}
+\definecolor{AnalysisSoft}{HTML}{F7F7F7}
+\definecolor{AnalysisAmber}{HTML}{FAFAF8}
+\definecolor{AnalysisAmberLine}{HTML}{777777}
+\definecolor{AnalysisLine}{HTML}{D0D0D0}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=AnalysisInk,
+  urlcolor=AnalysisTeal,
+  citecolor=AnalysisInk,
+  pdftitle={数学分析笔记},
+  pdfauthor={基于项目 HTML 讲义整理}
+}
+
+\ctexset{
+  chapter={format=\Huge\bfseries\color{AnalysisTealDark}},
+  section={format=\Large\bfseries\color{AnalysisTealDark}},
+  subsection={format=\large\bfseries\color{AnalysisTealDark}},
+  subsubsection={format=\normalsize\bfseries\color{AnalysisTealDark}}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{gray}\leftmark}
+\fancyhead[R]{\small\color{gray}\rightmark}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\lessonmark}[1]{\markright{#1}}
+\newcommand{\badge}[1]{%
+  \tcbox[on line,boxrule=0.5pt,arc=1pt,colback=AnalysisSoft,
+    colframe=AnalysisLine,coltext=AnalysisInk,
+    left=3pt,right=3pt,top=1pt,bottom=1pt]{\footnotesize\sffamily #1}}
+
+\newtcolorbox{conceptbox}{
+  enhanced,breakable,colback=white,colframe=AnalysisLine,
+  boxrule=0.6pt,arc=1pt,left=8pt,right=8pt,top=7pt,bottom=7pt,
+  before skip=8pt,after skip=8pt
+}
+\newtcolorbox{notebox}{
+  enhanced,breakable,colback=AnalysisAmber,colframe=AnalysisAmberLine,
+  boxrule=0pt,leftrule=1.5pt,arc=0pt,left=9pt,right=8pt,top=7pt,bottom=7pt,
+  before skip=8pt,after skip=8pt
+}
+\newtcolorbox{exercisebox}{
+  enhanced,breakable,colback=white,colframe=AnalysisLine,
+  boxrule=0.7pt,arc=1pt,left=9pt,right=9pt,top=8pt,bottom=8pt,
+  before skip=10pt,after skip=10pt
+}
+\newtcolorbox{hintbox}{
+  enhanced,breakable,title={提示},fonttitle=\bfseries\sffamily,
+  coltitle=AnalysisInk,colback=white,colbacktitle=AnalysisSoft,colframe=AnalysisLine,
+  boxrule=0.5pt,arc=1pt,left=8pt,right=8pt,top=6pt,bottom=6pt,
+  before skip=7pt,after skip=3pt
+}
+\newtcolorbox{quickcheck}{
+  enhanced,breakable,title={即时判断},fonttitle=\bfseries\sffamily,
+  coltitle=AnalysisInk,colback=white,colframe=AnalysisLine,
+  colbacktitle=AnalysisSoft,boxrule=0.6pt,arc=1pt,
+  left=8pt,right=8pt,top=7pt,bottom=7pt,
+  before skip=8pt,after skip=8pt
+}

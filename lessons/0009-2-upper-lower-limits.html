@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第九章 §2：上极限与下极限</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"]],
+        displayMath: [["\\[", "\\]"]],
+        processEscapes: true
+      },
+      options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202124;
+      --muted: #667085;
+      --line: #d9dee7;
+      --paper: #fffef9;
+      --accent: #0b6865;
+      --accent-dark: #074c49;
+      --soft: #edf8f7;
+      --amber: #fff4e3;
+      --amber-line: #bf7416;
+      --red: #a0183d;
+      --green: #146c43;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f4f0e8;
+      color: var(--ink);
+      font: 17px/1.75 ui-serif, "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+    }
+    main {
+      width: min(1040px, calc(100vw - 32px));
+      margin: 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 50px rgba(20, 30, 40, 0.08);
+    }
+    header {
+      padding: 42px 46px 30px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffef9, #fbf7ef);
+    }
+    section { padding: 28px 46px; border-bottom: 1px solid var(--line); }
+    h1, h2, h3, h4, button, .kicker, .tag, .pill, th {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      letter-spacing: 0;
+    }
+    h1 { margin: 0 0 10px; font-size: 35px; line-height: 1.2; }
+    h2 { margin: 0 0 14px; font-size: 24px; line-height: 1.3; }
+    h3 { margin: 22px 0 8px; font-size: 18px; line-height: 1.35; color: var(--accent-dark); }
+    h4 { margin: 14px 0 6px; font-size: 16px; color: var(--accent-dark); }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    ol, ul { padding-left: 24px; }
+    li { margin: 6px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 15px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #fafafa; }
+    .kicker {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .lead { color: var(--muted); max-width: 80ch; }
+    .formula {
+      background: var(--soft);
+      border-left: 4px solid var(--accent);
+      padding: 12px 14px;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+    .note {
+      background: var(--amber);
+      border-left: 4px solid var(--amber-line);
+      padding: 12px 14px;
+      margin: 14px 0;
+      color: #704000;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .box, .exercise, .quiz-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 14px 16px;
+    }
+    .box strong {
+      display: block;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      margin-bottom: 6px;
+    }
+    .exercise { margin: 12px 0; }
+    .exercise-title {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+    .tag, .pill {
+      display: inline-block;
+      border: 1px solid #b6d7d4;
+      background: var(--soft);
+      color: var(--accent-dark);
+      font-size: 13px;
+      padding: 2px 7px;
+    }
+    .pill { border-color: var(--line); color: var(--muted); background: #fff; }
+    details {
+      border-top: 1px dashed var(--line);
+      margin-top: 10px;
+      padding-top: 8px;
+    }
+    summary {
+      cursor: pointer;
+      color: var(--accent-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      font-weight: 650;
+    }
+    .question { background: #f7f7f7; padding: 10px 12px; overflow-x: auto; }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+    button {
+      border: 1px solid #b9c1cc;
+      background: #fff;
+      color: var(--ink);
+      padding: 9px 10px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    button:hover { border-color: var(--accent); background: var(--soft); }
+    button.correct { border-color: var(--green); background: #eaf7ef; color: var(--green); }
+    button.wrong { border-color: var(--red); background: #fff0f3; color: var(--red); }
+    .feedback { min-height: 28px; margin-top: 10px; color: var(--muted); font-size: 15px; }
+    .feedback.good { color: var(--green); }
+    .feedback.bad { color: var(--red); }
+    .footer { color: var(--muted); font-size: 15px; }
+    @media (max-width: 780px) {
+      main { margin: 16px auto; }
+      header, section { padding: 24px; }
+      h1 { font-size: 28px; }
+      .grid, .two, .choices { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; }
+      main { box-shadow: none; border: none; width: 100%; margin: 0; }
+      button { display: none; }
+      details { break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="kicker">数学分析 · 第九章 §2</div>
+    <h1>上极限与下极限</h1>
+    <p class="lead">这一节讨论一个很重要的考试问题：当数列不收敛时，我们怎样精确描述它“最后到底在什么范围里晃”。核心工具就是极限点、上极限 \(\overline{\lim}\) 和下极限 \(\underline{\lim}\)。这一节既是数列章节的深化，也是后面研究级数、函数列、积分判别时常用的语言工具。</p>
+  </header>
+
+  <section>
+    <h2>本节主线</h2>
+    <div class="grid">
+      <div class="box">
+        <strong>第一步：看子列</strong>
+        <p>不收敛的数列，常常不同子列有不同极限。先收集所有可能的子列极限。</p>
+      </div>
+      <div class="box">
+        <strong>第二步：取最大最小</strong>
+        <p>所有极限点的最大值叫上极限，最小值叫下极限。</p>
+      </div>
+      <div class="box">
+        <strong>第三步：转成判题模板</strong>
+        <p>上极限等于“最终不超过某值，并且无穷多次逼近这个值”。这是最实用的考试版定义。</p>
+      </div>
+    </div>
+    <div class="note">一句话记忆：上极限看“最后还能反复达到多高”，下极限看“最后还能反复掉到多低”。</div>
+  </section>
+
+  <section>
+    <h2>一、为什么需要上极限与下极限</h2>
+    <p>如果数列 \(\{x_n\}\) 收敛，我们只需要一个数 \(\lim x_n\) 来描述它。但很多数列并不收敛，例如</p>
+    <div class="formula">\[
+      x_n=(-1)^n,\qquad
+      x_n=\sin\frac{n\pi}{3},\qquad
+      x_n=n+(-1)^n.
+    \]</div>
+    <p>这些数列虽然不收敛，但也不是“完全没规律”：它们往往会沿某些子列逼近某些特定的值。于是我们先研究：</p>
+    <div class="formula">\[
+      \text{这个数列有哪些子列极限？}
+    \]</div>
+    <p>再从这些子列极限里挑出最大的和最小的，这就得到上极限和下极限。</p>
+  </section>
+
+  <section>
+    <h2>二、极限点：先收集所有子列极限</h2>
+    <h3>定义 9.2.1：极限点（子列极限）</h3>
+    <p>设 \(\{x_n\}\) 是有界数列。若存在它的一个子列 \(\{x_{n_k}\}\)，使得</p>
+    <div class="formula">\[
+      \lim_{k\to\infty}x_{n_k}=\xi,
+    \]</div>
+    <p>则称 \(\xi\) 是数列 \(\{x_n\}\) 的一个<strong>极限点</strong>，也叫<strong>子列极限</strong>。</p>
+
+    <h3>等价直观</h3>
+    <p>\(\xi\) 是极限点，等价于：对任意 \(\varepsilon&gt;0\)，区间 \((\xi-\varepsilon,\xi+\varepsilon)\) 里总能找到无穷多个数列项。</p>
+    <div class="note">这里要特别分清：</div>
+    <ul>
+      <li><strong>“最终都进去”</strong> 是整个数列收敛到 \(\xi\)；</li>
+      <li><strong>“总有无穷多个进去”</strong> 只是说 \(\xi\) 是一个极限点。</li>
+    </ul>
+
+    <h3>例子</h3>
+    <div class="grid two">
+      <div class="box">
+        <strong>\(x_n=(-1)^n\)</strong>
+        <p>偶数子列恒为 \(1\)，奇数子列恒为 \(-1\)。所以极限点是 \(\{-1,1\}\)。</p>
+      </div>
+      <div class="box">
+        <strong>\(x_n=\frac{(-1)^n}{n}\)</strong>
+        <p>虽然正负交替，但所有子列都趋于 \(0\)，所以唯一极限点是 \(0\)。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>三、上极限与下极限的定义</h2>
+    <p>记数列 \(\{x_n\}\) 的全体极限点组成的集合为</p>
+    <div class="formula">\[
+      E=\{\xi:\ \xi \text{ 是 } \{x_n\}\text{ 的极限点}\}.
+    \]</div>
+    <p>若 \(\{x_n\}\) 有界，则由 Bolzano-Weierstrass 定理，\(E\neq\varnothing\)，而且 \(E\) 也是有界集，所以</p>
+    <div class="formula">\[
+      H=\sup E,\qquad h=\inf E
+    \]</div>
+    <p>都存在。</p>
+
+    <h3>定理 9.2.1：上确界和下确界本身也是极限点</h3>
+    <div class="formula">\[
+      H\in E,\qquad h\in E.
+    \]</div>
+    <p>因此实际上</p>
+    <div class="formula">\[
+      H=\max E,\qquad h=\min E.
+    \]</div>
+
+    <h4>证明思路</h4>
+    <p>只说 \(H\)。因为 \(H=\sup E\)，可取 \(\xi_k\in E\)，使</p>
+    <div class="formula">\[
+      H-\frac1k&lt;\xi_k\le H.
+    \]</div>
+    <p>而每个 \(\xi_k\) 本身是极限点，所以都能在原数列里找到很多项非常靠近 \(\xi_k\)。从中递增地抽出一项 \(x_{n_k}\)，使</p>
+    <div class="formula">\[
+      |x_{n_k}-\xi_k|&lt;\frac1k.
+    \]</div>
+    <p>于是</p>
+    <div class="formula">\[
+      |x_{n_k}-H|
+      \le
+      |x_{n_k}-\xi_k|+|\xi_k-H|
+      &lt;
+      \frac1k+\frac1k
+      \to0.
+    \]</div>
+    <p>故 \(x_{n_k}\to H\)，所以 \(H\) 也是极限点。\(h\) 同理。</p>
+
+    <h3>定义 9.2.2：上极限与下极限</h3>
+    <div class="formula">\[
+      \overline{\lim}_{n\to\infty}x_n:=H=\max E,
+      \qquad
+      \underline{\lim}_{n\to\infty}x_n:=h=\min E.
+    \]</div>
+    <div class="note">所以：上极限不是随便取个大数，它必须真的是某个子列的极限；下极限也是一样。</div>
+  </section>
+
+  <section>
+    <h2>四、它和普通极限的关系</h2>
+    <h3>定理 9.2.2：收敛判别</h3>
+    <p>对有界数列 \(\{x_n\}\)，</p>
+    <div class="formula">\[
+      \{x_n\}\text{ 收敛}
+      \iff
+      \overline{\lim}_{n\to\infty}x_n
+      =
+      \underline{\lim}_{n\to\infty}x_n.
+    \]</div>
+    <p>并且在这种情形下，三者都等于同一个极限：</p>
+    <div class="formula">\[
+      \overline{\lim}_{n\to\infty}x_n
+      =
+      \underline{\lim}_{n\to\infty}x_n
+      =
+      \lim_{n\to\infty}x_n.
+    \]</div>
+
+    <h4>为什么</h4>
+    <ul>
+      <li>如果 \(x_n\to a\)，那么任何子列也都趋于 \(a\)，所以唯一极限点就是 \(a\)。</li>
+      <li>如果上极限和下极限相等，说明全部子列极限只有一个值，数列就只能收敛到这个值。</li>
+    </ul>
+
+    <h3>无界情形的扩充</h3>
+    <p>对一般实数列，也允许 \(+\infty\) 和 \(-\infty\) 作为“广义极限点”。于是上极限、下极限可以取扩充实数值，且仍有：</p>
+    <div class="formula">\[
+      \lim_{n\to\infty}x_n \text{ 存在（有限或 } \pm\infty\text{）}
+      \iff
+      \overline{\lim}_{n\to\infty}x_n
+      =
+      \underline{\lim}_{n\to\infty}x_n.
+    \]</div>
+  </section>
+
+  <section>
+    <h2>五、最实用的考试判别法</h2>
+    <h3>定理 9.2.3：上极限的 \(\varepsilon\)-刻画</h3>
+    <p>对有界数列 \(\{x_n\}\)，</p>
+    <div class="formula">\[
+      \overline{\lim}_{n\to\infty}x_n=H
+    \]</div>
+    <p>当且仅当对任意 \(\varepsilon&gt;0\)，都有：</p>
+    <ol>
+      <li>存在 \(N\)，当 \(n&gt;N\) 时，\(x_n&lt;H+\varepsilon\)；</li>
+      <li>有无穷多个 \(n\) 满足 \(x_n&gt;H-\varepsilon\)。</li>
+    </ol>
+    <p>同理，</p>
+    <div class="formula">\[
+      \underline{\lim}_{n\to\infty}x_n=h
+    \]</div>
+    <p>当且仅当对任意 \(\varepsilon&gt;0\)，都有：</p>
+    <ol>
+      <li>存在 \(N\)，当 \(n&gt;N\) 时，\(x_n&gt;h-\varepsilon\)；</li>
+      <li>有无穷多个 \(n\) 满足 \(x_n&lt;h+\varepsilon\)。</li>
+    </ol>
+
+    <div class="note">
+      <strong>这一定理一定要会翻成口语：</strong><br>
+      上极限 \(H\) = “从某一项以后，数列再也不会明显高过 \(H\)；但它又会无穷多次逼近 \(H\) 的下方。”<br>
+      下极限 \(h\) = “从某一项以后，数列再也不会明显低过 \(h\)；但它又会无穷多次逼近 \(h\) 的上方。”
+    </div>
+
+    <h4>证明思路为什么成立</h4>
+    <p>如果 \(H\) 是最大的极限点，那么：</p>
+    <ul>
+      <li>不可能有一串尾项总是大于 \(H+\varepsilon\)，否则能抽出一个子列，得到比 \(H\) 更大的极限点；</li>
+      <li>也不可能只有有限多项大于 \(H-\varepsilon\)，否则 \(H\) 就不可能被子列逼近。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>六、运算性质：什么时候能像普通极限那样算</h2>
+    <h3>1. 和的运算</h3>
+    <div class="formula">\[
+      \overline{\lim}(x_n+y_n)
+      \le
+      \overline{\lim}x_n+\overline{\lim}y_n,
+    \]</div>
+    <div class="formula">\[
+      \underline{\lim}(x_n+y_n)
+      \ge
+      \underline{\lim}x_n+\underline{\lim}y_n.
+    \]</div>
+    <p>一般只是<strong>不等式</strong>，不要直接写等号。</p>
+
+    <p>但如果 \(\lim x_n=x\) 存在，那么</p>
+    <div class="formula">\[
+      \overline{\lim}(x_n+y_n)=x+\overline{\lim}y_n,
+      \qquad
+      \underline{\lim}(x_n+y_n)=x+\underline{\lim}y_n.
+    \]</div>
+
+    <h3>2. 积的运算</h3>
+    <p>若 \(x_n\ge0,\ y_n\ge0\)，则</p>
+    <div class="formula">\[
+      \overline{\lim}(x_ny_n)
+      \le
+      \overline{\lim}x_n\cdot\overline{\lim}y_n,
+    \]</div>
+    <div class="formula">\[
+      \underline{\lim}(x_ny_n)
+      \ge
+      \underline{\lim}x_n\cdot\underline{\lim}y_n.
+    \]</div>
+    <p>若 \(\lim x_n=x\) 且 \(0&lt;x&lt;+\infty\)，则</p>
+    <div class="formula">\[
+      \overline{\lim}(x_ny_n)=x\cdot\overline{\lim}y_n,
+      \qquad
+      \underline{\lim}(x_ny_n)=x\cdot\underline{\lim}y_n.
+    \]</div>
+
+    <div class="note">考试提醒：上极限、下极限的四则运算没有普通极限那么自由。只有“其中一个真的收敛了”时，公式才最稳。</div>
+  </section>
+
+  <section>
+    <h2>七、最常用的计算工具：尾上确界与尾下确界</h2>
+    <p>对数列 \(\{x_n\}\)，定义尾部的上确界与下确界：</p>
+    <div class="formula">\[
+      b_n=\sup\{x_n,x_{n+1},x_{n+2},\ldots\},
+      \qquad
+      a_n=\inf\{x_n,x_{n+1},x_{n+2},\ldots\}.
+    \]</div>
+    <p>则 \(\{b_n\}\) 单调不增，\(\{a_n\}\) 单调不减，所以在扩充实数意义下都收敛。于是可定义</p>
+    <div class="formula">\[
+      \limsup_{n\to\infty}x_n:=\lim_{n\to\infty}b_n,
+      \qquad
+      \liminf_{n\to\infty}x_n:=\lim_{n\to\infty}a_n.
+    \]</div>
+
+    <h3>定理 9.2.6：两种定义完全等价</h3>
+    <div class="formula">\[
+      \limsup_{n\to\infty}x_n=\overline{\lim}_{n\to\infty}x_n,
+      \qquad
+      \liminf_{n\to\infty}x_n=\underline{\lim}_{n\to\infty}x_n.
+    \]</div>
+
+    <p>也就是说：</p>
+    <div class="formula">\[
+      \limsup_{n\to\infty}x_n
+      =
+      \inf_{n\ge1}\sup_{k\ge n}x_k,
+      \qquad
+      \liminf_{n\to\infty}x_n
+      =
+      \sup_{n\ge1}\inf_{k\ge n}x_k.
+    \]</div>
+
+    <div class="grid two">
+      <div class="box">
+        <strong>什么时候用极限点法</strong>
+        <p>数列明显能拆成几个子列，且每个子列的极限容易看出来。</p>
+      </div>
+      <div class="box">
+        <strong>什么时候用尾确界法</strong>
+        <p>题目要证明一般性质，或者数列结构不适合直接拆子列时。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>八、例题串讲</h2>
+    <h3>例 1：\(\displaystyle x_n=\cos\frac{2n\pi}{5}\)</h3>
+    <p>它只会取五个值，而且周期为 \(5\)。所以极限点就是这五个值本身：</p>
+    <div class="formula">\[
+      \left\{\cos\frac{2\pi}{5},\cos\frac{4\pi}{5},\cos\frac{6\pi}{5},\cos\frac{8\pi}{5},\cos 2\pi\right\}.
+    \]</div>
+    <p>其中最大的是 \(1\)，最小的是 \(-\cos\frac{\pi}{5}\)。因此</p>
+    <div class="formula">\[
+      \overline{\lim}_{n\to\infty}x_n=1,
+      \qquad
+      \underline{\lim}_{n\to\infty}x_n=-\cos\frac{\pi}{5}.
+    \]</div>
+
+    <h3>例 2：\(\displaystyle x_n=n^{\frac{1-(-1)^n}{2}}\)</h3>
+    <p>把奇偶拆开：</p>
+    <ul>
+      <li>若 \(n=2k\)，则 \(\frac{1-(-1)^n}{2}=0\)，故 \(x_{2k}=1\)；</li>
+      <li>若 \(n=2k-1\)，则 \(\frac{1-(-1)^n}{2}=1\)，故 \(x_{2k-1}=2k-1\to+\infty\)。</li>
+    </ul>
+    <p>所以极限点是 \(1\) 和 \(+\infty\)，于是</p>
+    <div class="formula">\[
+      \overline{\lim}_{n\to\infty}x_n=+\infty,
+      \qquad
+      \underline{\lim}_{n\to\infty}x_n=1.
+    \]</div>
+
+    <h3>例 3：\(\displaystyle x_n=\sqrt[n]{n+1}+\sin\frac{n\pi}{3}\)</h3>
+    <p>前一项 \(\sqrt[n]{n+1}\to1\)，后一项在</p>
+    <div class="formula">\[
+      \left\{\frac{\sqrt3}{2},\frac{\sqrt3}{2},0,-\frac{\sqrt3}{2},-\frac{\sqrt3}{2},0\right\}
+    \]</div>
+    <p>之间循环。因此</p>
+    <div class="formula">\[
+      \overline{\lim}_{n\to\infty}x_n=1+\frac{\sqrt3}{2},
+      \qquad
+      \underline{\lim}_{n\to\infty}x_n=1-\frac{\sqrt3}{2}.
+    \]</div>
+
+    <div class="note">
+      <strong>求上极限下极限的标准动作：</strong><br>
+      1. 先看能不能按奇偶、模周期、分段形式拆子列；<br>
+      2. 求每个子列极限；<br>
+      3. 最大子列极限就是上极限，最小子列极限就是下极限；<br>
+      4. 若有一支子列奔向 \(+\infty\)，则上极限就是 \(+\infty\)。
+    </div>
+  </section>
+
+  <section>
+    <h2>九、考试判断卡</h2>
+    <table>
+      <thead>
+        <tr><th>题型</th><th>先想什么</th><th>常用结论</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>求 \(\overline{\lim},\underline{\lim}\)</td>
+          <td>拆子列，找全部可能子列极限</td>
+          <td>上极限 = 最大极限点；下极限 = 最小极限点</td>
+        </tr>
+        <tr>
+          <td>证明 \(\overline{\lim}x_n=H\)</td>
+          <td>用“最终不超过 \(H+\varepsilon\)”和“无穷多项大于 \(H-\varepsilon\)”</td>
+          <td>定理 9.2.3</td>
+        </tr>
+        <tr>
+          <td>证明数列收敛</td>
+          <td>算出上极限和下极限</td>
+          <td>若二者相等，则数列收敛</td>
+        </tr>
+        <tr>
+          <td>和、积里的 \(\limsup\)</td>
+          <td>先问：是否有一个因子真的收敛？</td>
+          <td>若有，再用等式公式；否则通常只有不等式</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>十、即时判断练习</h2>
+    <div class="quiz-card" data-quiz>
+      <div class="question">若 \(\overline{\lim}x_n=\underline{\lim}x_n\)，则 \(\{x_n\}\) 如何？</div>
+      <div class="choices">
+        <button data-ok="true">收敛</button>
+        <button data-ok="false">未必收敛</button>
+        <button data-ok="false">只说明有界</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="quiz-card" data-quiz>
+      <div class="question">\(\overline{\lim}x_n=H\) 最关键的两句话是？</div>
+      <div class="choices">
+        <button data-ok="true">最终不超过 \(H+\varepsilon\)，且无穷多次大于 \(H-\varepsilon\)</button>
+        <button data-ok="false">最终都等于 \(H\)</button>
+        <button data-ok="false">每个子列都趋于 \(H\)</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="quiz-card" data-quiz>
+      <div class="question">若 \(x_{2n}\to 3,\ x_{2n-1}\to -1\)，则 \(\overline{\lim}x_n\) 是？</div>
+      <div class="choices">
+        <button data-ok="false">\(-1\)</button>
+        <button data-ok="true">\(3\)</button>
+        <button data-ok="false">\(1\)</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>十一、课后题训练</h2>
+    <p>下面按教材第九章第 2 节习题整理。题目完整保留，提示只给解题入口。写作业时建议先独立判断，再展开提示对照。</p>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 1 <span class="tag">求上极限与下极限</span></div>
+      <p>求下列数列的上极限与下极限：</p>
+      <div class="formula">\[
+      \begin{aligned}
+      &(1)\ x_n=\frac{n}{2n+1}\cos\frac{2n\pi}{5};\\
+      &(2)\ x_n=n+(-1)^n\frac{n^2+1}{n};\\
+      &(3)\ x_n=-n\bigl[(-1)^n+2\bigr];\\
+      &(4)\ x_n=\sqrt[n]{n+1}+\sin\frac{n\pi}{3};\\
+      &(5)\ x_n=2(-1)^{n+1}+3(-1)^{\frac{n(n-1)}2}.
+      \end{aligned}
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <ul>
+          <li>(1) \(\frac{n}{2n+1}\to \frac12\)，只需分析余下的周期因子 \(\cos\frac{2n\pi}{5}\)。</li>
+          <li>(2) 先把 \(\frac{n^2+1}{n}=n+\frac1n\) 展开，再拆奇偶。</li>
+          <li>(3) 奇偶两支都趋向 \(-\infty\)。</li>
+          <li>(4) \(\sqrt[n]{n+1}\to1\)，后一项是周期数列。</li>
+          <li>(5) 两个符号项都有周期，列出前四项就够了。</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 2 <span class="tag">符号与数乘</span></div>
+      <p>证明：</p>
+      <div class="formula">\[
+      (1)\ \overline{\lim}_{n\to\infty}(-x_n)
+      =
+      -\,\underline{\lim}_{n\to\infty}x_n;
+      \]</div>
+      <div class="formula">\[
+      (2)\ \overline{\lim}_{n\to\infty}(c x_n)
+      =
+      \begin{cases}
+      c\,\overline{\lim}_{n\to\infty}x_n, & c&gt;0,\\[4pt]
+      c\,\underline{\lim}_{n\to\infty}x_n, & c&lt;0.
+      \end{cases}
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <p>“乘上 \(-1\)” 会把所有极限点的大小顺序颠倒；“乘上正数”保持顺序，“乘上负数”反转顺序。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 3 <span class="tag">和的下极限</span></div>
+      <p>证明：</p>
+      <div class="formula">\[
+      (1)\ \underline{\lim}_{n\to\infty}(x_n+y_n)
+      \ge
+      \underline{\lim}_{n\to\infty}x_n
+      +
+      \underline{\lim}_{n\to\infty}y_n;
+      \]</div>
+      <div class="formula">\[
+      (2)\ \text{若 } \lim_{n\to\infty}x_n \text{ 存在，则 }
+      \underline{\lim}_{n\to\infty}(x_n+y_n)
+      =
+      \lim_{n\to\infty}x_n
+      +
+      \underline{\lim}_{n\to\infty}y_n.
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <p>直接对下极限用定理 9.2.3；或者先利用</p>
+        <div class="formula">\[
+          \underline{\lim}(x_n+y_n)
+          =
+          -\,\overline{\lim}(-x_n-y_n)
+        \]</div>
+        <p>再转成上极限公式。</p>
+      </details>
+    </div>
+
+    <div class="exercise">
+      <div class="exercise-title">习题 4 <span class="tag">负极限与乘法</span></div>
+      <p>证明：若 \(\lim_{n\to\infty}x_n=x\)，且 \(-\infty&lt;x&lt;0\)，则</p>
+      <div class="formula">\[
+        \overline{\lim}_{n\to\infty}(x_ny_n)
+        =
+        x\,\underline{\lim}_{n\to\infty}y_n,
+      \]</div>
+      <div class="formula">\[
+        \underline{\lim}_{n\to\infty}(x_ny_n)
+        =
+        x\,\overline{\lim}_{n\to\infty}y_n.
+      \]</div>
+      <details>
+        <summary>提示</summary>
+        <p>负数乘法会把大小顺序翻转。可以先令 \(x_n=-u_n\)，其中 \(u_n\to -x&gt;0\)，再套正数情形。</p>
+      </details>
+    </div>
+  </section>
+
+  <section>
+    <h2>十二、这一节的选题建议</h2>
+    <div class="grid">
+      <div class="box">
+        <strong>必做</strong>
+        <p>习题 1 的五小问全部要做；这是“拆子列找极限点”的标准训练。</p>
+      </div>
+      <div class="box">
+        <strong>证明题重点</strong>
+        <p>习题 2(1)、习题 3(1)。它们最能帮助你熟悉上极限下极限的运算规则。</p>
+      </div>
+      <div class="box">
+        <strong>压轴理解</strong>
+        <p>习题 4 是“负数会翻转上下极限”的典型题，很适合记进错题集或好题集。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="footer">
+    <p>来源参考：教材《数学分析》第三版下册第九章 §2（上极限与下极限）。这一节如果你卡在某个“为什么是这个上极限”，通常都是“子列没拆干净”或者“把极限点和整个极限混了”。直接在页面里选中那一步继续问我就行。</p>
+  </section>
+</main>
+
+<script>
+  document.querySelectorAll("[data-quiz]").forEach((card) => {
+    const feedback = card.querySelector(".feedback");
+    card.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("click", () => {
+        card.querySelectorAll("button").forEach((b) => b.classList.remove("correct", "wrong"));
+        const ok = button.dataset.ok === "true";
+        button.classList.add(ok ? "correct" : "wrong");
+        feedback.className = "feedback " + (ok ? "good" : "bad");
+        feedback.textContent = ok
+          ? "对。我们就是用上极限、下极限来抓住“子列最后能到哪里”。"
+          : "再想想：上极限和下极限描述的是全部子列极限里的最大值和最小值。";
+      });
+    });
+  });
+</script>
+</body>
+</html>

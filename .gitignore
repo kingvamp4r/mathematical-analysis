@@ -1,0 +1,17 @@
+.DS_Store
+tmp/
+
+# LaTeX build cache
+latex/*.aux
+latex/*.fdb_latexmk
+latex/*.fls
+latex/*.log
+latex/*.out
+latex/*.toc
+latex/*.xdv
+latex/*.synctex.gz
+latex/main.pdf
+
+# Python cache
+__pycache__/
+*.pyc
